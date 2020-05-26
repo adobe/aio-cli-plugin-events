@@ -1,6 +1,6 @@
-# Adobe I/O Event CLI Plugin
+# Adobe I/O Events CLI Plugin
 
-Adobe I/O Event Plugin for the Adobe I/O CLI
+Adobe I/O Events Plugin for the Adobe I/O CLI
 
 <!-- toc -->
 <!-- tocstop -->

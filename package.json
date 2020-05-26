@@ -1,5 +1,5 @@
 {
-  "name": "@adobe/aio-cli-plugin-event",
+  "name": "@adobe/aio-cli-plugin-events",
   "version": "0.1.0",
   "dependencies": {
     "@adobe/aio-lib-core-config": "^1.2.8",
