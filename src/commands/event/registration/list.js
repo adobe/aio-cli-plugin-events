@@ -13,7 +13,7 @@ const { flags } = require('@oclif/command')
 const { cli } = require('cli-ux')
 
 const BaseCommand = require('../../../BaseCommand')
-const aioConsoleLogger = require('@adobe/aio-lib-core-logging')('@adobe/aio-cli-plugin-events:registration:list', { provider: 'debug' })
+const aioLogger = require('@adobe/aio-lib-core-logging')('@adobe/aio-cli-plugin-events:registration:list', { provider: 'debug' })
 
 class ListCommand extends BaseCommand {
   async run () {
@@ -21,13 +21,13 @@ class ListCommand extends BaseCommand {
 
     try {
       await this.initSdk()
-      aioConsoleLogger.debug('Listing Registrations')
+      aioLogger.debug('Listing Registrations')
 
       cli.action.start(`Retrieving Registrations for the Workspace ${this.conf.workspace.id}`)
       const registrations = await this.eventClient.getAllWebhookRegistrations(this.conf.org.id, this.conf.integration.id)
       cli.action.stop()
 
-      aioConsoleLogger.debug('Listing Registrations: Data Received')
+      aioLogger.debug('Listing Registrations: Data Received')
 
       if (flags.json) {
         this.printJson(registrations)
@@ -37,8 +37,9 @@ class ListCommand extends BaseCommand {
         // print formatted result
         const commonTableConfig = { minWidth: 25 }
         cli.table(registrations, {
-          id: commonTableConfig,
+          registration_id: commonTableConfig,
           name: commonTableConfig,
+          // description: commonTableConfig, to
           integration_status: commonTableConfig,
           delivery_type: commonTableConfig
         }, {
@@ -47,7 +48,7 @@ class ListCommand extends BaseCommand {
       }
     } catch (err) {
       cli.action.stop()
-      aioConsoleLogger.debug(err)
+      aioLogger.debug(err)
       this.error(err.message)
     }
   }
