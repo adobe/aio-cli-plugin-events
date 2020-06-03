@@ -50,7 +50,6 @@ class BaseCommand extends Command {
     if (localProject && localProject.org && localWorkspace) {
       // is the above check enough?
 
-
       const workspaceIntegration = this.extractServiceIntegrationConfig(localWorkspace)
       // note in the local app aio, the workspaceIntegration only holds a reference, the
       // clientId is stored in the dotenv
@@ -67,7 +66,7 @@ class BaseCommand extends Command {
 
     // use console config
     const { org, project, workspace } = aioConfig.get(CONSOLE_CONFIG_KEY) || {}
-    if (!org || !project || !workspace ) {
+    if (!org || !project || !workspace) {
       throw new Error(`Your console configuration is incomplete.${EOL}Use the 'aio console' commands to select your organization, project, and workspace.${EOL}${this.consoleConfigString().value}`)
     }
     let { integration, workspaceId } = aioConfig.get(EVENTS_CONFIG_KEY) || {}
@@ -82,7 +81,10 @@ class BaseCommand extends Command {
     }
     return {
       isLocal: false,
-      org, project, workspace, integration
+      org,
+      project,
+      workspace,
+      integration
     }
   }
 
@@ -98,7 +100,7 @@ class BaseCommand extends Command {
   /** @private */
   extractServiceIntegrationConfig (workspaceConfig) {
     // note here we take the first that matches
-    const workspaceIntegration = workspaceConfig.details.credentials && workspaceConfig.details.credentials.find(c => c.integration_type === "service")
+    const workspaceIntegration = workspaceConfig.details.credentials && workspaceConfig.details.credentials.find(c => c.integration_type === 'service')
     if (!workspaceIntegration) {
       throw new Error(`Workspace ${workspaceConfig.name} has no JWT integration`)
     }
