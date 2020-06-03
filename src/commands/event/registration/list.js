@@ -20,8 +20,7 @@ class ListCommand extends BaseCommand {
     const { flags } = this.parse(ListCommand)
 
     try {
-
-    await this.initSdk()
+      await this.initSdk()
       aioConsoleLogger.debug('Listing Registrations')
 
       cli.action.start(`Retrieving Registrations for the Workspace ${this.conf.workspace.id}`)
@@ -40,17 +39,16 @@ class ListCommand extends BaseCommand {
         cli.table(registrations, {
           id: commonTableConfig,
           name: commonTableConfig,
-          integration_status:commonTableConfig,
+          integration_status: commonTableConfig,
           delivery_type: commonTableConfig
         }, {
           printLine: this.log
         })
       }
     } catch (err) {
+      cli.action.stop()
       aioConsoleLogger.debug(err)
       this.error(err.message)
-    } finally {
-      cli.action.stop()
     }
   }
 }
