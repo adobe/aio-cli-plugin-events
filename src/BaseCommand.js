@@ -42,6 +42,7 @@ class BaseCommand extends Command {
     this.eventClient = await require('@adobe/aio-lib-events').init(this.conf.org.code, this.conf.integration.jwtClientId, this.accessToken)
   }
 
+  /** @private */
   async loadConfig (consoleClient) {
     // are we in a local aio app project?
     const localProject = aioConfig.get('project', 'local')
@@ -67,7 +68,7 @@ class BaseCommand extends Command {
     // use console config
     const { org, project, workspace } = aioConfig.get(CONSOLE_CONFIG_KEY) || {}
     if (!org || !project || !workspace ) {
-      throw new Error(`Your console configuration is incomplete.${EOL}Use the 'aio console' commands to select your organization, project, and workspace.${EOL}${this.consoleConfigString()}`)
+      throw new Error(`Your console configuration is incomplete.${EOL}Use the 'aio console' commands to select your organization, project, and workspace.${EOL}${this.consoleConfigString().value}`)
     }
     let { integration, workspaceId } = aioConfig.get(EVENTS_CONFIG_KEY) || {}
     if (!integration || workspaceId !== workspace.id) {
