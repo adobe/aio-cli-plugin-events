@@ -19,42 +19,26 @@ const { EOL } = require('os')
 const { CLI } = require('@adobe/aio-lib-ims/src/context')
 const yaml = require('js-yaml')
 
-const DEFAULT_ENV = 'prod'
 const CONSOLE_CONFIG_KEY = '$console'
-const CONSOLE_API_KEYS = {
-  prod: 'aio-cli-console-auth',
-  stage: 'aio-cli-console-auth-stage'
-}
+const CONSOLE_API_KEY = 'aio-cli-console-auth'
 
 const EVENTS_CONFIG_KEY = '$events'
-const EVENTS_STAGE_ENV = {
-  EVENTS_BASE_URL: 'https://eventsingress-stage.adobe.io',
-  EVENTS_INGRESS_URL: 'https://eventsingress-stage.adobe.io'
-}
 
 class BaseCommand extends Command {
   async initSdk () {
-    // get ims env
-    const cliConfig = await context.getCli()
-    this.imsEnv = (cliConfig && cliConfig.env) || DEFAULT_ENV
-
     // login
     await context.setCli({ '$cli.bare-output': true }, false) // set this globally
     aioLogger.debug('Retrieving Auth Token')
     this.accessToken = await getToken(CLI) // user access token, would work with jwt too
 
     // init console sdk
-    this.consoleClient = await require('@adobe/aio-lib-console').init(this.accessToken, CONSOLE_API_KEYS[this.imsEnv], this.imsEnv)
+    this.consoleClient = await require('@adobe/aio-lib-console').init(this.accessToken, CONSOLE_API_KEY)
 
     // load configuration needed for future api calls
     aioLogger.debug('Loading config')
     this.conf = await this.loadConfig(this.consoleClient)
 
-    // init events sdk
-    if (this.imsEnv === 'stage') {
-      Object.assign(process.env, EVENTS_STAGE_ENV)
-    }
-    // important events lib needs to be required after setting env vars
+    // init the event client
     this.eventClient = await require('@adobe/aio-lib-events').init(this.conf.org.code, this.conf.integration.jwtClientId, this.accessToken)
   }
 
