@@ -10,18 +10,25 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
-const HHelp = require('@oclif/plugin-help').default
-const BaseCommand = require('../../BaseCommand.js')
+const BaseCommand = require('../../../BaseCommand.js')
 
-class IndexCommand extends BaseCommand {
+class GetCommand extends BaseCommand {
   async run () {
-    const help = new HHelp(this.config)
-    help.showHelp(['event', '--help'])
+    const { args } = this.parse(GetCommand)
+
+    await this.initSdk()
+    // todo formatting + support of --json and --yml
+    const res = await this.eventClient.getWebhookRegistration(this.conf.org.id, this.conf.integration.id, args.registrationId)
+    this.log(res)
   }
 }
 
-IndexCommand.description = 'Manage your Adobe I/O Events'
+GetCommand.args = [
+  { name: 'registrationId', required: true }
+]
 
-IndexCommand.args = []
+GetCommand.flags = {
+  ...BaseCommand.flags
+}
 
-module.exports = IndexCommand
+module.exports = GetCommand

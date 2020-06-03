@@ -11,17 +11,16 @@ governing permissions and limitations under the License.
 */
 
 const HHelp = require('@oclif/plugin-help').default
-const BaseCommand = require('../../BaseCommand.js')
+const BaseCommand = require('../../../BaseCommand.js')
 
 class IndexCommand extends BaseCommand {
   async run () {
     const help = new HHelp(this.config)
-    help.showHelp(['event', '--help'])
+    help.showHelp(['event:registration', '--help'])
+    await this.initSdk()
   }
 }
 
-IndexCommand.description = 'Manage your Adobe I/O Events'
-
-IndexCommand.args = []
+IndexCommand.description = 'Manage your Adobe I/O Events Registrations'
 
 module.exports = IndexCommand
