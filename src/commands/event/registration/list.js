@@ -9,34 +9,42 @@ the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTA
 OF ANY KIND, either express or implied. See the License for the specific language
 governing permissions and limitations under the License.
 */
-
 const { flags } = require('@oclif/command')
 const { cli } = require('cli-ux')
 
 const BaseCommand = require('../../../BaseCommand')
 const aioLogger = require('@adobe/aio-lib-core-logging')('@adobe/aio-cli-plugin-events:registration:list', { provider: 'debug' })
 
-class GetCommand extends BaseCommand {
+class ListCommand extends BaseCommand {
   async run () {
-    const { args, flags } = this.parse(GetCommand)
+    const { flags } = this.parse(ListCommand)
 
     try {
       await this.initSdk()
       aioLogger.debug('Listing Registrations')
 
-      cli.action.start(`Retrieving Registration with id ${args.registrationId}`)
-      const registration = await this.eventClient.getWebhookRegistration(this.conf.org.id, this.conf.integration.id, args.registrationId)
+      cli.action.start(`Retrieving Registrations for the Workspace ${this.conf.workspace.id}`)
+      const registrations = await this.eventClient.getAllWebhookRegistrations(this.conf.org.id, this.conf.integration.id)
       cli.action.stop()
 
       aioLogger.debug('Listing Registrations: Data Received')
 
       if (flags.json) {
-        this.printJson(registration)
+        this.printJson(registrations)
       } else if (flags.yml) {
-        this.printYaml(registration)
+        this.printYaml(registrations)
       } else {
-        // for now let's print a beautified json
-        this.log(JSON.stringify(registration, null, 2))
+        // print formatted result
+        const commonTableConfig = { minWidth: 25 }
+        cli.table(registrations, {
+          registration_id: commonTableConfig,
+          name: commonTableConfig,
+          // description: commonTableConfig, to
+          integration_status: commonTableConfig,
+          delivery_type: commonTableConfig
+        }, {
+          printLine: this.log
+        })
       }
     } catch (err) {
       aioLogger.debug(err)
@@ -45,13 +53,15 @@ class GetCommand extends BaseCommand {
   }
 }
 
-GetCommand.description = 'Get an Event Registration in your Workspace'
+ListCommand.description = 'List your Event Registrations in your Workspace'
 
-GetCommand.aliases = [
-  'console:reg:get'
+ListCommand.aliases = [
+  'console:registration:ls',
+  'console:registration:list',
+  'console:reg:ls'
 ]
 
-GetCommand.flags = {
+ListCommand.flags = {
   ...BaseCommand.flags,
   json: flags.boolean({
     description: 'Output json',
@@ -65,8 +75,4 @@ GetCommand.flags = {
   })
 }
 
-GetCommand.args = [
-  { name: 'registrationId', required: true, description: 'Id of the registration to get' }
-]
-
-module.exports = GetCommand
+module.exports = ListCommand
