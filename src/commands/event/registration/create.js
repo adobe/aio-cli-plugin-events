@@ -12,6 +12,7 @@ governing permissions and limitations under the License.
 
 const { flags } = require('@oclif/command')
 const { cli } = require('cli-ux')
+const fs = require('fs')
 
 const BaseCommand = require('../../../BaseCommand')
 const aioLogger = require('@adobe/aio-lib-core-logging')('@adobe/aio-cli-plugin-events:registration:list', { provider: 'debug' })
@@ -22,10 +23,23 @@ class GetCommand extends BaseCommand {
 
     try {
       await this.initSdk()
-      aioLogger.debug('Listing Registrations')
 
-      cli.action.start(`Retrieving Registration with id ${args.registrationId}`)
-      const registration = await this.eventClient.getWebhookRegistration(this.conf.org.id, this.conf.integration.id, args.registrationId)
+      const body = this.parseJSONFile(args.bodyJSONFile)
+      if (!body.client_id) {
+        body.client_id = this.conf.integration.jwtClientId
+      }
+      if (!body.delivery_type) {
+        body.delivery_type = 'JOURNAL'
+      }
+      if (body.delivery_type === 'JOURNAL' && body.webhook_url) {
+        throw new Error('\'webhook_url\' is not allowed if \'delivery_type\' is \'JOURNAL\'')
+      }
+      // todo further validation needs to be implemented in the event lib
+
+      aioLogger.debug(`Creating an Event Registration from input file ${args.file}`)
+
+      cli.action.start('Creating new Event Registration')
+      const registration = await this.eventClient.createWebhookRegistration(this.conf.org.id, this.conf.integration.id, body)
       cli.action.stop()
 
       aioLogger.debug('Listing Registrations: Data Received')
@@ -43,9 +57,19 @@ class GetCommand extends BaseCommand {
       this.error(err)
     }
   }
+
+  /** @private */
+  parseJSONFile (file) {
+    const bodyText = fs.readFileSync(file).toString()
+    try {
+      return JSON.parse(bodyText)
+    } catch (e) {
+      throw new Error(`${file} is not a valid JSON file`)
+    }
+  }
 }
 
-GetCommand.description = 'Get an Event Registration in your Workspace'
+GetCommand.description = 'Create a new Event Registration in your Workspace'
 
 GetCommand.aliases = [
   'console:reg:get'
@@ -66,7 +90,22 @@ GetCommand.flags = {
 }
 
 GetCommand.args = [
-  { name: 'registrationId', required: true, description: 'Id of the registration to get' }
+  {
+    name: 'bodyJSONFile',
+    required: true,
+    description: `Path to a file in JSON format with the information to create a new Event Registration.
+The JSON should follow the following format:
+{
+  "name": "<event registration name>",
+  "description": "<event registration description>",
+  "delivery_type": "WEBHOOK|WEBHOOK_BATCH|JOURNAL",
+  "webhook_url": "<webhook URL responding to challenge>"
+  "events_of_interest": [{
+    "provider_id": "<event provider id>"
+    "event_code": "<event provider event_code metadata>"
+  }, { <...more events> }]
+}`
+  }
 ]
 
 module.exports = GetCommand

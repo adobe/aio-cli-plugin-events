@@ -47,14 +47,13 @@ class ListCommand extends BaseCommand {
         })
       }
     } catch (err) {
-      cli.action.stop()
       aioLogger.debug(err)
-      this.error(err.message)
+      this.error(err)
     }
   }
 }
 
-ListCommand.description = 'List your Registrations in your current Workspace'
+ListCommand.description = 'List your Event Registrations in your Workspace'
 
 ListCommand.aliases = [
   'console:registration:ls',
