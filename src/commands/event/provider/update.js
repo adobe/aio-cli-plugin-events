@@ -54,7 +54,9 @@ class ProviderUpdateCommand extends BaseCommand {
         docs_url: response.docs_url || undefined
       }
 
+      cli.action.start('Updating the Event Provider')
       const provider = await this.eventClient.updateProvider(this.conf.org.id, this.conf.project.id, this.conf.workspace.id, args.providerId, providerPayload)
+      cli.action.stop()
       if (flags.json) {
         this.printJson(provider)
       } else if (flags.yml) {
@@ -63,11 +65,8 @@ class ProviderUpdateCommand extends BaseCommand {
         this.log(JSON.stringify(provider, null, 2))
       }
     } catch (err) {
-      cli.action.stop()
       aioLogger.debug(err)
-      this.error(err.message)
-    } finally {
-      cli.action.stop()
+      this.error(err)
     }
   }
 }

@@ -21,8 +21,10 @@ class ProviderGetCommand extends BaseCommand {
 
     try {
       await this.initSdk()
+      cli.action.start('Fetching the Event Provider')
       const provider = await this.eventClient.getProvider(args.providerId,
         flags.fetchEventMetadata)
+      cli.action.stop()
 
       if (flags.json) {
         this.printJson(provider)
@@ -32,11 +34,8 @@ class ProviderGetCommand extends BaseCommand {
         this.log(JSON.stringify(provider, null, 2))
       }
     } catch (err) {
-      cli.action.stop()
       aioLogger.debug(err)
-      this.error(err.message)
-    } finally {
-      cli.action.stop()
+      this.error(err)
     }
   }
 }
