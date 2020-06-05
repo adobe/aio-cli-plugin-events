@@ -11,7 +11,7 @@ governing permissions and limitations under the License.
 */
 
 const IndexCommand = require('../../../src/commands/event')
-const {stdout} = require('stdout-stderr')
+const { stdout } = require('stdout-stderr')
 
 beforeAll(() => stdout.start())
 afterAll(() => stdout.stop())

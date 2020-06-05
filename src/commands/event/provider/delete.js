@@ -20,14 +20,13 @@ class ProviderDeleteCommand extends BaseCommand {
 
     try {
       await this.initSdk()
+      cli.action.start('Deleting Event Provider')
       await this.eventClient.deleteProvider(this.conf.org.id, this.conf.project.id, this.conf.workspace.id, args.providerId)
+      cli.action.stop()
       this.log('Provider ' + args.providerId + ' has been deleted successfully')
     } catch (err) {
-      cli.action.stop()
       aioLogger.debug(err)
-      this.error(err.message)
-    } finally {
-      cli.action.stop()
+      this.error(err)
     }
   }
 }

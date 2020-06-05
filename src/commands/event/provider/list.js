@@ -20,8 +20,9 @@ class ProviderListCommand extends BaseCommand {
     const { flags } = this.parse(ProviderListCommand)
     try {
       await this.initSdk()
+      cli.action.start('Fetching all Event Providers')
       const providers = await this.eventClient.getAllProviders(this.conf.org.id)
-
+      cli.action.stop()
       if (flags.json) {
         this.printJson(providers)
       } else if (flags.yml) {
@@ -30,13 +31,9 @@ class ProviderListCommand extends BaseCommand {
         this.printResults(providers._embedded.providers)
       }
     } catch (err) {
-      cli.action.stop()
       aioLogger.debug(err)
-      this.error(err.message)
-    } finally {
-      cli.action.stop()
+      this.error(err)
     }
-    await this.initSdk()
   }
 
   printResults (projects) {
