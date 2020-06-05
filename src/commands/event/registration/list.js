@@ -34,13 +34,12 @@ class ListCommand extends BaseCommand {
         this.printYaml(registrations)
       } else {
         // print formatted result
-        const commonTableConfig = { minWidth: 25 }
         cli.table(registrations, {
-          registration_id: commonTableConfig,
-          name: commonTableConfig,
-          // description: commonTableConfig, to
-          integration_status: commonTableConfig,
-          delivery_type: commonTableConfig
+          registration_id: { minWidth: 38 },
+          name: { minWidth: 25 },
+          integration_status: { minWidth: 10 },
+          delivery_type: { minWidth: 10 },
+          status: { minWidth: 10 }
         }, {
           printLine: this.log
         })
