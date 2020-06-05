@@ -28,17 +28,19 @@ class BaseCommand extends Command {
   async initSdk () {
     // login
     await context.setCli({ '$cli.bare-output': true }, false) // set this globally
-    aioLogger.debug('Retrieving Auth Token')
+    aioLogger.debug('run login')
     this.accessToken = await getToken(CLI) // user access token, would work with jwt too
 
     // init console sdk
     this.consoleClient = await require('@adobe/aio-lib-console').init(this.accessToken, CONSOLE_API_KEY)
 
     // load configuration needed for future api calls
-    aioLogger.debug('Loading config')
+    aioLogger.debug('loading console configuration')
     this.conf = await this.loadConfig(this.consoleClient)
+    aioLogger.debug(`${JSON.stringify(this.conf)}`)
 
     // init the event client
+    aioLogger.debug(`initializing aio-lib-events with org=${this.conf.org.code}, apiKey(jwtClientId)=${this.conf.integration.jwtClientId} and accessToken`)
     this.eventClient = await require('@adobe/aio-lib-events').init(this.conf.org.code, this.conf.integration.jwtClientId, this.accessToken)
   }
 
@@ -49,7 +51,7 @@ class BaseCommand extends Command {
     const localWorkspace = aioConfig.get('workspace', 'local')
     if (localProject && localProject.org && localWorkspace) {
       // is the above check enough?
-
+      aioLogger.debug('retrieving console configuration from local aio application config')
       const workspaceIntegration = this.extractServiceIntegrationConfig(localWorkspace)
       // note in the local app aio, the workspaceIntegration only holds a reference, the
       // clientId is stored in the dotenv
@@ -64,19 +66,28 @@ class BaseCommand extends Command {
       }
     }
 
-    // use console config
+    // use global console config
+    aioLogger.debug('retrieving console configuration from global config')
     const { org, project, workspace } = aioConfig.get(CONSOLE_CONFIG_KEY) || {}
     if (!org || !project || !workspace) {
       throw new Error(`Your console configuration is incomplete.${EOL}Use the 'aio console' commands to select your organization, project, and workspace.${EOL}${this.consoleConfigString().value}`)
     }
     let { integration, workspaceId } = aioConfig.get(EVENTS_CONFIG_KEY) || {}
+    if (integration) {
+      aioLogger.debug(`found integration in ${EVENTS_CONFIG_KEY} cache with workspaceId=${workspaceId}`)
+      if (workspaceId !== workspace.id) {
+        aioLogger.debug(`cannot use cache as workspaceId does not match selected workspace: ${workspace.id}`)
+      }
+    }
     if (!integration || workspaceId !== workspace.id) {
+      aioLogger.debug('downloading workspace JSON to retrieve integration details')
       // fetch integration details
       const consoleJSON = await consoleClient.downloadWorkspaceJson(org.id, project.id, workspace.id)
       const workspaceIntegration = this.extractServiceIntegrationConfig(consoleJSON.body.project.workspace)
       integration = { id: workspaceIntegration.id, name: workspaceIntegration.name, jwtClientId: workspaceIntegration.jwt.client_id }
 
       // cache the integration details for future use
+      aioLogger.debug(`caching integration details with workspaceId=${workspace.id} to ${EVENTS_CONFIG_KEY}`)
       aioConfig.set(EVENTS_CONFIG_KEY, { integration, workspaceId: workspace.id }, false)
     }
     return {

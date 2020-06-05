@@ -15,7 +15,7 @@ const { cli } = require('cli-ux')
 const fs = require('fs')
 
 const BaseCommand = require('../../../BaseCommand')
-const aioLogger = require('@adobe/aio-lib-core-logging')('@adobe/aio-cli-plugin-events:registration:list', { provider: 'debug' })
+const aioLogger = require('@adobe/aio-lib-core-logging')('@adobe/aio-cli-plugin-events:registration:create', { provider: 'debug' })
 
 class GetCommand extends BaseCommand {
   async run () {
@@ -25,6 +25,7 @@ class GetCommand extends BaseCommand {
       await this.initSdk()
 
       const body = this.parseJSONFile(args.bodyJSONFile)
+      // todo those should be moved to the events sdk
       if (!body.client_id) {
         body.client_id = this.conf.integration.jwtClientId
       }
@@ -34,15 +35,14 @@ class GetCommand extends BaseCommand {
       if (body.delivery_type === 'JOURNAL' && body.webhook_url) {
         throw new Error('\'webhook_url\' is not allowed if \'delivery_type\' is \'JOURNAL\'')
       }
-      // todo further validation needs to be implemented in the event lib
 
-      aioLogger.debug(`Creating an Event Registration from input file ${args.file}`)
+      // other checks are performed by the server
 
+      aioLogger.debug(`create event registration with body ${body}`)
       cli.action.start('Creating new Event Registration')
       const registration = await this.eventClient.createWebhookRegistration(this.conf.org.id, this.conf.integration.id, body)
       cli.action.stop()
-
-      aioLogger.debug('Listing Registrations: Data Received')
+      aioLogger.debug(`create successful, id: ${registration.id}, name: ${registration.name}`)
 
       if (flags.json) {
         this.printJson(registration)

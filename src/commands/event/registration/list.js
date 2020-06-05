@@ -21,13 +21,12 @@ class ListCommand extends BaseCommand {
 
     try {
       await this.initSdk()
-      aioLogger.debug('Listing Registrations')
 
+      aioLogger.debug(`list registrations in the workspace ${this.conf.workspace.id}`)
       cli.action.start(`Retrieving Registrations for the Workspace ${this.conf.workspace.id}`)
       const registrations = await this.eventClient.getAllWebhookRegistrations(this.conf.org.id, this.conf.integration.id)
       cli.action.stop()
-
-      aioLogger.debug('Listing Registrations: Data Received')
+      aioLogger.debug(`list successful, got ${registrations.length} elements with ids: ${registrations.map(r => r.id)}`)
 
       if (flags.json) {
         this.printJson(registrations)
