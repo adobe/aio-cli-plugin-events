@@ -40,7 +40,7 @@ class BaseCommand extends Command {
     aioLogger.debug(`${JSON.stringify(this.conf)}`)
 
     // init the event client
-    aioLogger.debug(`initializing aio-lib-events with org=${this.conf.org.code}, apiKey(jwtClientId)=${this.conf.integration.jwtClientId} and accessToken`)
+    aioLogger.debug(`initializing aio-lib-events with org=${this.conf.org.code}, apiKey(jwtClientId)=${this.conf.integration.jwtClientId} and accessToken=<hidden>`)
     this.eventClient = await require('@adobe/aio-lib-events').init(this.conf.org.code, this.conf.integration.jwtClientId, this.accessToken)
   }
 

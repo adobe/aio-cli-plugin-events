@@ -17,23 +17,25 @@ const fs = require('fs')
 const BaseCommand = require('../../../BaseCommand')
 const aioLogger = require('@adobe/aio-lib-core-logging')('@adobe/aio-cli-plugin-events:registration:create', { provider: 'debug' })
 
-class GetCommand extends BaseCommand {
+class CreateCommand extends BaseCommand {
   async run () {
-    const { args, flags } = this.parse(GetCommand)
+    const { args, flags } = this.parse(CreateCommand)
 
     try {
       await this.initSdk()
 
       const body = this.parseJSONFile(args.bodyJSONFile)
-      // todo those should be moved to the events sdk
+
+      // todo should these transformations be moved to the events sdk ?
       if (!body.client_id) {
         body.client_id = this.conf.integration.jwtClientId
       }
       if (!body.delivery_type) {
-        body.delivery_type = 'JOURNAL'
-      }
-      if (body.delivery_type === 'JOURNAL' && body.webhook_url) {
-        throw new Error('\'webhook_url\' is not allowed if \'delivery_type\' is \'JOURNAL\'')
+        if (body.webhook_url) {
+          body.delivery_type = 'WEBHOOK'
+        } else {
+          body.delivery_type = 'JOURNAL'
+        }
       }
 
       // other checks are performed by the server
@@ -69,13 +71,13 @@ class GetCommand extends BaseCommand {
   }
 }
 
-GetCommand.description = 'Create a new Event Registration in your Workspace'
+CreateCommand.description = 'Create a new Event Registration in your Workspace'
 
-GetCommand.aliases = [
+CreateCommand.aliases = [
   'console:reg:get'
 ]
 
-GetCommand.flags = {
+CreateCommand.flags = {
   ...BaseCommand.flags,
   json: flags.boolean({
     description: 'Output json',
@@ -89,7 +91,7 @@ GetCommand.flags = {
   })
 }
 
-GetCommand.args = [
+CreateCommand.args = [
   {
     name: 'bodyJSONFile',
     required: true,
@@ -108,4 +110,4 @@ The JSON should follow the following format:
   }
 ]
 
-module.exports = GetCommand
+module.exports = CreateCommand

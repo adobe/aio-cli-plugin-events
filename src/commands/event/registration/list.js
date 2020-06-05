@@ -35,11 +35,11 @@ class ListCommand extends BaseCommand {
       } else {
         // print formatted result
         cli.table(registrations, {
-          registration_id: { minWidth: 38 },
-          name: { minWidth: 25 },
-          integration_status: { minWidth: 10 },
-          delivery_type: { minWidth: 10 },
-          status: { minWidth: 10 }
+          registration_id: { minWidth: 38, header: 'ID' },
+          name: { minWidth: 25, header: 'NAME' },
+          integration_status: { minWidth: 10, header: 'INTEGRATION_STATUS' },
+          delivery_type: { minWidth: 10, header: 'DELIVERY_TYPE' },
+          status: { minWidth: 10, header: 'STATUS' }
         }, {
           printLine: this.log
         })
