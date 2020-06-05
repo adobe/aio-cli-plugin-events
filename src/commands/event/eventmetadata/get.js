@@ -21,8 +21,10 @@ class EventmetadataGetCommand extends BaseCommand {
 
     try {
       await this.initSdk()
+      cli.action.start('Fetching the event metadata for the provider')
       const eventmetadata = await this.eventClient.getEventMetadataForProvider(args.providerId,
         args.eventCode)
+      cli.action.stop()
 
       if (flags.json) {
         this.printJson(eventmetadata)
@@ -32,11 +34,8 @@ class EventmetadataGetCommand extends BaseCommand {
         this.log(JSON.stringify(eventmetadata, null, 2))
       }
     } catch (err) {
-      cli.action.stop()
       aioLogger.debug(err)
-      this.error(err.message)
-    } finally {
-      cli.action.stop()
+      this.error(err)
     }
   }
 }

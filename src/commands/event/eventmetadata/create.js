@@ -62,7 +62,10 @@ class EventmetadataCreateCommand extends BaseCommand {
         description: response.description
       }
 
+      cli.action.start('Creating Event Metadata')
       const eventmetadata = await this.eventClient.createEventMetadataForProvider(this.conf.org.id, this.conf.project.id, this.conf.workspace.id, args.providerId, eventMetadataPayload)
+      cli.action.stop()
+
       if (flags.json) {
         this.printJson(eventmetadata)
       } else if (flags.yml) {
@@ -71,11 +74,8 @@ class EventmetadataCreateCommand extends BaseCommand {
         this.log(JSON.stringify(eventmetadata, null, 2))
       }
     } catch (err) {
-      cli.action.stop()
       aioLogger.debug(err)
-      this.error(err.message)
-    } finally {
-      cli.action.stop()
+      this.error(err)
     }
   }
 }

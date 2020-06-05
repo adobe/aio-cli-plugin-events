@@ -29,8 +29,10 @@ class EventmetadataDeleteCommand extends BaseCommand {
 
         }])
         if (response.delete) {
+          cli.action.start('Deleting ALL Event Metadata for provider')
           await this.eventClient.deleteAllEventMetadata(this.conf.org.id,
             this.conf.project.id, this.conf.workspace.id, args.providerId)
+          cli.action.stop()
           this.log('All eventmetadata of provider ' + args.providerId + ' has been deleted successfully')
         } else {
           this.log('Deletion operation has been cancelled. For more information on delete use --help')
@@ -43,20 +45,19 @@ class EventmetadataDeleteCommand extends BaseCommand {
 
         }])
         if (response.delete) {
+          cli.action.start('Deleting Event Metadata for provider')
           await this.eventClient.deleteEventMetadata(this.conf.org.id,
             this.conf.project.id, this.conf.workspace.id, args.providerId,
             args.eventCode)
+          cli.action.stop()
           this.log(args.eventCode + ' eventmetadata of provider ' + args.providerId + ' has been deleted successfully')
         } else {
           this.log('Deletion operation has been cancelled. For more information on delete use --help')
         }
       }
     } catch (err) {
-      cli.action.stop()
       aioLogger.debug(err)
-      this.error(err.message)
-    } finally {
-      cli.action.stop()
+      this.error(err)
     }
   }
 }

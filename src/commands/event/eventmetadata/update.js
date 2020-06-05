@@ -51,7 +51,9 @@ class EventmetadataUpdateCommand extends BaseCommand {
         description: response.description
       }
 
+      cli.action.start('Updating Event Metadata for provider')
       const eventmetadata = await this.eventClient.updateEventMetadataForProvider(this.conf.org.id, this.conf.project.id, this.conf.workspace.id, args.providerId, args.eventCode, eventMetadataPayload)
+      cli.action.stop()
       if (flags.json) {
         this.printJson(eventmetadata)
       } else if (flags.yml) {
@@ -60,11 +62,8 @@ class EventmetadataUpdateCommand extends BaseCommand {
         this.log(JSON.stringify(eventmetadata, null, 2))
       }
     } catch (err) {
-      cli.action.stop()
       aioLogger.debug(err)
-      this.error(err.message)
-    } finally {
-      cli.action.stop()
+      this.error(err)
     }
   }
 }
