@@ -21,13 +21,12 @@ class ListCommand extends BaseCommand {
 
     try {
       await this.initSdk()
-      aioLogger.debug('Listing Registrations')
 
+      aioLogger.debug(`list registrations in the workspace ${this.conf.workspace.id}`)
       cli.action.start(`Retrieving Registrations for the Workspace ${this.conf.workspace.id}`)
       const registrations = await this.eventClient.getAllWebhookRegistrations(this.conf.org.id, this.conf.integration.id)
       cli.action.stop()
-
-      aioLogger.debug('Listing Registrations: Data Received')
+      aioLogger.debug(`list successful, got ${registrations.length} elements with ids: ${registrations.map(r => r.id)}`)
 
       if (flags.json) {
         this.printJson(registrations)
@@ -35,13 +34,12 @@ class ListCommand extends BaseCommand {
         this.printYaml(registrations)
       } else {
         // print formatted result
-        const commonTableConfig = { minWidth: 25 }
         cli.table(registrations, {
-          registration_id: commonTableConfig,
-          name: commonTableConfig,
-          // description: commonTableConfig, to
-          integration_status: commonTableConfig,
-          delivery_type: commonTableConfig
+          registration_id: { minWidth: 38, header: 'ID' },
+          name: { minWidth: 25, header: 'NAME' },
+          integration_status: { minWidth: 10, header: 'INTEGRATION_STATUS' },
+          delivery_type: { minWidth: 10, header: 'DELIVERY_TYPE' },
+          status: { minWidth: 10, header: 'STATUS' }
         }, {
           printLine: this.log
         })

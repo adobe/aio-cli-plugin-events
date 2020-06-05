@@ -14,7 +14,7 @@ const { flags } = require('@oclif/command')
 const { cli } = require('cli-ux')
 
 const BaseCommand = require('../../../BaseCommand')
-const aioLogger = require('@adobe/aio-lib-core-logging')('@adobe/aio-cli-plugin-events:registration:list', { provider: 'debug' })
+const aioLogger = require('@adobe/aio-lib-core-logging')('@adobe/aio-cli-plugin-events:registration:get', { provider: 'debug' })
 
 class GetCommand extends BaseCommand {
   async run () {
@@ -22,13 +22,12 @@ class GetCommand extends BaseCommand {
 
     try {
       await this.initSdk()
-      aioLogger.debug('Listing Registrations')
 
+      aioLogger.debug(`get registration: ${args.registrationId}`)
       cli.action.start(`Retrieving Registration with id ${args.registrationId}`)
       const registration = await this.eventClient.getWebhookRegistration(this.conf.org.id, this.conf.integration.id, args.registrationId)
       cli.action.stop()
-
-      aioLogger.debug('Listing Registrations: Data Received')
+      aioLogger.debug(`get successful, name: ${registration.name}`)
 
       if (flags.json) {
         this.printJson(registration)
