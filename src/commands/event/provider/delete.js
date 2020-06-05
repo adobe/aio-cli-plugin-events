@@ -12,6 +12,7 @@ governing permissions and limitations under the License.
 
 const BaseCommand = require('../../../BaseCommand.js')
 const { cli } = require('cli-ux')
+const inquirer = require('inquirer')
 const aioLogger = require('@adobe/aio-lib-core-logging')('@adobe/aio-cli-plugin-events:provider:get', { provider: 'debug' })
 
 class ProviderDeleteCommand extends BaseCommand {
@@ -20,10 +21,22 @@ class ProviderDeleteCommand extends BaseCommand {
 
     try {
       await this.initSdk()
-      cli.action.start('Deleting Event Provider')
-      await this.eventClient.deleteProvider(this.conf.org.id, this.conf.project.id, this.conf.workspace.id, args.providerId)
-      cli.action.stop()
-      this.log('Provider ' + args.providerId + ' has been deleted successfully')
+      const response = await inquirer.prompt([{
+        type: 'confirm',
+        name: 'delete',
+        message: 'Are you sure you want to delete the provider? This operation in irreversible.'
+
+      }])
+      if (response.delete) {
+        cli.action.start('Deleting Event Provider')
+        await this.eventClient.deleteProvider(this.conf.org.id,
+          this.conf.project.id, this.conf.workspace.id, args.providerId)
+        cli.action.stop()
+        this.log('Provider ' + args.providerId +
+                ' has been deleted successfully')
+      } else {
+        this.log('Delete operation has been cancelled')
+      }
     } catch (err) {
       aioLogger.debug(err)
       this.error(err)
