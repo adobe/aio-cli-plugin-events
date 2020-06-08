@@ -13,5 +13,6 @@ coverage/
 junit.xml
 package-lock.json
 .idea
-oclif.manifest.json
 .aio
+playground/
+oclif.manifest.json
