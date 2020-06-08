@@ -15,52 +15,39 @@ const { flags } = require('@oclif/command')
 const { cli } = require('cli-ux')
 const aioLogger = require('@adobe/aio-lib-core-logging')('@adobe/aio-cli-plugin-events:provider:get', { provider: 'debug' })
 
-class ProviderListCommand extends BaseCommand {
+class EventmetadataGetCommand extends BaseCommand {
   async run () {
-    const { flags } = this.parse(ProviderListCommand)
+    const { args, flags } = this.parse(EventmetadataGetCommand)
+
     try {
       await this.initSdk()
-      cli.action.start('Fetching all Event Providers')
-      const providers = await this.eventClient.getAllProviders(this.conf.org.id)
+      cli.action.start('Fetching the event metadata for the provider')
+      const eventmetadata = await this.eventClient.getEventMetadataForProvider(args.providerId,
+        args.eventCode)
       cli.action.stop()
+
       if (flags.json) {
-        this.printJson(providers)
+        this.printJson(eventmetadata)
       } else if (flags.yml) {
-        this.printYaml(providers)
+        this.printYaml(eventmetadata)
       } else {
-        this.printResults(providers._embedded.providers)
+        this.log(JSON.stringify(eventmetadata, null, 2))
       }
     } catch (err) {
       aioLogger.debug(err)
       this.error(err)
     }
   }
-
-  printResults (projects) {
-    const columns = {
-      id: {
-        header: 'ID'
-      },
-      label: {
-        header: 'LABEL'
-      },
-      description: {
-        header: 'DESC'
-      },
-      source: {
-        header: 'SOURCE'
-      },
-      docs_url: {
-        header: 'DOCS'
-      }
-    }
-    cli.table(projects, columns)
-  }
 }
 
-ProviderListCommand.description = 'Get list of all Providers for the Organization'
+EventmetadataGetCommand.description = 'Get details of an Event Code of a Provider'
 
-ProviderListCommand.flags = {
+EventmetadataGetCommand.args = [
+  { name: 'providerId', required: true },
+  { name: 'eventCode', required: true }
+]
+
+EventmetadataGetCommand.flags = {
   ...BaseCommand.flags,
   json: flags.boolean({
     description: 'Output json',
@@ -74,4 +61,4 @@ ProviderListCommand.flags = {
   })
 }
 
-module.exports = ProviderListCommand
+module.exports = EventmetadataGetCommand

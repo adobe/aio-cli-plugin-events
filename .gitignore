@@ -16,3 +16,4 @@ package-lock.json
 .aio
 playground/
 oclif.manifest.json
+.idea
