@@ -53,7 +53,7 @@ class EventmetadataListCommand extends BaseCommand {
   }
 }
 
-EventmetadataListCommand.description = 'List all event metadata for a provider'
+EventmetadataListCommand.description = 'List all Event Metadata for a Provider'
 
 EventmetadataListCommand.args = [
   { name: 'providerId', required: true }

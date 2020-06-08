@@ -26,22 +26,22 @@ class EventmetadataUpdateCommand extends BaseCommand {
         message: 'Enter the label for the event metadata.',
         validate (input) {
           // eslint-disable-next-line no-useless-escape
-          const valid = /[\w-_\.]{1,255}$/
+          const valid = /[\w\s-_.(),@]{1,255}$/
           if (valid.test(input)) {
             return true
           }
-          return `The input event metadata label '${input}' contains invalid character (valid characters are letters, numbers, underscores, hyphens, dots)"`
+          return `The input: '${input}' is invalid, please use a < 255 characters string with a combination of alphanumeric characters, spaces and special characters in '-_.(),@'`
         }
       }, {
         name: 'description',
         message: 'Add a description about the event metadata.',
         validate (input) {
           // eslint-disable-next-line no-useless-escape
-          const valid = /[\w\s-_\.\(\)\,\@]{1,255}$/
+          const valid = /[\w\s-_.(),@]{1,255}$/
           if (valid.test(input)) {
             return true
           }
-          return `The input event metadata's description '${input}' contains invalid character (valid characters are letters, numbers, underscores, hyphens, dots, parenthesis, comma, @ and space)"`
+          return `The input: '${input}' is invalid, please use a < 255 characters string with a combination of alphanumeric characters, spaces and special characters in '-_.(),@'`
         }
       }])
 
@@ -51,7 +51,7 @@ class EventmetadataUpdateCommand extends BaseCommand {
         description: response.description
       }
 
-      cli.action.start('Updating Event Metadata for provider')
+      cli.action.start('Updating Event Metadata for Provider')
       const eventmetadata = await this.eventClient.updateEventMetadataForProvider(this.conf.org.id, this.conf.project.id, this.conf.workspace.id, args.providerId, args.eventCode, eventMetadataPayload)
       cli.action.stop()
       if (flags.json) {
@@ -68,7 +68,7 @@ class EventmetadataUpdateCommand extends BaseCommand {
   }
 }
 
-EventmetadataUpdateCommand.description = 'Update an event metadata for a provider'
+EventmetadataUpdateCommand.description = 'Update an Event Metadata for a Provider'
 
 EventmetadataUpdateCommand.args = [
   { name: 'providerId', required: true },

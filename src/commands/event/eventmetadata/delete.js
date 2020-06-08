@@ -21,7 +21,7 @@ class EventmetadataDeleteCommand extends BaseCommand {
 
     try {
       await this.initSdk()
-      if (args.eventCode === undefined) {
+      if (!args.eventCode) {
         const response = await inquirer.prompt([{
           type: 'confirm',
           name: 'delete',
@@ -33,7 +33,7 @@ class EventmetadataDeleteCommand extends BaseCommand {
           await this.eventClient.deleteAllEventMetadata(this.conf.org.id,
             this.conf.project.id, this.conf.workspace.id, args.providerId)
           cli.action.stop()
-          this.log('All eventmetadata of provider ' + args.providerId + ' has been deleted successfully')
+          this.log('All event metadata of provider ' + args.providerId + ' has been deleted successfully')
         } else {
           this.log('Deletion operation has been cancelled. For more information on delete use --help')
         }
@@ -50,7 +50,7 @@ class EventmetadataDeleteCommand extends BaseCommand {
             this.conf.project.id, this.conf.workspace.id, args.providerId,
             args.eventCode)
           cli.action.stop()
-          this.log(args.eventCode + ' eventmetadata of provider ' + args.providerId + ' has been deleted successfully')
+          this.log(args.eventCode + ' event metadata of provider ' + args.providerId + ' has been deleted successfully')
         } else {
           this.log('Deletion operation has been cancelled. For more information on delete use --help')
         }
@@ -62,7 +62,7 @@ class EventmetadataDeleteCommand extends BaseCommand {
   }
 }
 
-EventmetadataDeleteCommand.description = 'Delete event metadata for a provider'
+EventmetadataDeleteCommand.description = 'Delete Event Metadata for a Provider'
 
 EventmetadataDeleteCommand.args = [
   { name: 'providerId', required: true },

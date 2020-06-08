@@ -40,7 +40,7 @@ class EventmetadataGetCommand extends BaseCommand {
   }
 }
 
-EventmetadataGetCommand.description = 'Get details of an event code of a provider'
+EventmetadataGetCommand.description = 'Get details of an Event Code of a Provider'
 
 EventmetadataGetCommand.args = [
   { name: 'providerId', required: true },
