@@ -12,3 +12,6 @@ node_modules
 coverage/
 junit.xml
 package-lock.json
+.aio
+playground/
+oclif.manifest.json

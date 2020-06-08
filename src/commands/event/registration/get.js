@@ -10,25 +10,62 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
-const BaseCommand = require('../../../BaseCommand.js')
+const { flags } = require('@oclif/command')
+const { cli } = require('cli-ux')
+
+const BaseCommand = require('../../../BaseCommand')
+const aioLogger = require('@adobe/aio-lib-core-logging')('@adobe/aio-cli-plugin-events:registration:get', { provider: 'debug' })
 
 class GetCommand extends BaseCommand {
   async run () {
-    const { args } = this.parse(GetCommand)
+    const { args, flags } = this.parse(GetCommand)
 
-    await this.initSdk()
-    // todo formatting + support of --json and --yml
-    const res = await this.eventClient.getWebhookRegistration(this.conf.org.id, this.conf.integration.id, args.registrationId)
-    this.log(res)
+    try {
+      await this.initSdk()
+
+      aioLogger.debug(`get registration: ${args.registrationId}`)
+      cli.action.start(`Retrieving Registration with id ${args.registrationId}`)
+      const registration = await this.eventClient.getWebhookRegistration(this.conf.org.id, this.conf.integration.id, args.registrationId)
+      cli.action.stop()
+      aioLogger.debug(`get successful, name: ${registration.name}`)
+
+      if (flags.json) {
+        this.printJson(registration)
+      } else if (flags.yml) {
+        this.printYaml(registration)
+      } else {
+        // for now let's print a beautified json
+        this.log(JSON.stringify(registration, null, 2))
+      }
+    } catch (err) {
+      aioLogger.debug(err)
+      this.error(err)
+    }
   }
 }
 
-GetCommand.args = [
-  { name: 'registrationId', required: true }
+GetCommand.description = 'Get an Event Registration in your Workspace'
+
+GetCommand.aliases = [
+  'console:reg:get'
 ]
 
 GetCommand.flags = {
-  ...BaseCommand.flags
+  ...BaseCommand.flags,
+  json: flags.boolean({
+    description: 'Output json',
+    char: 'j',
+    exclusive: ['yml']
+  }),
+  yml: flags.boolean({
+    description: 'Output yml',
+    char: 'y',
+    exclusive: ['json']
+  })
 }
+
+GetCommand.args = [
+  { name: 'registrationId', required: true, description: 'Id of the registration to get' }
+]
 
 module.exports = GetCommand
