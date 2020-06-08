@@ -26,22 +26,22 @@ class ProviderUpdateCommand extends BaseCommand {
         message: 'Enter the label for the provider',
         validate (input) {
           // eslint-disable-next-line no-useless-escape
-          const valid = /[\w\s-_\.\(\)\,\@]{1,255}$/
+          const valid = /[\w\s-_.(),@]{1,255}$/
           if (valid.test(input)) {
             return true
           }
-          return `The input provider's label '${input}' contains invalid character (valid characters are letters, numbers, underscores, hyphens, dots, parenthesis, comma, @ and space)"`
+          return `The input: '${input}' is invalid, please use a < 255 characters string with a combination of alphanumeric characters, spaces and special characters in '-_.(),@'`
         }
       }, {
         name: 'description',
         message: 'Add a description about the provider. (Optional)',
         validate (input) {
           // eslint-disable-next-line no-useless-escape
-          const valid = /[\w\s-_\.\(\)\,\@]{0,255}$/
+          const valid = /[\w\s-_.(),@]{0,255}$/
           if (valid.test(input)) {
             return true
           }
-          return `The input provider's description '${input}' contains invalid character (valid characters are letters, numbers, underscores, hyphens, dots, parenthesis, comma, @ and space)"`
+          return `The input: '${input}' is invalid, please use a < 255 characters string with a combination of alphanumeric characters, spaces and special characters in '-_.(),@'`
         }
       }, {
         name: 'docs_url',
@@ -71,7 +71,7 @@ class ProviderUpdateCommand extends BaseCommand {
   }
 }
 
-ProviderUpdateCommand.description = 'Update an existing provider'
+ProviderUpdateCommand.description = 'Update an existing Provider'
 
 ProviderUpdateCommand.args = [
   { name: 'providerId', required: true }

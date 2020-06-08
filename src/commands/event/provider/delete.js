@@ -44,7 +44,7 @@ class ProviderDeleteCommand extends BaseCommand {
   }
 }
 
-ProviderDeleteCommand.description = 'Delete provider by id'
+ProviderDeleteCommand.description = 'Delete Provider by id'
 
 ProviderDeleteCommand.args = [
   { name: 'providerId', required: true }

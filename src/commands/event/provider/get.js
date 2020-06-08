@@ -40,7 +40,7 @@ class ProviderGetCommand extends BaseCommand {
   }
 }
 
-ProviderGetCommand.description = 'Get details of provider by id'
+ProviderGetCommand.description = 'Get details of Provider by id'
 
 ProviderGetCommand.args = [
   { name: 'providerId', required: true }
