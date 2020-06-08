@@ -26,7 +26,7 @@ class ProviderCreateCommand extends BaseCommand {
         message: 'Enter the label for the provider.',
         validate (input) {
           // eslint-disable-next-line no-useless-escape
-          const valid = /[\w\s-_\.\(\)\,\@]{1,255}$/
+          const valid = /[\w\s-_.(),@]{1,255}$/
           if (valid.test(input)) {
             return true
           }
@@ -37,7 +37,7 @@ class ProviderCreateCommand extends BaseCommand {
         message: 'Add a description about the provider. (Optional)',
         validate (input) {
           // eslint-disable-next-line no-useless-escape
-          const valid = /[\w\s-_\.\(\)\,\@]{0,255}$/
+          const valid = /[\w\s-_.(),@]{0,255}$/
           if (valid.test(input)) {
             return true
           }
@@ -71,7 +71,7 @@ class ProviderCreateCommand extends BaseCommand {
   }
 }
 
-ProviderCreateCommand.description = 'Create a new provider'
+ProviderCreateCommand.description = 'Create a new Provider'
 
 ProviderCreateCommand.flags = {
   ...BaseCommand.flags,

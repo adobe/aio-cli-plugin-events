@@ -58,6 +58,8 @@ class ProviderListCommand extends BaseCommand {
   }
 }
 
+ProviderListCommand.description = 'Get list of all Providers for the Organization'
+
 ProviderListCommand.flags = {
   ...BaseCommand.flags,
   json: flags.boolean({
