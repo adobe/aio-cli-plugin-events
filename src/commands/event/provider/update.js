@@ -30,7 +30,7 @@ class ProviderUpdateCommand extends BaseCommand {
           if (valid.test(input)) {
             return true
           }
-          return `The input provider's label '${input}' contains invalid character (valid characters are letters, numbers, underscores, hyphens, dots, parenthesis, comma, @ and space)"`
+          return `The input: '${input}' is invalid, please use a < 255 characters string with a combination of alphanumeric characters, spaces and special characters in '-_.(),@'`
         }
       }, {
         name: 'description',
@@ -41,7 +41,7 @@ class ProviderUpdateCommand extends BaseCommand {
           if (valid.test(input)) {
             return true
           }
-          return `The input provider's description '${input}' contains invalid character (valid characters are letters, numbers, underscores, hyphens, dots, parenthesis, comma, @ and space)"`
+          return `The input: '${input}' is invalid, please use a < 255 characters string with a combination of alphanumeric characters, spaces and special characters in '-_.(),@'`
         }
       }, {
         name: 'docs_url',
