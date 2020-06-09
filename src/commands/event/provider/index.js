@@ -10,12 +10,17 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
-const IndexCommand = require('../../../src/commands/event')
-const { stdout } = require('stdout-stderr')
+const HHelp = require('@oclif/plugin-help').default
+const BaseCommand = require('../../../BaseCommand.js')
 
-beforeAll(() => stdout.start())
-afterAll(() => stdout.stop())
+class IndexCommand extends BaseCommand {
+  async run () {
+    const help = new HHelp(this.config)
+    help.showHelp(['event:provider', '--help'])
+    await this.initSdk()
+  }
+}
 
-test('exports', async () => {
-  expect(typeof IndexCommand).toEqual('function')
-})
+IndexCommand.description = 'Manage your Adobe I/O Events Providers'
+
+module.exports = IndexCommand

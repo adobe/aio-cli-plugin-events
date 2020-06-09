@@ -10,15 +10,138 @@ governing permissions and limitations under the License.
 */
 
 const { Command, flags } = require('@oclif/command')
+const aioLogger = require('@adobe/aio-lib-core-logging')('@adobe/aio-cli-plugin-events', { provider: 'debug' })
+const aioConfig = require('@adobe/aio-lib-core-config')
+const { getToken, context } = require('@adobe/aio-lib-ims')
+
+const { EOL } = require('os')
+
+const { CLI } = require('@adobe/aio-lib-ims/src/context')
+const yaml = require('js-yaml')
+
+const CONSOLE_CONFIG_KEY = '$console'
+const CONSOLE_API_KEY = 'aio-cli-console-auth'
+
+const EVENTS_CONFIG_KEY = '$events'
 
 class BaseCommand extends Command {
+  async initSdk () {
+    // login
+    await context.setCli({ '$cli.bare-output': true }, false) // set this globally
+    aioLogger.debug('run login')
+    this.accessToken = await getToken(CLI) // user access token, would work with jwt too
+
+    // init console sdk
+    this.consoleClient = await require('@adobe/aio-lib-console').init(this.accessToken, CONSOLE_API_KEY)
+
+    // load configuration needed for future api calls
+    aioLogger.debug('loading console configuration')
+    this.conf = await this.loadConfig(this.consoleClient)
+    aioLogger.debug(`${JSON.stringify(this.conf)}`)
+
+    // init the event client
+    aioLogger.debug(`initializing aio-lib-events with org=${this.conf.org.code}, apiKey(jwtClientId)=${this.conf.integration.jwtClientId} and accessToken=<hidden>`)
+    this.eventClient = await require('@adobe/aio-lib-events').init(this.conf.org.code, this.conf.integration.jwtClientId, this.accessToken)
+  }
+
+  /** @private */
+  async loadConfig (consoleClient) {
+    // are we in a local aio app project?
+    const localProject = aioConfig.get('project', 'local')
+    const localWorkspace = aioConfig.get('workspace', 'local')
+    if (localProject && localProject.org && localWorkspace) {
+      // is the above check enough?
+      aioLogger.debug('retrieving console configuration from local aio application config')
+      const workspaceIntegration = this.extractServiceIntegrationConfig(localWorkspace)
+      // note in the local app aio, the workspaceIntegration only holds a reference, the
+      // clientId is stored in the dotenv
+      const integrationCredentials = aioConfig.get(workspaceIntegration.name, 'env')
+
+      return {
+        isLocal: true,
+        org: { id: localProject.org.id, name: localProject.org.name, code: localProject.org.ims_org_id },
+        project: { id: localProject.id, name: localProject.name, title: localProject.title },
+        workspace: { id: localWorkspace.id, name: localWorkspace.name },
+        integration: { id: workspaceIntegration.id, name: workspaceIntegration.name, jwtClientId: integrationCredentials.client_id }
+      }
+    }
+
+    // use global console config
+    aioLogger.debug('retrieving console configuration from global config')
+    const { org, project, workspace } = aioConfig.get(CONSOLE_CONFIG_KEY) || {}
+    if (!org || !project || !workspace) {
+      throw new Error(`Your console configuration is incomplete.${EOL}Use the 'aio console' commands to select your organization, project, and workspace.${EOL}${this.consoleConfigString().value}`)
+    }
+    let { integration, workspaceId } = aioConfig.get(EVENTS_CONFIG_KEY) || {}
+    if (integration) {
+      aioLogger.debug(`found integration in ${EVENTS_CONFIG_KEY} cache with workspaceId=${workspaceId}`)
+      if (workspaceId !== workspace.id) {
+        aioLogger.debug(`cannot use cache as workspaceId does not match selected workspace: ${workspace.id}`)
+      }
+    }
+    if (!integration || workspaceId !== workspace.id) {
+      aioLogger.debug('downloading workspace JSON to retrieve integration details')
+      // fetch integration details
+      const consoleJSON = await consoleClient.downloadWorkspaceJson(org.id, project.id, workspace.id)
+      const workspaceIntegration = this.extractServiceIntegrationConfig(consoleJSON.body.project.workspace)
+      integration = { id: workspaceIntegration.id, name: workspaceIntegration.name, jwtClientId: workspaceIntegration.jwt.client_id }
+
+      // cache the integration details for future use
+      aioLogger.debug(`caching integration details with workspaceId=${workspace.id} to ${EVENTS_CONFIG_KEY}`)
+      aioConfig.set(EVENTS_CONFIG_KEY, { integration, workspaceId: workspace.id }, false)
+    }
+    return {
+      isLocal: false,
+      org,
+      project,
+      workspace,
+      integration
+    }
+  }
+
+  consoleConfigString (org = {}, project = {}, workspace = {}) {
+    const list = [
+      `1. Org: ${org.name || '<no org selected>'}`,
+      `2. Project: ${project.name || '<no project selected>'}`,
+      `3. Workspace: ${workspace.name || '<no workspace selected>'}`
+    ]
+    return { value: list.join(EOL) }
+  }
+
+  /** @private */
+  extractServiceIntegrationConfig (workspaceConfig) {
+    // note here we take the first that matches
+    const workspaceIntegration = workspaceConfig.details.credentials && workspaceConfig.details.credentials.find(c => c.integration_type === 'service')
+    if (!workspaceIntegration) {
+      throw new Error(`Workspace ${workspaceConfig.name} has no JWT integration`)
+    }
+    return workspaceIntegration
+  }
+
+  /**
+   * Output JSON data
+   *
+   * @param {object} data JSON data to print
+   */
+  printJson (data) {
+    this.log(JSON.stringify(data))
+  }
+
+  /**
+   * Output YAML data
+   *
+   * @param {object} data YAML data to print
+   */
+  printYaml (data) {
+    // clean undefined values
+    data = JSON.parse(JSON.stringify(data))
+    this.log(yaml.safeDump(data, { noCompatMode: true }))
+  }
 }
 
 BaseCommand.flags = {
   verbose: flags.boolean({ char: 'v', description: 'Verbose output' }),
   version: flags.boolean({ description: 'Show version' })
 }
-
-BaseCommand.args = []
 
 module.exports = BaseCommand

@@ -12,7 +12,7 @@
     ],
     "extends": [
         "plugin:jest/recommended",
-        "eslint:recommended"
+        "standard"
     ],
     "rules": {
         "no-var": 2
