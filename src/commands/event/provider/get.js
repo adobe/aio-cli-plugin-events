@@ -10,32 +10,28 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
+const BaseCommand = require('../../../BaseCommand.js')
 const { flags } = require('@oclif/command')
 const { cli } = require('cli-ux')
+const aioLogger = require('@adobe/aio-lib-core-logging')('@adobe/aio-cli-plugin-events:provider:get', { provider: 'debug' })
 
-const BaseCommand = require('../../../BaseCommand')
-const aioLogger = require('@adobe/aio-lib-core-logging')('@adobe/aio-cli-plugin-events:registration:get', { provider: 'debug' })
-
-class GetCommand extends BaseCommand {
+class ProviderGetCommand extends BaseCommand {
   async run () {
-    const { args, flags } = this.parse(GetCommand)
+    const { args, flags } = this.parse(ProviderGetCommand)
 
     try {
       await this.initSdk()
-
-      aioLogger.debug(`get registration: ${args.registrationId}`)
-      cli.action.start(`Retrieving Registration with id ${args.registrationId}`)
-      const registration = await this.eventClient.getWebhookRegistration(this.conf.org.id, this.conf.integration.id, args.registrationId)
+      cli.action.start('Fetching the Event Provider')
+      const provider = await this.eventClient.getProvider(args.providerId,
+        flags.fetchEventMetadata)
       cli.action.stop()
-      aioLogger.debug(`get successful, name: ${registration.name}`)
 
       if (flags.json) {
-        this.printJson(registration)
+        this.printJson(provider)
       } else if (flags.yml) {
-        this.printYaml(registration)
+        this.printYaml(provider)
       } else {
-        // for now let's print a beautified json
-        this.log(JSON.stringify(registration, null, 2))
+        this.log(JSON.stringify(provider, null, 2))
       }
     } catch (err) {
       aioLogger.debug(err)
@@ -44,14 +40,17 @@ class GetCommand extends BaseCommand {
   }
 }
 
-GetCommand.description = 'Get an Event Registration in your Workspace'
+ProviderGetCommand.description = 'Get details of Provider by id'
 
-GetCommand.aliases = [
-  'console:reg:get'
+ProviderGetCommand.args = [
+  { name: 'providerId', required: true }
 ]
 
-GetCommand.flags = {
+ProviderGetCommand.flags = {
   ...BaseCommand.flags,
+  fetchEventMetadata: flags.boolean({
+    description: 'Fetch event metadata with provider'
+  }),
   json: flags.boolean({
     description: 'Output json',
     char: 'j',
@@ -64,8 +63,4 @@ GetCommand.flags = {
   })
 }
 
-GetCommand.args = [
-  { name: 'registrationId', required: true, description: 'Id of the registration to get' }
-]
-
-module.exports = GetCommand
+module.exports = ProviderGetCommand

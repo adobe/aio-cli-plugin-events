@@ -10,47 +10,57 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
+const BaseCommand = require('../../../BaseCommand.js')
 const { flags } = require('@oclif/command')
 const { cli } = require('cli-ux')
+const aioLogger = require('@adobe/aio-lib-core-logging')('@adobe/aio-cli-plugin-events:provider:get', { provider: 'debug' })
 
-const BaseCommand = require('../../../BaseCommand')
-const aioLogger = require('@adobe/aio-lib-core-logging')('@adobe/aio-cli-plugin-events:registration:get', { provider: 'debug' })
-
-class GetCommand extends BaseCommand {
+class ProviderListCommand extends BaseCommand {
   async run () {
-    const { args, flags } = this.parse(GetCommand)
-
+    const { flags } = this.parse(ProviderListCommand)
     try {
       await this.initSdk()
-
-      aioLogger.debug(`get registration: ${args.registrationId}`)
-      cli.action.start(`Retrieving Registration with id ${args.registrationId}`)
-      const registration = await this.eventClient.getWebhookRegistration(this.conf.org.id, this.conf.integration.id, args.registrationId)
+      cli.action.start('Fetching all Event Providers')
+      const providers = await this.eventClient.getAllProviders(this.conf.org.id)
       cli.action.stop()
-      aioLogger.debug(`get successful, name: ${registration.name}`)
-
       if (flags.json) {
-        this.printJson(registration)
+        this.printJson(providers)
       } else if (flags.yml) {
-        this.printYaml(registration)
+        this.printYaml(providers)
       } else {
-        // for now let's print a beautified json
-        this.log(JSON.stringify(registration, null, 2))
+        this.printResults(providers._embedded.providers)
       }
     } catch (err) {
       aioLogger.debug(err)
       this.error(err)
     }
   }
+
+  printResults (projects) {
+    const columns = {
+      id: {
+        header: 'ID'
+      },
+      label: {
+        header: 'LABEL'
+      },
+      description: {
+        header: 'DESC'
+      },
+      source: {
+        header: 'SOURCE'
+      },
+      docs_url: {
+        header: 'DOCS'
+      }
+    }
+    cli.table(projects, columns)
+  }
 }
 
-GetCommand.description = 'Get an Event Registration in your Workspace'
+ProviderListCommand.description = 'Get list of all Providers for the Organization'
 
-GetCommand.aliases = [
-  'console:reg:get'
-]
-
-GetCommand.flags = {
+ProviderListCommand.flags = {
   ...BaseCommand.flags,
   json: flags.boolean({
     description: 'Output json',
@@ -64,8 +74,4 @@ GetCommand.flags = {
   })
 }
 
-GetCommand.args = [
-  { name: 'registrationId', required: true, description: 'Id of the registration to get' }
-]
-
-module.exports = GetCommand
+module.exports = ProviderListCommand
