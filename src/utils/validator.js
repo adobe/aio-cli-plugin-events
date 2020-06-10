@@ -28,7 +28,12 @@ function sentenceValidatorWithMinZeroChar (input) {
   return sentenceValidatorWithMinOneChar(input)
 }
 
+function eventCodeValidator (input) {
+  return validator(input, /[\w-_.,@]{1,255}$/)
+}
+
 module.exports = {
   sentenceValidatorWithMinOneChar,
-  sentenceValidatorWithMinZeroChar
+  sentenceValidatorWithMinZeroChar,
+  eventCodeValidator
 }
