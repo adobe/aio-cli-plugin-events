@@ -51,7 +51,7 @@ ProviderDeleteCommand.args = [
 ]
 
 ProviderDeleteCommand.flags = {
-  ...BaseCommand.flag
+  ...BaseCommand.flags
 }
 
 module.exports = ProviderDeleteCommand

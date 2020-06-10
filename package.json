@@ -15,7 +15,9 @@
   "devDependencies": {
     "@oclif/dev-cli": "^1.22.2",
     "@oclif/test": "^1",
+    "babel-runtime": "^6.26.0",
     "cli-ux": "^5.4.6",
+    "eol": "^0.9.1",
     "acorn": "^7.2.0",
     "chalk": "^4.0.0",
     "inquirer": "^7.1.0",
@@ -24,6 +26,7 @@
     "eslint-config-standard": "^14.1.1",
     "eslint-plugin-import": "^2.20.2",
     "eslint-plugin-jest": "23.13.1",
+    "jest-plugin-fs": "^2.9.0",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-standard": "^4.0.1",
@@ -75,7 +78,7 @@
     ],
     "testEnvironment": "node",
     "setupFilesAfterEnv": [
-      "./jest.setup.js"
+      "./test/jest.setup.js"
     ]
   }
 }

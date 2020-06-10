@@ -14,16 +14,15 @@ const chalk = require('chalk')
 const { stdout } = require('stdout-stderr')
 const fs = require('fs')
 
-stdout.print = true 
+stdout.print = true
 
 test('boilerplate help test', async () => {
-
   const packagejson = JSON.parse(fs.readFileSync('package.json').toString())
   const name = `${packagejson.name}`
   console.log(chalk.blue(`> e2e tests for ${chalk.bold(name)}`))
 
-  console.log(chalk.dim(`    - boilerplate help ..`))
+  console.log(chalk.dim('    - boilerplate help ..'))
   expect(() => { execa.sync('./bin/run', ['--help'], { stderr: 'inherit' }) }).not.toThrow()
 
   console.log(chalk.green(`    - done for ${chalk.bold(name)}`))
-});
+})
