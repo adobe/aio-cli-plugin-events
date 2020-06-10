@@ -155,12 +155,48 @@ const getProviderUpdateResponse = {
   publisher: '123@AdobeOrg'
 }
 
+const eventMetadataSample = {
+  _links: {
+    'rel:sample_event': {
+      href: 'https://api.adobe.io/events/providers/ID01/eventmetadata/com.adobe.CODE01/sample_event'
+    },
+    'rel:update': {
+      href: 'https://api.adobe.io/events/consumerId/projectId/workspaceId/providers/ID01/eventmetadata/com.adobe.CODE01'
+    },
+    self: {
+      href: 'https://api.adobe.io/events/providers/ID01/eventmetadata/com.adobe.CODE01'
+    }
+  },
+  label: 'LABEL01',
+  description: 'DESC01',
+  event_code: 'com.adobe.CODE01'
+}
+
+const eventMetadataUpdatedSample = {
+  _links: {
+    'rel:sample_event': {
+      href: 'https://api.adobe.io/events/providers/ID01/eventmetadata/com.adobe.CODE01/sample_event'
+    },
+    'rel:update': {
+      href: 'https://api.adobe.io/events/consumerId/projectId/workspaceId/providers/ID01/eventmetadata/com.adobe.CODE01'
+    },
+    self: {
+      href: 'https://api.adobe.io/events/providers/ID01/eventmetadata/com.adobe.CODE01'
+    }
+  },
+  label: 'LABEL04',
+  description: 'DESC04',
+  event_code: 'com.adobe.CODE01'
+}
+
 const data = {
   getAllProvidersResponse: getAllProvidersResponse,
   getProviderByIdResponse: getProviderByIdResponse,
   getProviderUpdateResponse: getProviderUpdateResponse,
   createProviderWithoutDescAndDocsUrlResponse: createProviderWithoutDescAndDocsUrlResponse,
-  updateProviderWithoutDescAndDocsUrlResponse: updateProviderWithoutDescAndDocsUrlResponse
+  updateProviderWithoutDescAndDocsUrlResponse: updateProviderWithoutDescAndDocsUrlResponse,
+  eventMetadataSample: eventMetadataSample,
+  eventMetadataUpdatedSample: eventMetadataUpdatedSample
 }
 
 module.exports = {
