@@ -8,7 +8,7 @@ the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTA
 OF ANY KIND, either express or implied. See the License for the specific language
 governing permissions and limitations under the License.
 */
-const { sentenceValidatorWithMinOneChar, sentenceValidatorWithMinZeroChar } = require('../../src/utils/validator')
+const { sentenceValidatorWithMinOneChar, sentenceValidatorWithMinZeroChar, eventCodeValidator } = require('../../src/utils/validator')
 
 describe('sentence validator with min one character', () => {
   test('empty input', async () => {
@@ -36,6 +36,21 @@ describe('sentence validator with min zero characters', () => {
   })
   test('valid input', async () => {
     const response = sentenceValidatorWithMinZeroChar('This (is)_ a valid-input, this should @pass.')
+    expect(response).toBe(true)
+  })
+})
+
+describe('event code validator', () => {
+  test('empty input', async () => {
+    const response = eventCodeValidator('')
+    expect(response).toBe('The input: \'\' is invalid. Input should match regex: \'/[\\w-_.,@]{1,255}$/\'')
+  })
+  test('invalid characters', async () => {
+    const response = eventCodeValidator('&*')
+    expect(response).toBe('The input: \'&*\' is invalid. Input should match regex: \'/[\\w-_.,@]{1,255}$/\'')
+  })
+  test('valid input', async () => {
+    const response = eventCodeValidator('com.adobe.eventcode')
     expect(response).toBe(true)
   })
 })
