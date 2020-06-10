@@ -189,6 +189,50 @@ const eventMetadataUpdatedSample = {
   event_code: 'com.adobe.CODE01'
 }
 
+const getAllEventMetadata = {
+  _links: {
+    self: {
+      href: 'https://api.adobe.io/events/providers/ID01/eventmetadata'
+    }
+  },
+  _embedded: {
+    eventmetadata: [
+      {
+        _links: {
+          'rel:sample_event': {
+            href: 'https://api.adobe.io/events/providers/ID01/eventmetadata/com.adobe.CODE01/sample_event'
+          },
+          'rel:update': {
+            href: 'https://api.adobe.io/events/consumerId/projectId/workspaceId/providers/ID01/eventmetadata/com.adobe.CODE01'
+          },
+          self: {
+            href: 'https://api.adobe.io/events/providers/ID01/eventmetadata/com.adobe.CODE01'
+          }
+        },
+        description: 'DESC01',
+        label: 'LABEL01',
+        event_code: 'com.adobe.CODE01'
+      },
+      {
+        _links: {
+          'rel:sample_event': {
+            href: 'https://api.adobe.io/events/providers/ID01/eventmetadata/com.adobe.CODE02/sample_event'
+          },
+          'rel:update': {
+            href: 'https://api.adobe.io/events/consumerId/projectId/workspaceId/providers/ID01/eventmetadata/com.adobe.CODE02'
+          },
+          self: {
+            href: 'https://api.adobe.io/events/providers/ID01/eventmetadata/com.adobe.CODE02'
+          }
+        },
+        description: 'DESC02',
+        label: 'LABEL2',
+        event_code: 'CODE02'
+      }
+    ]
+  }
+}
+
 const data = {
   getAllProvidersResponse: getAllProvidersResponse,
   getProviderByIdResponse: getProviderByIdResponse,
@@ -196,7 +240,8 @@ const data = {
   createProviderWithoutDescAndDocsUrlResponse: createProviderWithoutDescAndDocsUrlResponse,
   updateProviderWithoutDescAndDocsUrlResponse: updateProviderWithoutDescAndDocsUrlResponse,
   eventMetadataSample: eventMetadataSample,
-  eventMetadataUpdatedSample: eventMetadataUpdatedSample
+  eventMetadataUpdatedSample: eventMetadataUpdatedSample,
+  getAllEventMetadata: getAllEventMetadata
 }
 
 module.exports = {

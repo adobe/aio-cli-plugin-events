@@ -1,0 +1,43 @@
+{
+    "_embedded": {
+        "eventmetadata": [
+            {
+                "_links": {
+                    "rel:sample_event": {
+                        "href": "https://api.adobe.io/events/providers/ID01/eventmetadata/com.adobe.CODE01/sample_event"
+                    },
+                    "rel:update": {
+                        "href": "https://api.adobe.io/events/consumerId/projectId/workspaceId/providers/ID01/eventmetadata/com.adobe.CODE01"
+                    },
+                    "self": {
+                        "href": "https://api.adobe.io/events/providers/ID01/eventmetadata/com.adobe.CODE01"
+                    }
+                },
+                "description": "DESC01",
+                "event_code": "com.adobe.CODE01",
+                "label": "LABEL01"
+            },
+            {
+                "_links": {
+                    "rel:sample_event": {
+                        "href": "https://api.adobe.io/events/providers/ID01/eventmetadata/com.adobe.CODE02/sample_event"
+                    },
+                    "rel:update": {
+                        "href": "https://api.adobe.io/events/consumerId/projectId/workspaceId/providers/ID01/eventmetadata/com.adobe.CODE02"
+                    },
+                    "self": {
+                        "href": "https://api.adobe.io/events/providers/ID01/eventmetadata/com.adobe.CODE02"
+                    }
+                },
+                "description": "DESC02",
+                "event_code": "CODE02",
+                "label": "LABEL2"
+            }
+        ]
+    },
+    "_links": {
+        "self": {
+            "href": "https://api.adobe.io/events/providers/ID01/eventmetadata"
+        }
+    }
+}
