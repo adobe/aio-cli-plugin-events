@@ -70,7 +70,7 @@ EventmetadataDeleteCommand.args = [
 ]
 
 EventmetadataDeleteCommand.flags = {
-  ...BaseCommand.flag
+  ...BaseCommand.flags
 }
 
 module.exports = EventmetadataDeleteCommand
