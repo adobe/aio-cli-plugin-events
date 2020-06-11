@@ -20,7 +20,7 @@ function validator (input, regex, message) {
 }
 
 function sentenceValidatorWithMinOneChar (input) {
-  return validator(input, /[\w\s-_.(),@:'`?#!]{1,255}$/,
+  return validator(input, /^[\w\s-_.(),@:'`?#!]{1,255}$/,
       `The input: ${input} is invalid, please use < 255 characters string with a combination of alphanumeric characters, spaces and special characters in '-_.(),@:'\`?#!'`)
 }
 
@@ -30,7 +30,7 @@ function sentenceValidatorWithMinZeroChar (input) {
 }
 
 function eventCodeValidator (input) {
-  return validator(input, /[\w-_.]{1,255}$/,
+  return validator(input, /^[\w-_.]{1,255}$/,
       `The input: ${input} is invalid, please use at least one and < 255 characters string with a combination of alphanumeric characters and special characters in '-_.'`)
 }
 

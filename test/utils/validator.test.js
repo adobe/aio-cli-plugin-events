@@ -46,8 +46,8 @@ describe('event code validator', () => {
     expect(response).toBe('The input:  is invalid, please use at least one and < 255 characters string with a combination of alphanumeric characters and special characters in \'-_.\'')
   })
   test('invalid characters', async () => {
-    const response = eventCodeValidator('&*')
-    expect(response).toBe('The input: &* is invalid, please use at least one and < 255 characters string with a combination of alphanumeric characters and special characters in \'-_.\'')
+    const response = eventCodeValidator('event code')
+    expect(response).toBe('The input: event code is invalid, please use at least one and < 255 characters string with a combination of alphanumeric characters and special characters in \'-_.\'')
   })
   test('valid input', async () => {
     const response = eventCodeValidator('com.adobe.eventcode')
