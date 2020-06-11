@@ -10,17 +10,18 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
-function validator (input, regex) {
+function validator (input, regex, message) {
   // eslint-disable-next-line no-useless-escape
   const valid = regex
   if (valid.test(input)) {
     return true
   }
-  return `The input: '${input}' is invalid. Input should match regex: '${regex}'`
+  return message
 }
 
 function sentenceValidatorWithMinOneChar (input) {
-  return validator(input, /[\w\s-_.(),@]{1,255}$/)
+  return validator(input, /[\w\s-_.(),@:'`?#!]{1,255}$/,
+      `The input: ${input} is invalid, please use < 255 characters string with a combination of alphanumeric characters, spaces and special characters in '-_.(),@:'\`?#!'`)
 }
 
 function sentenceValidatorWithMinZeroChar (input) {
@@ -29,7 +30,8 @@ function sentenceValidatorWithMinZeroChar (input) {
 }
 
 function eventCodeValidator (input) {
-  return validator(input, /[\w-_.,@]{1,255}$/)
+  return validator(input, /[\w-_.]{1,255}$/,
+      `The input: ${input} is invalid, please use at least one and < 255 characters string with a combination of alphanumeric characters and special characters in '-_.'`)
 }
 
 module.exports = {

@@ -13,27 +13,27 @@ governing permissions and limitations under the License.
 const BaseCommand = require('../../../BaseCommand.js')
 const { cli } = require('cli-ux')
 const inquirer = require('inquirer')
-const aioLogger = require('@adobe/aio-lib-core-logging')('@adobe/aio-cli-plugin-events:provider:delete', { provider: 'debug' })
+const aioLogger = require('@adobe/aio-lib-core-logging')('@adobe/aio-cli-plugin-events:registration:delete', { provider: 'debug' })
 
-class ProviderDeleteCommand extends BaseCommand {
+class DeleteCommand extends BaseCommand {
   async run () {
-    const { args } = this.parse(ProviderDeleteCommand)
+    const { args } = this.parse(DeleteCommand)
 
     try {
       await this.initSdk()
       const response = await inquirer.prompt([{
         type: 'confirm',
         name: 'delete',
-        message: 'Are you sure you want to delete the provider? This operation is irreversible.'
+        message: 'Are you sure you want to delete the registration? This operation is irreversible.'
 
       }])
       if (response.delete) {
-        cli.action.start('Deleting Event Provider')
-        await this.eventClient.deleteProvider(this.conf.org.id,
-          this.conf.project.id, this.conf.workspace.id, args.providerId)
+        cli.action.start('Deleting Registration')
+        await this.eventClient.deleteWebhookRegistration(this.conf.org.id,
+          this.conf.integration.id, args.registrationId)
         cli.action.stop()
-        this.log('Provider ' + args.providerId +
-                ' has been deleted successfully')
+        this.log('Registration ' + args.registrationId +
+                    ' has been deleted successfully')
       } else {
         this.log('Delete operation has been cancelled')
       }
@@ -44,14 +44,14 @@ class ProviderDeleteCommand extends BaseCommand {
   }
 }
 
-ProviderDeleteCommand.description = 'Delete Provider by id'
+DeleteCommand.description = 'Delete Registration'
 
-ProviderDeleteCommand.args = [
-  { name: 'providerId', required: true }
+DeleteCommand.args = [
+  { name: 'registrationId', required: true }
 ]
 
-ProviderDeleteCommand.flags = {
+DeleteCommand.flags = {
   ...BaseCommand.flags
 }
 
-module.exports = ProviderDeleteCommand
+module.exports = DeleteCommand

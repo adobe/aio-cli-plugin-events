@@ -13,11 +13,11 @@ const { sentenceValidatorWithMinOneChar, sentenceValidatorWithMinZeroChar, event
 describe('sentence validator with min one character', () => {
   test('empty input', async () => {
     const response = sentenceValidatorWithMinOneChar('')
-    expect(response).toBe('The input: \'\' is invalid. Input should match regex: \'/[\\w\\s-_.(),@]{1,255}$/\'')
+    expect(response).toBe('The input:  is invalid, please use < 255 characters string with a combination of alphanumeric characters, spaces and special characters in \'-_.(),@:\'`?#!\'')
   })
   test('invalid characters', async () => {
     const response = sentenceValidatorWithMinOneChar('&*')
-    expect(response).toBe('The input: \'&*\' is invalid. Input should match regex: \'/[\\w\\s-_.(),@]{1,255}$/\'')
+    expect(response).toBe('The input: &* is invalid, please use < 255 characters string with a combination of alphanumeric characters, spaces and special characters in \'-_.(),@:\'`?#!\'')
   })
   test('valid input', async () => {
     const response = sentenceValidatorWithMinOneChar('This (is)_ a valid-input, this should @pass.')
@@ -32,7 +32,7 @@ describe('sentence validator with min zero characters', () => {
   })
   test('invalid characters', async () => {
     const response = sentenceValidatorWithMinZeroChar('&*')
-    expect(response).toBe('The input: \'&*\' is invalid. Input should match regex: \'/[\\w\\s-_.(),@]{1,255}$/\'')
+    expect(response).toBe('The input: &* is invalid, please use < 255 characters string with a combination of alphanumeric characters, spaces and special characters in \'-_.(),@:\'`?#!\'')
   })
   test('valid input', async () => {
     const response = sentenceValidatorWithMinZeroChar('This (is)_ a valid-input, this should @pass.')
@@ -43,11 +43,11 @@ describe('sentence validator with min zero characters', () => {
 describe('event code validator', () => {
   test('empty input', async () => {
     const response = eventCodeValidator('')
-    expect(response).toBe('The input: \'\' is invalid. Input should match regex: \'/[\\w-_.,@]{1,255}$/\'')
+    expect(response).toBe('The input:  is invalid, please use at least one and < 255 characters string with a combination of alphanumeric characters and special characters in \'-_.\'')
   })
   test('invalid characters', async () => {
     const response = eventCodeValidator('&*')
-    expect(response).toBe('The input: \'&*\' is invalid. Input should match regex: \'/[\\w-_.,@]{1,255}$/\'')
+    expect(response).toBe('The input: &* is invalid, please use at least one and < 255 characters string with a combination of alphanumeric characters and special characters in \'-_.\'')
   })
   test('valid input', async () => {
     const response = eventCodeValidator('com.adobe.eventcode')

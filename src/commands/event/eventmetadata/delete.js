@@ -13,7 +13,7 @@ governing permissions and limitations under the License.
 const BaseCommand = require('../../../BaseCommand.js')
 const { cli } = require('cli-ux')
 const inquirer = require('inquirer')
-const aioLogger = require('@adobe/aio-lib-core-logging')('@adobe/aio-cli-plugin-events:provider:get', { provider: 'debug' })
+const aioLogger = require('@adobe/aio-lib-core-logging')('@adobe/aio-cli-plugin-events:eventmetadata:delete', { provider: 'debug' })
 
 class EventmetadataDeleteCommand extends BaseCommand {
   async run () {
@@ -25,7 +25,7 @@ class EventmetadataDeleteCommand extends BaseCommand {
         const response = await inquirer.prompt([{
           type: 'confirm',
           name: 'delete',
-          message: 'Are you sure you want to delete all event metadata?'
+          message: 'Are you sure you want to delete all event metadata? This operation is irreversible.'
 
         }])
         if (response.delete) {
@@ -41,7 +41,7 @@ class EventmetadataDeleteCommand extends BaseCommand {
         const response = await inquirer.prompt([{
           type: 'confirm',
           name: 'delete',
-          message: 'Are you sure you want to delete ' + args.eventCode + '?'
+          message: 'Are you sure you want to delete ' + args.eventCode + '? This operation is irreversible.'
 
         }])
         if (response.delete) {
