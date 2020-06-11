@@ -17,7 +17,6 @@ class IndexCommand extends BaseCommand {
   async run () {
     const help = new Help(this.config)
     help.showHelp(['event:eventmetadata', '--help'])
-    await this.initSdk()
   }
 }
 
