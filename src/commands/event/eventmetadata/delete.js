@@ -25,7 +25,7 @@ class EventmetadataDeleteCommand extends BaseCommand {
         const response = await inquirer.prompt([{
           type: 'confirm',
           name: 'delete',
-          message: 'Are you sure you want to delete all event metadata?'
+          message: 'Are you sure you want to delete all event metadata? This operation is irreversible.'
 
         }])
         if (response.delete) {
@@ -41,7 +41,7 @@ class EventmetadataDeleteCommand extends BaseCommand {
         const response = await inquirer.prompt([{
           type: 'confirm',
           name: 'delete',
-          message: 'Are you sure you want to delete ' + args.eventCode + '?'
+          message: 'Are you sure you want to delete ' + args.eventCode + '? This operation is irreversible.'
 
         }])
         if (response.delete) {

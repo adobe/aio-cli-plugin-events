@@ -24,7 +24,7 @@ class DeleteCommand extends BaseCommand {
       const response = await inquirer.prompt([{
         type: 'confirm',
         name: 'delete',
-        message: 'Are you sure you want to delete the registration? This operation in irreversible.'
+        message: 'Are you sure you want to delete the registration? This operation is irreversible.'
 
       }])
       if (response.delete) {
