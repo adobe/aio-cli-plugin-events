@@ -56,7 +56,7 @@ describe('console:provider:delete', () => {
     expect(command.run).toBeInstanceOf(Function)
   })
 
-  describe('successfully get provider', () => {
+  describe('successfully delete provider', () => {
     beforeEach(async () => {
       command.initSdk = jest.fn()
       command.argv = ['providerId']
@@ -83,7 +83,7 @@ describe('console:provider:delete', () => {
     })
   })
 
-  describe('fail to fetch provider', () => {
+  describe('fail to delete provider', () => {
     beforeEach(() => {
       command.initSdk = jest.fn()
       jest.fn().mockResolvedValue(command.eventClient)
@@ -94,7 +94,7 @@ describe('console:provider:delete', () => {
       jest.clearAllMocks()
     })
 
-    test('should return error on get provider', async () => {
+    test('should return error on delete provider', async () => {
       command.argv = ['providerId']
       inquirer.prompt.mockResolvedValueOnce({ delete: true })
       await expect(command.run()).rejects.toThrowError(new Error('Error deleting provider'))

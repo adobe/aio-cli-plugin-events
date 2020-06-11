@@ -13,6 +13,7 @@ governing permissions and limitations under the License.
 const BaseCommand = require('../../../BaseCommand.js')
 const { flags } = require('@oclif/command')
 const { cli } = require('cli-ux')
+const { sentenceValidatorWithMinOneChar, eventCodeValidator } = require('../../../utils/validator')
 const inquirer = require('inquirer')
 const aioLogger = require('@adobe/aio-lib-core-logging')('@adobe/aio-cli-plugin-events:provider:get', { provider: 'debug' })
 
@@ -24,36 +25,15 @@ class EventmetadataCreateCommand extends BaseCommand {
       const response = await inquirer.prompt([{
         name: 'label',
         message: 'Enter the label for the event metadata.',
-        validate (input) {
-          // eslint-disable-next-line no-useless-escape
-          const valid = /[\w\s-_.(),@]{1,255}$/
-          if (valid.test(input)) {
-            return true
-          }
-          return `The input: '${input}' is invalid, please use a < 255 characters string with a combination of alphanumeric characters, spaces and special characters in '-_.(),@'`
-        }
+        validate: sentenceValidatorWithMinOneChar
       }, {
         name: 'event_code',
         message: 'Enter the event code that is used as part of the message in reverse dns format ( eg. com.adobe.eventcode).',
-        validate (input) {
-          // eslint-disable-next-line no-useless-escape
-          const valid = /[\w-_.,@]{1,255}$/
-          if (valid.test(input)) {
-            return true
-          }
-          return `The input: '${input}' is invalid, please use a < 255 characters string with a combination of alphanumeric characters and special characters in '-_.,@'`
-        }
+        validate: eventCodeValidator
       }, {
         name: 'description',
         message: 'Add a description about the event metadata.',
-        validate (input) {
-          // eslint-disable-next-line no-useless-escape
-          const valid = /[\w\s-_.(),@]{1,255}$/
-          if (valid.test(input)) {
-            return true
-          }
-          return `The input: '${input}' is invalid, please use a < 255 characters string with a combination of alphanumeric characters, spaces and special characters in '-_.(),@'`
-        }
+        validate: sentenceValidatorWithMinOneChar
       }])
 
       const eventMetadataPayload = {
