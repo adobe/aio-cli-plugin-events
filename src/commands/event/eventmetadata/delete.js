@@ -13,7 +13,7 @@ governing permissions and limitations under the License.
 const BaseCommand = require('../../../BaseCommand.js')
 const { cli } = require('cli-ux')
 const inquirer = require('inquirer')
-const aioLogger = require('@adobe/aio-lib-core-logging')('@adobe/aio-cli-plugin-events:provider:get', { provider: 'debug' })
+const aioLogger = require('@adobe/aio-lib-core-logging')('@adobe/aio-cli-plugin-events:eventmetadata:delete', { provider: 'debug' })
 
 class EventmetadataDeleteCommand extends BaseCommand {
   async run () {

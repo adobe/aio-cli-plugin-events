@@ -13,7 +13,7 @@ governing permissions and limitations under the License.
 const BaseCommand = require('../../../BaseCommand.js')
 const { flags } = require('@oclif/command')
 const { cli } = require('cli-ux')
-const aioLogger = require('@adobe/aio-lib-core-logging')('@adobe/aio-cli-plugin-events:provider:get', { provider: 'debug' })
+const aioLogger = require('@adobe/aio-lib-core-logging')('@adobe/aio-cli-plugin-events:eventmetadata:list', { provider: 'debug' })
 
 class EventmetadataListCommand extends BaseCommand {
   async run () {

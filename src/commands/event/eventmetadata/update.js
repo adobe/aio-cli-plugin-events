@@ -15,7 +15,7 @@ const { flags } = require('@oclif/command')
 const { cli } = require('cli-ux')
 const { sentenceValidatorWithMinOneChar } = require('../../../utils/validator')
 const inquirer = require('inquirer')
-const aioLogger = require('@adobe/aio-lib-core-logging')('@adobe/aio-cli-plugin-events:provider:get', { provider: 'debug' })
+const aioLogger = require('@adobe/aio-lib-core-logging')('@adobe/aio-cli-plugin-events:eventmetadata:update', { provider: 'debug' })
 
 class EventmetadataUpdateCommand extends BaseCommand {
   async run () {

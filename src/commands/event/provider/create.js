@@ -15,7 +15,7 @@ const { flags } = require('@oclif/command')
 const { cli } = require('cli-ux')
 const { sentenceValidatorWithMinOneChar, sentenceValidatorWithMinZeroChar } = require('../../../utils/validator')
 const inquirer = require('inquirer')
-const aioLogger = require('@adobe/aio-lib-core-logging')('@adobe/aio-cli-plugin-events:provider:get', { provider: 'debug' })
+const aioLogger = require('@adobe/aio-lib-core-logging')('@adobe/aio-cli-plugin-events:provider:create', { provider: 'debug' })
 
 class ProviderCreateCommand extends BaseCommand {
   async run () {
