@@ -140,6 +140,7 @@ class BaseCommand extends Command {
 }
 
 BaseCommand.flags = {
+  help: flags.boolean({ description: 'Show help' }),
   verbose: flags.boolean({ char: 'v', description: 'Verbose output' }),
   version: flags.boolean({ description: 'Show version' })
 }

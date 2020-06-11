@@ -10,12 +10,25 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
-const { stdout } = require('stdout-stderr')
+function validator (input, regex) {
+  // eslint-disable-next-line no-useless-escape
+  const valid = regex
+  if (valid.test(input)) {
+    return true
+  }
+  return `The input: '${input}' is invalid. Input should match regex: '${regex}'`
+}
 
-jest.setTimeout(30000)
+function sentenceValidatorWithMinOneChar (input) {
+  return validator(input, /[\w\s-_.(),@]{1,255}$/)
+}
 
-beforeEach(() => {
-  stdout.start()
-  jest.clearAllMocks()
-})
-afterEach(() => { stdout.stop() })
+function sentenceValidatorWithMinZeroChar (input) {
+  if (input === undefined || input === '') { return true }
+  return sentenceValidatorWithMinOneChar(input)
+}
+
+module.exports = {
+  sentenceValidatorWithMinOneChar,
+  sentenceValidatorWithMinZeroChar
+}

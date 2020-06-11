@@ -1,0 +1,4 @@
+ID   LABEL   DESC   SOURCE           DOCS   
+ID01 LABEL01 DESC01 urn:uuid:source1 DOCS01 
+ID02 LABEL02 DESC02 urn:uuid:source2 DOCS02 
+ID03 LABEL03 DESC03 urn:uuid:source3 DOCS03 

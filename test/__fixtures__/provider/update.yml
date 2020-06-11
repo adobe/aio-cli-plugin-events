@@ -1,0 +1,14 @@
+_links:
+  'rel:eventmetadata':
+    href: 'https://api.adobe.io/events/providers/ID01/eventmetadata'
+  'rel:update':
+    href: >-
+      https://api.adobe.io/events/consumerOrgId/projectId/workspaceId/providers/ID01
+  self:
+    href: 'https://api.adobe.io/events/providers/ID01?eventmetadata=false'
+id: ID01
+label: LABEL04
+description: DESC04
+source: 'urn:uuid:ID01'
+publisher: 123@AdobeOrg
+
