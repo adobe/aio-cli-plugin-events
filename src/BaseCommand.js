@@ -22,14 +22,16 @@ const yaml = require('js-yaml')
 const Events = require('@adobe/aio-lib-events')
 const Console = require('@adobe/aio-lib-console')
 
-const CONSOLE_CONFIG_KEY = 'console'
+const CONSOLE_CONFIG_KEY = '$console'
 const CONSOLE_API_KEY = 'aio-cli-console-auth'
-const EVENTS_CONFIG_KEY = 'events'
+const EVENTS_CONFIG_KEY = '$events'
+const IMS_CONFIG_KEY = '$ims'
+const IMS_CLI_CONFIG_KEY = '$cli'
 
 class BaseCommand extends Command {
   async initSdk () {
     // login
-    await context.setCli({ '$cli.bare-output': true }, false) // set this globally
+    await context.setCli({ [`${IMS_CLI_CONFIG_KEY}.bare-output`]: true }, false) // set this globally
     aioLogger.debug('run login')
     this.accessToken = await getToken(CLI) // user access token, would work with jwt too
 
@@ -57,7 +59,7 @@ class BaseCommand extends Command {
       const workspaceIntegration = this.extractServiceIntegrationConfig(localProject.workspace)
       // note in the local app aio, the workspaceIntegration only holds a reference, the
       // clientId is stored in the dotenv
-      const integrationCredentials = aioConfig.get(`$ims.${workspaceIntegration.name}`, 'env')
+      const integrationCredentials = aioConfig.get(`${IMS_CONFIG_KEY}.${workspaceIntegration.name}`, 'env')
       if (!integrationCredentials || !integrationCredentials.client_id) {
         throw new Error(`IMS .env configuration $ims.${workspaceIntegration.name} is incomplete or missing`)
       }

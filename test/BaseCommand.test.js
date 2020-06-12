@@ -34,9 +34,10 @@ const aioConfig = require('@adobe/aio-lib-core-config')
 
 const BaseCommand = require('../src/BaseCommand')
 
-const CONSOLE_CONFIG_KEY = 'console'
-const EVENT_CONFIG_KEY = 'events'
+const CONSOLE_CONFIG_KEY = '$console'
+const EVENT_CONFIG_KEY = '$events'
 const CONSOLE_API_KEY = 'aio-cli-console-auth'
+const IMS_CONFIG_KEY = '$ims'
 
 let command
 beforeEach(() => {
@@ -100,7 +101,7 @@ describe('initSDK', () => {
         }
       }
     }
-    localEnvConfig = { $ims: { [_validConfig.integration.name.toLowerCase()]: { client_id: _validConfig.integration.jwtClientId } } }
+    localEnvConfig = { [IMS_CONFIG_KEY]: { [_validConfig.integration.name.toLowerCase()]: { client_id: _validConfig.integration.jwtClientId } } }
   })
   test('not local config, console and events config are set', async () => {
     aioConfig.get.mockImplementation((key, type) => {
@@ -260,7 +261,7 @@ Use the 'aio console' commands to select your organization, project, and workspa
   test('local app config, .aio and env are set', async () => {
     aioConfig.get.mockImplementation((key, type) => {
       if (type === 'local' && key === 'project') return localConfig.project
-      if (type === 'env' && key === `$ims.${_validConfig.integration.name}`) return Object.values(localEnvConfig.$ims)[0]
+      if (type === 'env' && key === `${IMS_CONFIG_KEY}.${_validConfig.integration.name}`) return Object.values(localEnvConfig[IMS_CONFIG_KEY])[0]
     })
     await command.initSdk()
     expect(command.consoleClient).toBe(mockConsoleInstance)
@@ -275,7 +276,7 @@ Use the 'aio console' commands to select your organization, project, and workspa
     localConfig.project.workspace.details.credentials.pop()
     aioConfig.get.mockImplementation((key, type) => {
       if (type === 'local' && key === 'project') return localConfig.project
-      if (type === 'env' && key === `$ims.${_validConfig.integration.name}`) return Object.values(localEnvConfig.$ims)[0]
+      if (type === 'env' && key === `$ims.${_validConfig.integration.name}`) return Object.values(localEnvConfig[IMS_CONFIG_KEY])[0]
     })
     await expect(command.initSdk()).rejects.toThrow('Workspace Rug has no JWT integration')
   })
