@@ -17,7 +17,6 @@ class IndexCommand extends BaseCommand {
   async run () {
     const help = new HHelp(this.config)
     help.showHelp(['event:registration', '--help'])
-    await this.initSdk()
   }
 }
 

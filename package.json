@@ -66,19 +66,20 @@
   },
   "jest": {
     "collectCoverage": true,
-    "testPathIgnorePatterns": [
-      "<rootDir>/tests/fixtures/"
-    ],
-    "coveragePathIgnorePatterns": [
-      "<rootDir>/tests/fixtures/"
-    ],
+    "rootDir": ".",
+    "coverageThreshold": {
+      "global": {
+        "branches": 100,
+        "lines": 100,
+        "statements": 100
+      }
+    },
     "reporters": [
-      "default",
-      "jest-junit"
+      "default"
     ],
     "testEnvironment": "node",
     "setupFilesAfterEnv": [
-      "./test/jest.setup.js"
+      "<rootDir>/test/jest.setup.js"
     ]
   }
 }
