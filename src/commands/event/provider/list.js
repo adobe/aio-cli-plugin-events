@@ -61,8 +61,7 @@ class ProviderListCommand extends BaseCommand {
 ProviderListCommand.description = 'Get list of all Providers for the Organization'
 
 ProviderListCommand.aliases = [
-  'event:provider:ls',
-  'event:provider:list'
+  'event:provider:ls'
 ]
 
 ProviderListCommand.flags = {
