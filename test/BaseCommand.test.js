@@ -36,8 +36,8 @@ const aioConfig = require('@adobe/aio-lib-core-config')
 
 const BaseCommand = require('../src/BaseCommand')
 
-const CONSOLE_CONFIG_KEY = '$console'
-const EVENT_CONFIG_KEY = '$events'
+const CONSOLE_CONFIG_KEY = 'console'
+const EVENT_CONFIG_KEY = 'events'
 const CONSOLE_API_KEY = 'aio-cli-console-auth'
 const IMS_CONFIG_KEY = '$ims'
 
