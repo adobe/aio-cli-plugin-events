@@ -26,7 +26,7 @@ class CreateCommand extends BaseCommand {
 
       const body = this.parseJSONFile(args.bodyJSONFile)
 
-      // todo should these transformations be moved to the events sdk ?
+      // should these transformations be moved to the events sdk ?
       if (!body.client_id) {
         body.client_id = this.conf.integration.jwtClientId
       }

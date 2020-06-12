@@ -35,6 +35,10 @@ test('flags', async () => {
   expect(ProviderCreateCommand.flags.yml.exclusive).toEqual(['json'])
 })
 
+test('args', async () => {
+  expect(ProviderCreateCommand.args).toBeUndefined()
+})
+
 describe('console:provider:create', () => {
   let command
 
@@ -65,7 +69,6 @@ describe('console:provider:create', () => {
   describe('successfully create provider', () => {
     beforeEach(async () => {
       command.initSdk = jest.fn()
-      jest.fn().mockResolvedValue(command.eventClient)
       command.eventClient = { createProvider: jest.fn().mockReturnValue(mock.data.getProviderByIdResponse) }
     })
 

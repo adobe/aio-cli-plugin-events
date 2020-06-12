@@ -34,6 +34,13 @@ test('flags', async () => {
   expect(EventmetadataGetCommand.flags.yml.exclusive).toEqual(['json'])
 })
 
+test('args', async () => {
+  expect(EventmetadataGetCommand.args[0].required).toBe(true)
+  expect(EventmetadataGetCommand.args[0].description).toBeDefined()
+  expect(EventmetadataGetCommand.args[1].required).toBe(true)
+  expect(EventmetadataGetCommand.args[1].description).toBeDefined()
+})
+
 describe('console:eventmetadata:get', () => {
   let command
 
@@ -53,7 +60,6 @@ describe('console:eventmetadata:get', () => {
     beforeEach(async () => {
       command.initSdk = jest.fn()
       command.argv = ['providerId', 'com.adobe.CODE01']
-      jest.fn().mockResolvedValue(command.eventClient)
       command.eventClient = { getEventMetadataForProvider: jest.fn().mockReturnValue(mock.data.eventMetadataSample) }
     })
 

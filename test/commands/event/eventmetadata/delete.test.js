@@ -28,6 +28,12 @@ test('flags', async () => {
   expect(EventmetadataDeleteCommand.flags.version.type).toBe('boolean')
   expect(EventmetadataDeleteCommand.flags.verbose.type).toBe('boolean')
 })
+test('args', async () => {
+  expect(EventmetadataDeleteCommand.args[0].required).toBe(true)
+  expect(EventmetadataDeleteCommand.args[0].description).toBeDefined()
+  expect(EventmetadataDeleteCommand.args[1].required).toBe(false)
+  expect(EventmetadataDeleteCommand.args[1].description).toBeDefined()
+})
 
 describe('console:eventmetadata:delete', () => {
   let command
@@ -59,7 +65,6 @@ describe('console:eventmetadata:delete', () => {
   describe('successfully delete event metadata', () => {
     beforeEach(async () => {
       command.initSdk = jest.fn()
-      jest.fn().mockResolvedValue(command.eventClient)
       command.eventClient = { deleteProvider: jest.fn().mockReturnValue('OK') }
     })
 

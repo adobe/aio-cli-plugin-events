@@ -61,7 +61,7 @@ class ProviderUpdateCommand extends BaseCommand {
 ProviderUpdateCommand.description = 'Update an existing Provider'
 
 ProviderUpdateCommand.args = [
-  { name: 'providerId', required: true }
+  { name: 'providerId', required: true, description: 'the Events Provider id' }
 ]
 
 ProviderUpdateCommand.flags = {

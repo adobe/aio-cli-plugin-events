@@ -1,0 +1,3 @@
+ID                                    NAME                     INTEGRATION_STATUS DELIVERY_TYPE STATUS    
+REGID1                                bowling 1                ENABLED            WEBHOOK       VERIFIED  
+REGID2                                table tenis 2            ENABLED            WEBHOOK       VERIFIED  

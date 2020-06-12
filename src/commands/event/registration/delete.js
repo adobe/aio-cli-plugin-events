@@ -47,7 +47,7 @@ class DeleteCommand extends BaseCommand {
 DeleteCommand.description = 'Delete Registration'
 
 DeleteCommand.args = [
-  { name: 'registrationId', required: true }
+  { name: 'registrationId', required: true, description: 'the Events Registration id' }
 ]
 
 DeleteCommand.flags = {

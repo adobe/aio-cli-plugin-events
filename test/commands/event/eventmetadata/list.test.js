@@ -33,6 +33,10 @@ test('flags', async () => {
   expect(EventmetadataListCommand.flags.yml.char).toBe('y')
   expect(EventmetadataListCommand.flags.yml.exclusive).toEqual(['json'])
 })
+test('args', async () => {
+  expect(EventmetadataListCommand.args[0].required).toBe(true)
+  expect(EventmetadataListCommand.args[0].description).toBeDefined()
+})
 
 describe('console:eventmetadata:list', () => {
   let command
@@ -52,7 +56,6 @@ describe('console:eventmetadata:list', () => {
   describe('successfully list event metadata', () => {
     beforeEach(async () => {
       command.initSdk = jest.fn()
-      jest.fn().mockResolvedValue(command.eventClient)
       command.eventClient = { getAllEventMetadataForProvider: jest.fn().mockReturnValue(mock.data.getAllEventMetadata) }
     })
 

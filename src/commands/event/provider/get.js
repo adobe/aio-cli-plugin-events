@@ -43,7 +43,7 @@ class ProviderGetCommand extends BaseCommand {
 ProviderGetCommand.description = 'Get details of Provider by id'
 
 ProviderGetCommand.args = [
-  { name: 'providerId', required: true }
+  { name: 'providerId', required: true, description: 'the Events Provider id' }
 ]
 
 ProviderGetCommand.flags = {

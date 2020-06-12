@@ -1,0 +1,27 @@
+{
+    "id": 11111,
+    "name": "bowling 1",
+    "description": "let me know when we can go play bowling!",
+    "client_id": "1234654902189324798",
+    "parent_client_id": "9088675987031198237",
+    "webhook_url": "https://send-me-a-bowling-event.com/right-now",
+    "status": "VERIFIED",
+    "type": "APP",
+    "integration_status": "ENABLED",
+    "events_of_interest": [
+      {
+        "event_code": "com.adobe.bowling",
+        "provider_id": "IDP1",
+        "provider": "3rd_party_custom_events_ORG@AdobeOrg_IDP01",
+        "provider_label": "bowling",
+        "provider_description": "let's play bowling",
+        "event_delivery_format": "cloud_events_v1"
+      }
+    ],
+    "registration_id": "REGID1",
+    "delivery_type": "WEBHOOK",
+    "events_url": "https://events-va6.adobe.io/events/organizations/99999/integrations/888888/REGID1",
+    "created_date": "2020-06-12T13:53:59.363Z",
+    "updated_date": "2020-06-12T13:53:59.363Z",
+    "runtime_action": ""
+}

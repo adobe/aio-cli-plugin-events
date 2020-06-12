@@ -35,6 +35,11 @@ test('flags', async () => {
   expect(ProviderGetCommand.flags.yml.exclusive).toEqual(['json'])
 })
 
+test('args', async () => {
+  expect(ProviderGetCommand.args[0].required).toBe(true)
+  expect(ProviderGetCommand.args[0].description).toBeDefined()
+})
+
 describe('console:provider:get', () => {
   let command
 
@@ -54,7 +59,6 @@ describe('console:provider:get', () => {
     beforeEach(async () => {
       command.initSdk = jest.fn()
       command.argv = ['providerId']
-      jest.fn().mockResolvedValue(command.eventClient)
       command.eventClient = { getProvider: jest.fn().mockReturnValue(mock.data.getProviderByIdResponse) }
     })
 

@@ -65,8 +65,8 @@ class EventmetadataDeleteCommand extends BaseCommand {
 EventmetadataDeleteCommand.description = 'Delete Event Metadata for a Provider'
 
 EventmetadataDeleteCommand.args = [
-  { name: 'providerId', required: true },
-  { name: 'eventCode', required: false }
+  { name: 'providerId', required: true, description: 'the Events Provider id' },
+  { name: 'eventCode', required: false, description: 'the Events Metadata code' }
 ]
 
 EventmetadataDeleteCommand.flags = {
