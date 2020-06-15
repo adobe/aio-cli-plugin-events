@@ -10,12 +10,16 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
-const { stdout } = require('stdout-stderr')
+const Help = require('@oclif/plugin-help').default
+const BaseCommand = require('../../../BaseCommand.js')
 
-jest.setTimeout(30000)
+class IndexCommand extends BaseCommand {
+  async run () {
+    const help = new Help(this.config)
+    help.showHelp(['event:eventmetadata', '--help'])
+  }
+}
 
-beforeEach(() => {
-  stdout.start()
-  jest.clearAllMocks()
-})
-afterEach(() => { stdout.stop() })
+IndexCommand.description = 'Manage your Adobe I/O Events Providers\' Event Metadata'
+
+module.exports = IndexCommand

@@ -1,0 +1,68 @@
+{
+    "_links": {
+        "self": {
+            "href": "https://api.adobe.io/events/consumerOrgId/providers"
+        }
+    },
+    "_embedded": {
+        "providers": [
+            {
+                "_links": {
+                    "rel:eventmetadata": {
+                        "href": "https://api.adobe.io/events/providers/test-id-1/eventmetadata"
+                    },
+                    "rel:update": {
+                        "href": "https://api.adobe.io/events/consumerId/projectId/workspaceId/providers/test-id-1"
+                    },
+                    "self": {
+                        "href": "https://api.adobe.io/events/providers/test-id-1"
+                    }
+                },
+                "id": "ID01",
+                "description": "DESC01",
+                "label": "LABEL01",
+                "source": "urn:uuid:source1",
+                "docs_url": "DOCS01",
+                "publisher": "Adobe"
+            },
+            {
+                "_links": {
+                    "rel:eventmetadata": {
+                        "href": "https://api.adobe.io/events/providers/test-id-2/eventmetadata"
+                    },
+                    "rel:update": {
+                        "href": "https://api.adobe.io/events/consumerId/projectId/workspaceId/providers/test-id-2"
+                    },
+                    "self": {
+                        "href": "https://api.adobe.io/events/providers/test-id-2"
+                    }
+                },
+                "id": "ID02",
+                "description": "DESC02",
+                "label": "LABEL02",
+                "source": "urn:uuid:source2",
+                "docs_url": "DOCS02",
+                "publisher": "adobeOrg@AdobeOrg"
+            },
+            {
+                "_links": {
+                    "rel:eventmetadata": {
+                        "href": "https://api.adobe.io/events/providers/test-id-3/eventmetadata"
+                    },
+                    "rel:update": {
+                        "href": "https://api.adobe.io/events/consumerId/projectId/workspaceId/providers/test-id-3"
+                    },
+                    "self": {
+                        "href": "https://api.adobe.io/events/providers/test-id-3"
+                    }
+                },
+                "id": "ID03",
+                "description": "DESC03",
+                "label": "LABEL03",
+                "source": "urn:uuid:source3",
+                "docs_url": "DOCS03",
+                "publisher": "adobeOrg@AdobeOrg"
+            }
+        ]
+    }
+}

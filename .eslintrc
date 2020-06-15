@@ -12,9 +12,10 @@
     ],
     "extends": [
         "plugin:jest/recommended",
-        "eslint:recommended"
+        "standard"
     ],
     "rules": {
-        "no-var": 2
+        "no-var": 2,
+        "node/no-unpublished-require": 0
     }
 }
