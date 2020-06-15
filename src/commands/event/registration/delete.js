@@ -47,7 +47,7 @@ class DeleteCommand extends BaseCommand {
 DeleteCommand.description = 'Delete Registration'
 
 DeleteCommand.aliases = [
-  'console:reg:delete'
+  'event:reg:delete'
 ]
 
 DeleteCommand.args = [

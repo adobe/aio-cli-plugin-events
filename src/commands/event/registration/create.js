@@ -65,7 +65,7 @@ class CreateCommand extends BaseCommand {
 CreateCommand.description = 'Create a new Event Registration in your Workspace'
 
 CreateCommand.aliases = [
-  'console:reg:get'
+  'event:reg:create'
 ]
 
 CreateCommand.flags = {

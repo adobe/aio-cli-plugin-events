@@ -47,7 +47,7 @@ class GetCommand extends BaseCommand {
 GetCommand.description = 'Get an Event Registration in your Workspace'
 
 GetCommand.aliases = [
-  'console:reg:get'
+  'event:reg:get'
 ]
 
 GetCommand.flags = {

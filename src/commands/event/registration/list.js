@@ -54,9 +54,9 @@ class ListCommand extends BaseCommand {
 ListCommand.description = 'List your Event Registrations in your Workspace'
 
 ListCommand.aliases = [
-  'console:registration:ls',
-  'console:registration:list',
-  'console:reg:ls'
+  'event:registration:ls',
+  'event:reg:list',
+  'event:reg:ls'
 ]
 
 ListCommand.flags = {
