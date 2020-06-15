@@ -63,7 +63,7 @@ class EventmetadataCreateCommand extends BaseCommand {
 EventmetadataCreateCommand.description = 'Create an Event Metadata for a Provider'
 
 EventmetadataCreateCommand.args = [
-  { name: 'providerId', required: true, description: 'the Events Provider id' }
+  { name: 'providerId', required: true, description: 'The requested eventmetadata event code' }
 ]
 
 EventmetadataCreateCommand.flags = {

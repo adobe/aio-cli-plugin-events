@@ -321,27 +321,6 @@ const createWebhookRegistrationInputJSONNoClientId = {
   }]
 }
 
-const createWebhookRegistrationInputJSONNoDeliveryType = {
-  name: 'bowling 1',
-  description: 'let me know when we can go play bowling!',
-  webhook_url: 'https://send-me-a-bowling-event.com/right-now',
-  client_id: '1234654902189324798',
-  events_of_interest: [{
-    event_code: 'com.adobe.bowling',
-    provider_id: 'IDP1'
-  }]
-}
-
-const createWebhookRegistrationInputJSONNoDeliveryTypeAndNoWebhookUrl = {
-  name: 'bowling 1',
-  description: 'let me know when we can go play bowling!',
-  client_id: '1234654902189324798',
-  events_of_interest: [{
-    event_code: 'com.adobe.bowling',
-    provider_id: 'IDP1'
-  }]
-}
-
 const data = {
   getAllProvidersResponse,
   getProviderByIdResponse,
@@ -355,9 +334,7 @@ const data = {
   getAllWebhookRegistrationsResponse,
   getWebhookRegistrationResponse,
   createWebhookRegistrationInputJSON,
-  createWebhookRegistrationInputJSONNoClientId,
-  createWebhookRegistrationInputJSONNoDeliveryType,
-  createWebhookRegistrationInputJSONNoDeliveryTypeAndNoWebhookUrl
+  createWebhookRegistrationInputJSONNoClientId
 }
 
 module.exports = {

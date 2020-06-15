@@ -65,7 +65,7 @@ GetCommand.flags = {
 }
 
 GetCommand.args = [
-  { name: 'registrationId', required: true, description: 'the Events Registration id' }
+  { name: 'registrationId', required: true, description: 'The requested registration ID' }
 ]
 
 module.exports = GetCommand

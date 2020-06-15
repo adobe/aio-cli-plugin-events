@@ -34,6 +34,10 @@ test('flags', async () => {
   expect(TheCommand.flags.yml.exclusive).toEqual(['json'])
 })
 
+test('args', async () => {
+  expect(TheCommand.args).toBeUndefined()
+})
+
 describe('console:registration:list', () => {
   let command
 

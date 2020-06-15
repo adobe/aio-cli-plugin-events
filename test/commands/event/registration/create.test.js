@@ -37,6 +37,11 @@ test('flags', async () => {
   expect(TheCommand.flags.yml.exclusive).toEqual(['json'])
 })
 
+test('args', async () => {
+  expect(TheCommand.args[0].required).toBe(true)
+  expect(TheCommand.args[0].description).toBeDefined()
+})
+
 describe('console:registration:create', () => {
   let command
 
@@ -62,7 +67,7 @@ describe('console:registration:create', () => {
       command.eventClient = { createWebhookRegistration: jest.fn().mockReturnValue(mock.data.createWebhookRegistrationResponse) }
     })
 
-    test('fakefile.json', async () => {
+    test('with valid input file fakefile.json', async () => {
       command.argv = ['fakefile.json']
       mockFs.readFileSync.mockReturnValue(jsonToBuffer(mock.data.createWebhookRegistrationInputJSON))
       await command.run()
@@ -70,27 +75,11 @@ describe('console:registration:create', () => {
       expect(stdout.output).toMatchFixture('registration/create.txt')
     })
 
-    test('fakefile.json missing clientId', async () => {
+    test('with valid input file fakefile.json, missing clientId', async () => {
       command.argv = ['fakefile.json']
       mockFs.readFileSync.mockReturnValue(jsonToBuffer(mock.data.createWebhookRegistrationInputJSONNoClientId))
       await command.run()
       expect(command.eventClient.createWebhookRegistration).toHaveBeenCalledWith('ORGID', 'INTEGRATIONID', { ...mock.data.createWebhookRegistrationInputJSON, client_id: 'CLIENTID' })
-    })
-
-    test('fakefile.json missing delivery_type', async () => {
-      command.argv = ['fakefile.json']
-      mockFs.readFileSync.mockReturnValue(jsonToBuffer(mock.data.createWebhookRegistrationInputJSONNoDeliveryType))
-      await command.run()
-      expect(command.eventClient.createWebhookRegistration).toHaveBeenCalledWith('ORGID', 'INTEGRATIONID', { ...mock.data.createWebhookRegistrationInputJSON, delivery_type: 'WEBHOOK' })
-      expect(stdout.output).toMatchFixture('registration/create.txt')
-    })
-
-    test('fakefile.json missing delivery_type and webhook_url', async () => {
-      command.argv = ['fakefile.json']
-      mockFs.readFileSync.mockReturnValue(jsonToBuffer(mock.data.createWebhookRegistrationInputJSONNoDeliveryTypeAndNoWebhookUrl))
-      await command.run()
-      expect(command.eventClient.createWebhookRegistration).toHaveBeenCalledWith('ORGID', 'INTEGRATIONID', { ...mock.data.createWebhookRegistrationInputJSONNoDeliveryTypeAndNoWebhookUrl, delivery_type: 'JOURNAL' })
-      expect(stdout.output).toMatchFixture('registration/create.txt')
     })
 
     test('fakefile.json --json', async () => {

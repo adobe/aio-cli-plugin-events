@@ -58,8 +58,8 @@ class EventmetadataUpdateCommand extends BaseCommand {
 EventmetadataUpdateCommand.description = 'Update an Event Metadata for a Provider'
 
 EventmetadataUpdateCommand.args = [
-  { name: 'providerId', required: true, description: 'the Events Provider id' },
-  { name: 'eventCode', required: true, description: 'the Events Metadata code' }
+  { name: 'providerId', required: true, description: 'The requested provider ID' },
+  { name: 'eventCode', required: true, description: 'The requested eventmetadata event code' }
 ]
 
 EventmetadataUpdateCommand.flags = {
