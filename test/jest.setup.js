@@ -17,7 +17,10 @@ const eol = require('eol')
 jest.setTimeout(30000)
 
 // don't touch the real fs
-jest.mock('fs', () => require('jest-plugin-fs/mock'))
+const mockFs = {
+  readFileSync: jest.fn()
+}
+jest.mock('fs', () => mockFs)
 
 // clear env variables
 

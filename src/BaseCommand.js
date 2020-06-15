@@ -22,9 +22,9 @@ const yaml = require('js-yaml')
 const Events = require('@adobe/aio-lib-events')
 const Console = require('@adobe/aio-lib-console')
 
-const CONSOLE_CONFIG_KEY = '$console'
+const CONSOLE_CONFIG_KEY = 'console'
 const CONSOLE_API_KEY = 'aio-cli-console-auth'
-const EVENTS_CONFIG_KEY = '$events'
+const EVENTS_CONFIG_KEY = 'events'
 const IMS_CONFIG_KEY = '$ims'
 const IMS_CLI_CONFIG_KEY = '$cli'
 

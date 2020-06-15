@@ -35,6 +35,13 @@ test('flags', async () => {
   expect(EventmetadataUpdateCommand.flags.yml.exclusive).toEqual(['json'])
 })
 
+test('args', async () => {
+  expect(EventmetadataUpdateCommand.args[0].required).toBe(true)
+  expect(EventmetadataUpdateCommand.args[0].description).toBeDefined()
+  expect(EventmetadataUpdateCommand.args[1].required).toBe(true)
+  expect(EventmetadataUpdateCommand.args[1].description).toBeDefined()
+})
+
 describe('console:eventmetadata:update', () => {
   let command
 
@@ -65,7 +72,6 @@ describe('console:eventmetadata:update', () => {
   describe('successfully update event metadata', () => {
     beforeEach(async () => {
       command.initSdk = jest.fn()
-      jest.fn().mockResolvedValue(command.eventClient)
       command.eventClient = { updateEventMetadataForProvider: jest.fn().mockReturnValue(mock.data.eventMetadataUpdatedSample) }
     })
 

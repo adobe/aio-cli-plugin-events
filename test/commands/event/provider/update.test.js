@@ -35,6 +35,11 @@ test('flags', async () => {
   expect(ProviderUpdateCommand.flags.yml.exclusive).toEqual(['json'])
 })
 
+test('args', async () => {
+  expect(ProviderUpdateCommand.args[0].required).toBe(true)
+  expect(ProviderUpdateCommand.args[0].description).toBeDefined()
+})
+
 describe('console:provider:update', () => {
   let command
 
@@ -65,7 +70,6 @@ describe('console:provider:update', () => {
   describe('successfully update provider', () => {
     beforeEach(async () => {
       command.initSdk = jest.fn()
-      jest.fn().mockResolvedValue(command.eventClient)
       command.eventClient = { updateProvider: jest.fn().mockReturnValue(mock.data.getProviderUpdateResponse) }
     })
 

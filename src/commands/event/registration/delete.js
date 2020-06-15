@@ -51,7 +51,7 @@ DeleteCommand.aliases = [
 ]
 
 DeleteCommand.args = [
-  { name: 'registrationId', required: true }
+  { name: 'registrationId', required: true, description: 'The requested registration ID' }
 ]
 
 DeleteCommand.flags = {

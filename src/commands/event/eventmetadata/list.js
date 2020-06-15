@@ -60,7 +60,7 @@ EventmetadataListCommand.aliases = [
 ]
 
 EventmetadataListCommand.args = [
-  { name: 'providerId', required: true }
+  { name: 'providerId', required: true, description: 'The requested provider ID' }
 ]
 
 EventmetadataListCommand.flags = {

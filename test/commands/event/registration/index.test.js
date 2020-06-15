@@ -9,8 +9,8 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
-const IndexCommand = require('../../../src/commands/event')
-const BaseCommand = require('../../../src/BaseCommand')
+const IndexCommand = require('../../../../src/commands/event/registration')
+const BaseCommand = require('../../../../src/BaseCommand')
 const Help = require('@oclif/plugin-help').default
 
 test('exports', async () => {
@@ -23,7 +23,7 @@ test('description', async () => {
 })
 
 test('args', async () => {
-  expect(IndexCommand.args).toEqual([])
+  expect(IndexCommand.args).toBeUndefined()
 })
 
 test('flags', async () => {
@@ -46,7 +46,7 @@ describe('instance methods', () => {
     test('returns help file for registration command', () => {
       const spy = jest.spyOn(Help.prototype, 'showHelp').mockReturnValue(true)
       return command.run().then(() => {
-        expect(spy).toHaveBeenCalledWith(['event', '--help'])
+        expect(spy).toHaveBeenCalledWith(['event:registration', '--help'])
       })
     })
   })

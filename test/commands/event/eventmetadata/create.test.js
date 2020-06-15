@@ -35,6 +35,11 @@ test('flags', async () => {
   expect(EventmetadataCreateCommand.flags.yml.exclusive).toEqual(['json'])
 })
 
+test('args', async () => {
+  expect(EventmetadataCreateCommand.args[0].required).toBe(true)
+  expect(EventmetadataCreateCommand.args[0].description).toBeDefined()
+})
+
 describe('console:eventmetadata:create', () => {
   let command
 
@@ -65,7 +70,6 @@ describe('console:eventmetadata:create', () => {
   describe('successfully create event metadata', () => {
     beforeEach(async () => {
       command.initSdk = jest.fn()
-      jest.fn().mockResolvedValue(command.eventClient)
       command.eventClient = { createEventMetadataForProvider: jest.fn().mockReturnValue(mock.data.eventMetadataSample) }
     })
 

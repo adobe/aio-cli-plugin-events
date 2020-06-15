@@ -233,15 +233,108 @@ const getAllEventMetadata = {
   }
 }
 
+const getWebhookRegistrationResponse = {
+  id: 11111,
+  name: 'bowling 1',
+  description: 'let me know when we can go play bowling!',
+  client_id: '1234654902189324798',
+  parent_client_id: '9088675987031198237',
+  webhook_url: 'https://send-me-a-bowling-event.com/right-now',
+  status: 'VERIFIED',
+  type: 'APP',
+  integration_status: 'ENABLED',
+  events_of_interest: [
+    {
+      event_code: 'com.adobe.bowling',
+      provider_id: 'IDP1',
+      provider: '3rd_party_custom_events_ORG@AdobeOrg_IDP01',
+      provider_label: 'bowling',
+      provider_description: "let's play bowling",
+      event_delivery_format: 'cloud_events_v1'
+    }
+  ],
+  registration_id: 'REGID1',
+  delivery_type: 'WEBHOOK',
+  events_url: 'https://events-va6.adobe.io/events/organizations/99999/integrations/888888/REGID1',
+  created_date: '2020-06-12T13:53:59.363Z',
+  updated_date: '2020-06-12T13:53:59.363Z',
+  runtime_action: ''
+}
+
+const getWebhookRegistrationResponse2 = {
+  id: 22222,
+  name: 'table tenis 2',
+  description: 'registration for table tennis events',
+  client_id: '1234654902189324798',
+  parent_client_id: '9088675987031198237',
+  webhook_url: 'https://send-me-a-table-tennis-event.com/please',
+  status: 'VERIFIED',
+  type: 'APP',
+  integration_status: 'ENABLED',
+  events_of_interest: [
+    {
+      event_code: 'com.adobe.table.tennis',
+      provider_id: 'IDP2',
+      provider: '3rd_party_custom_events_ORG@AdobeOrg_IDP02',
+      provider_label: 'table-tennis',
+      provider_description: "let's play table tennis",
+      event_delivery_format: 'cloud_events_v1'
+    }
+  ],
+  registration_id: 'REGID2',
+  delivery_type: 'WEBHOOK',
+  events_url: 'https://events-va6.adobe.io/events/organizations/99999/integrations/888888/REGID2',
+  created_date: '2020-06-12T13:53:59.363Z',
+  updated_date: '2020-06-12T13:53:59.363Z',
+  runtime_action: ''
+}
+
+const createWebhookRegistrationResponse = {
+  ...getWebhookRegistrationResponse
+}
+
+const getAllWebhookRegistrationsResponse = [
+  getWebhookRegistrationResponse,
+  getWebhookRegistrationResponse2
+]
+
+const createWebhookRegistrationInputJSON = {
+  name: 'bowling 1',
+  description: 'let me know when we can go play bowling!',
+  webhook_url: 'https://send-me-a-bowling-event.com/right-now',
+  client_id: '1234654902189324798',
+  delivery_type: 'WEBHOOK',
+  events_of_interest: [{
+    event_code: 'com.adobe.bowling',
+    provider_id: 'IDP1'
+  }]
+}
+
+const createWebhookRegistrationInputJSONNoClientId = {
+  name: 'bowling 1',
+  description: 'let me know when we can go play bowling!',
+  webhook_url: 'https://send-me-a-bowling-event.com/right-now',
+  delivery_type: 'WEBHOOK',
+  events_of_interest: [{
+    event_code: 'com.adobe.bowling',
+    provider_id: 'IDP1'
+  }]
+}
+
 const data = {
-  getAllProvidersResponse: getAllProvidersResponse,
-  getProviderByIdResponse: getProviderByIdResponse,
-  getProviderUpdateResponse: getProviderUpdateResponse,
-  createProviderWithoutDescAndDocsUrlResponse: createProviderWithoutDescAndDocsUrlResponse,
-  updateProviderWithoutDescAndDocsUrlResponse: updateProviderWithoutDescAndDocsUrlResponse,
-  eventMetadataSample: eventMetadataSample,
-  eventMetadataUpdatedSample: eventMetadataUpdatedSample,
-  getAllEventMetadata: getAllEventMetadata
+  getAllProvidersResponse,
+  getProviderByIdResponse,
+  getProviderUpdateResponse,
+  createProviderWithoutDescAndDocsUrlResponse,
+  updateProviderWithoutDescAndDocsUrlResponse,
+  eventMetadataSample,
+  eventMetadataUpdatedSample,
+  getAllEventMetadata,
+  createWebhookRegistrationResponse,
+  getAllWebhookRegistrationsResponse,
+  getWebhookRegistrationResponse,
+  createWebhookRegistrationInputJSON,
+  createWebhookRegistrationInputJSONNoClientId
 }
 
 module.exports = {

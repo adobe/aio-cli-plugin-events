@@ -29,6 +29,11 @@ test('flags', async () => {
   expect(ProviderDeleteCommand.flags.verbose.type).toBe('boolean')
 })
 
+test('args', async () => {
+  expect(ProviderDeleteCommand.args[0].required).toBe(true)
+  expect(ProviderDeleteCommand.args[0].description).toBeDefined()
+})
+
 describe('console:provider:delete', () => {
   let command
 
@@ -60,7 +65,6 @@ describe('console:provider:delete', () => {
     beforeEach(async () => {
       command.initSdk = jest.fn()
       command.argv = ['providerId']
-      jest.fn().mockResolvedValue(command.eventClient)
       command.eventClient = { deleteProvider: jest.fn().mockReturnValue('OK') }
     })
 

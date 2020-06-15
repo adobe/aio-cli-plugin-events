@@ -26,18 +26,9 @@ class CreateCommand extends BaseCommand {
 
       const body = this.parseJSONFile(args.bodyJSONFile)
 
-      // todo should these transformations be moved to the events sdk ?
       if (!body.client_id) {
         body.client_id = this.conf.integration.jwtClientId
       }
-      if (!body.delivery_type) {
-        if (body.webhook_url) {
-          body.delivery_type = 'WEBHOOK'
-        } else {
-          body.delivery_type = 'JOURNAL'
-        }
-      }
-
       // other checks are performed by the server
 
       aioLogger.debug(`create event registration with body ${body}`)

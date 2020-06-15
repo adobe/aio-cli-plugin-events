@@ -8,6 +8,8 @@ the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTA
 OF ANY KIND, either express or implied. See the License for the specific language
 governing permissions and limitations under the License.
 */
+const { EOL } = require('os')
+
 // mocks setup
 jest.mock('@adobe/aio-lib-ims', () => ({
   getToken: jest.fn(),
@@ -34,8 +36,8 @@ const aioConfig = require('@adobe/aio-lib-core-config')
 
 const BaseCommand = require('../src/BaseCommand')
 
-const CONSOLE_CONFIG_KEY = '$console'
-const EVENT_CONFIG_KEY = '$events'
+const CONSOLE_CONFIG_KEY = 'console'
+const EVENT_CONFIG_KEY = 'events'
 const CONSOLE_API_KEY = 'aio-cli-console-auth'
 const IMS_CONFIG_KEY = '$ims'
 
@@ -222,11 +224,12 @@ describe('initSDK', () => {
       if (key === CONSOLE_CONFIG_KEY) return undefined
       if (key === EVENT_CONFIG_KEY) return undefined
     })
-    await expect(command.initSdk()).rejects.toThrow(`Your console configuration is incomplete.
-Use the 'aio console' commands to select your organization, project, and workspace.
-1. Org: <no org selected>
-2. Project: <no project selected>
-3. Workspace: <no workspace selected>`)
+    await expect(command.initSdk()).rejects.toThrow(
+      `Your console configuration is incomplete.${EOL}` +
+      `Use the 'aio console' commands to select your organization, project, and workspace.${EOL}` +
+      `1. Org: <no org selected>${EOL}` +
+      `2. Project: <no project selected>${EOL}` +
+      '3. Workspace: <no workspace selected>')
   })
 
   test('not local config, console config workspace is not set', async () => {
@@ -236,11 +239,12 @@ Use the 'aio console' commands to select your organization, project, and workspa
       if (key === CONSOLE_CONFIG_KEY) return consoleConfig
       if (key === EVENT_CONFIG_KEY) return undefined
     })
-    await expect(command.initSdk()).rejects.toThrow(`Your console configuration is incomplete.
-Use the 'aio console' commands to select your organization, project, and workspace.
-1. Org: Coen Brothers
-2. Project: TheBigLebowski
-3. Workspace: <no workspace selected>`)
+    await expect(command.initSdk()).rejects.toThrow(
+      `Your console configuration is incomplete.${EOL}` +
+      `Use the 'aio console' commands to select your organization, project, and workspace.${EOL}` +
+      `1. Org: Coen Brothers${EOL}` +
+      `2. Project: TheBigLebowski${EOL}` +
+      '3. Workspace: <no workspace selected>')
   })
 
   test('not local config, console config workspace and project is not set', async () => {
@@ -251,11 +255,12 @@ Use the 'aio console' commands to select your organization, project, and workspa
       if (key === CONSOLE_CONFIG_KEY) return consoleConfig
       if (key === EVENT_CONFIG_KEY) return undefined
     })
-    await expect(command.initSdk()).rejects.toThrow(`Your console configuration is incomplete.
-Use the 'aio console' commands to select your organization, project, and workspace.
-1. Org: Coen Brothers
-2. Project: <no project selected>
-3. Workspace: <no workspace selected>`)
+    await expect(command.initSdk()).rejects.toThrow(
+      `Your console configuration is incomplete.${EOL}` +
+      `Use the 'aio console' commands to select your organization, project, and workspace.${EOL}` +
+      `1. Org: Coen Brothers${EOL}` +
+      `2. Project: <no project selected>${EOL}` +
+      '3. Workspace: <no workspace selected>')
   })
 
   test('local app config, .aio and env are set', async () => {
