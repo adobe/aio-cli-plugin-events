@@ -57,7 +57,7 @@ describe('console:registration:get', () => {
     expect(command.run).toBeInstanceOf(Function)
   })
 
-  describe('successfully get event metadata', () => {
+  describe('successfully get registration', () => {
     beforeEach(async () => {
       command.eventClient = { getWebhookRegistration: jest.fn().mockReturnValue(mock.data.getWebhookRegistrationResponse) }
     })
