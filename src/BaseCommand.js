@@ -25,7 +25,7 @@ const Console = require('@adobe/aio-lib-console')
 const CONSOLE_CONFIG_KEY = 'console'
 const CONSOLE_API_KEY = 'aio-cli-console-auth'
 const EVENTS_CONFIG_KEY = 'events'
-const IMS_CONFIG_KEY = '$ims'
+const IMS_CONFIG_KEY = 'ims'
 const IMS_CLI_CONFIG_KEY = '$cli'
 
 class BaseCommand extends Command {
@@ -61,7 +61,7 @@ class BaseCommand extends Command {
       // clientId is stored in the dotenv
       const integrationCredentials = aioConfig.get(`${IMS_CONFIG_KEY}.${workspaceIntegration.name}`, 'env')
       if (!integrationCredentials || !integrationCredentials.client_id) {
-        throw new Error(`IMS .env configuration $ims.${workspaceIntegration.name} is incomplete or missing`)
+        throw new Error(`IMS .env configuration ${IMS_CONFIG_KEY}.${workspaceIntegration.name} is incomplete or missing`)
       }
 
       return {
