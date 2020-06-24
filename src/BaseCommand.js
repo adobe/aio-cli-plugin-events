@@ -26,7 +26,7 @@ const CONSOLE_CONFIG_KEY = 'console'
 const CONSOLE_API_KEY = 'aio-cli-console-auth'
 const EVENTS_CONFIG_KEY = 'events'
 const IMS_CONFIG_KEY = 'ims'
-const IMS_CLI_CONFIG_KEY = '$cli'
+const IMS_CLI_CONFIG_KEY = 'cli'
 
 class BaseCommand extends Command {
   async initSdk () {
