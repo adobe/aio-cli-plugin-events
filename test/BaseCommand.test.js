@@ -14,7 +14,8 @@ const { EOL } = require('os')
 jest.mock('@adobe/aio-lib-ims', () => ({
   getToken: jest.fn(),
   context: {
-    setCli: jest.fn()
+    setCli: jest.fn(),
+    get: jest.fn()
   }
 }))
 const Ims = require('@adobe/aio-lib-ims')
@@ -49,6 +50,7 @@ beforeEach(() => {
   aioConfig.get.mockReset()
   aioConfig.set.mockReset()
 
+  Ims.context.get.mockReset()
   Ims.context.setCli.mockReset()
   Ims.getToken.mockReset()
   Ims.getToken.mockResolvedValue('bowling')
@@ -266,8 +268,8 @@ describe('initSDK', () => {
   test('local app config, .aio and env are set', async () => {
     aioConfig.get.mockImplementation((key, type) => {
       if (type === 'local' && key === 'project') return localConfig.project
-      if (type === 'env' && key === `${IMS_CLI_CONFIG_KEY}.${_validConfig.integration.name}`) return Object.values(localEnvConfig[IMS_CLI_CONFIG_KEY])[0]
     })
+    Ims.context.get.mockReturnValue({ data: Object.values(localEnvConfig[IMS_CLI_CONFIG_KEY])[0] })
     await command.initSdk()
     expect(command.consoleClient).toBe(mockConsoleInstance)
     expect(Console.init).toHaveBeenCalledWith('bowling', CONSOLE_API_KEY)
@@ -275,6 +277,7 @@ describe('initSDK', () => {
     expect(Events.init).toHaveBeenCalledWith(_validConfig.org.code, _validConfig.integration.jwtClientId, 'bowling')
     expect(command.accessToken).toBe('bowling')
     expect(command.conf).toEqual({ ..._validConfig, isLocal: true })
+    expect(Ims.context.get).toHaveBeenCalledWith(_validConfig.integration.name)
   })
 
   test('local app config, missing jwt integration', async () => {
@@ -289,16 +292,18 @@ describe('initSDK', () => {
   test('local app config, missing .env credentials jwt client id', async () => {
     aioConfig.get.mockImplementation((key, type) => {
       if (type === 'local' && key === 'project') return localConfig.project
-      if (type === 'env' && key === `${IMS_CLI_CONFIG_KEY}.${_validConfig.integration.name}`) return {}
     })
-    await expect(command.initSdk()).rejects.toThrow(`IMS .env configuration ${IMS_CLI_CONFIG_KEY}.Project_WhiteRussian is incomplete or missing`)
+    Ims.context.get.mockReturnValue({ data: { clientId: 'is not client_id', other: 'fake data' } })
+    await expect(command.initSdk()).rejects.toThrow('IMS configuration for Project_WhiteRussian is incomplete or missing')
+    expect(Ims.context.get).toHaveBeenCalledWith(_validConfig.integration.name)
   })
 
   test('local app config, missing .env', async () => {
     aioConfig.get.mockImplementation((key, type) => {
       if (type === 'local' && key === 'project') return localConfig.project
-      if (type === 'env' && key === `${IMS_CLI_CONFIG_KEY}.${_validConfig.integration.name}`) return undefined
     })
-    await expect(command.initSdk()).rejects.toThrow(`IMS .env configuration ${IMS_CLI_CONFIG_KEY}.Project_WhiteRussian is incomplete or missing`)
+    Ims.context.get.mockReturnValue({ data: undefined })
+    await expect(command.initSdk()).rejects.toThrow('IMS configuration for Project_WhiteRussian is incomplete or missing')
+    expect(Ims.context.get).toHaveBeenCalledWith(_validConfig.integration.name)
   })
 })
