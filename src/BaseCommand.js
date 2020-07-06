@@ -13,7 +13,6 @@ const { Command, flags } = require('@oclif/command')
 const aioLogger = require('@adobe/aio-lib-core-logging')('@adobe/aio-cli-plugin-events', { provider: 'debug' })
 const aioConfig = require('@adobe/aio-lib-core-config')
 const { getToken, context } = require('@adobe/aio-lib-ims')
-
 const { EOL } = require('os')
 
 const { CLI } = require('@adobe/aio-lib-ims/src/context')
@@ -25,13 +24,11 @@ const Console = require('@adobe/aio-lib-console')
 const CONSOLE_CONFIG_KEY = 'console'
 const CONSOLE_API_KEY = 'aio-cli-console-auth'
 const EVENTS_CONFIG_KEY = 'events'
-const IMS_CONFIG_KEY = '$ims'
-const IMS_CLI_CONFIG_KEY = '$cli'
 
 class BaseCommand extends Command {
   async initSdk () {
     // login
-    await context.setCli({ [`${IMS_CLI_CONFIG_KEY}.bare-output`]: true }, false) // set this globally
+    await context.setCli({ 'cli.bare-output': true }, false) // set this globally
     aioLogger.debug('run login')
     this.accessToken = await getToken(CLI) // user access token, would work with jwt too
 
@@ -49,6 +46,8 @@ class BaseCommand extends Command {
     this.eventClient = await Events.init(this.conf.org.code, this.conf.integration.jwtClientId, this.accessToken)
   }
 
+  // Note: loadConfig should be shared across plugins at the aio-lib-ims level
+  // see: https://github.com/adobe/aio-cli-plugin-console/issues/149
   /** @private */
   async loadConfig (consoleClient) {
     // are we in a local aio app project?
@@ -59,9 +58,10 @@ class BaseCommand extends Command {
       const workspaceIntegration = this.extractServiceIntegrationConfig(localProject.workspace)
       // note in the local app aio, the workspaceIntegration only holds a reference, the
       // clientId is stored in the dotenv
-      const integrationCredentials = aioConfig.get(`${IMS_CONFIG_KEY}.${workspaceIntegration.name}`, 'env')
+      aioLogger.debug(`loading local IMS context ${workspaceIntegration.name}`)
+      const integrationCredentials = (await context.get(workspaceIntegration.name)).data
       if (!integrationCredentials || !integrationCredentials.client_id) {
-        throw new Error(`IMS .env configuration $ims.${workspaceIntegration.name} is incomplete or missing`)
+        throw new Error(`IMS configuration for ${workspaceIntegration.name} is incomplete or missing`)
       }
 
       return {
