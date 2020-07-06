@@ -105,7 +105,7 @@ describe('initSDK', () => {
         }
       }
     }
-    localEnvConfig = { [IMS_CLI_CONFIG_KEY]: { [_validConfig.integration.name.toLowerCase()]: { client_id: _validConfig.integration.jwtClientId } } }
+    localEnvConfig = { [IMS_CLI_CONFIG_KEY]: { contexts: { [_validConfig.integration.name.toLowerCase()]: { client_id: _validConfig.integration.jwtClientId } } } }
   })
   test('not local config, console and events config are set', async () => {
     aioConfig.get.mockImplementation((key, type) => {
@@ -269,7 +269,7 @@ describe('initSDK', () => {
     aioConfig.get.mockImplementation((key, type) => {
       if (type === 'local' && key === 'project') return localConfig.project
     })
-    Ims.context.get.mockReturnValue({ data: Object.values(localEnvConfig[IMS_CLI_CONFIG_KEY])[0] })
+    Ims.context.get.mockReturnValue({ data: Object.values(localEnvConfig[IMS_CLI_CONFIG_KEY].contexts)[0] })
     await command.initSdk()
     expect(command.consoleClient).toBe(mockConsoleInstance)
     expect(Console.init).toHaveBeenCalledWith('bowling', CONSOLE_API_KEY)
@@ -284,7 +284,7 @@ describe('initSDK', () => {
     localConfig.project.workspace.details.credentials.pop()
     aioConfig.get.mockImplementation((key, type) => {
       if (type === 'local' && key === 'project') return localConfig.project
-      if (type === 'env' && key === `${IMS_CLI_CONFIG_KEY}.${_validConfig.integration.name}`) return Object.values(localEnvConfig[IMS_CLI_CONFIG_KEY])[0]
+      if (type === 'env' && key === `${IMS_CLI_CONFIG_KEY}.contexts.${_validConfig.integration.name}`) return Object.values(localEnvConfig[IMS_CLI_CONFIG_KEY])[0]
     })
     await expect(command.initSdk()).rejects.toThrow('Workspace Rug has no JWT integration')
   })
