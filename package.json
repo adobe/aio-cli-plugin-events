@@ -3,7 +3,7 @@
   "description": "Adobe I/O Events Plugin for the Adobe I/O CLI",
   "version": "1.1.0",
   "dependencies": {
-    "@adobe/aio-lib-console": "^1.1.1",
+    "@adobe/aio-lib-console": "^2.1.0",
     "@adobe/aio-lib-core-config": "^2.0.0",
     "@adobe/aio-lib-events": "^1.0.0",
     "@adobe/aio-lib-ims": "^4.0.0",
