@@ -13,6 +13,7 @@
     "@oclif/plugin-help": "^3.0.1",
     "debug": "^4.1.1"
   },
+  "repository": "adobe/aio-cli-plugin-events",
   "devDependencies": {
     "@oclif/dev-cli": "^1.22.2",
     "@oclif/test": "^1",
