@@ -33,7 +33,7 @@ $ npm install -g @adobe/aio-cli-plugin-events
 $ aio COMMAND
 running command...
 $ aio (-v|--version|version)
-@adobe/aio-cli-plugin-events/1.1.0 darwin-x64 node-v12.18.0
+@adobe/aio-cli-plugin-events/1.1.1 darwin-x64 node-v12.18.0
 $ aio --help [COMMAND]
 USAGE
   $ aio COMMAND
