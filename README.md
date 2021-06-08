@@ -33,7 +33,7 @@ $ npm install -g @adobe/aio-cli-plugin-events
 $ aio COMMAND
 running command...
 $ aio (-v|--version|version)
-@adobe/aio-cli-plugin-events/1.1.2 win32-x64 node-v14.17.0
+@adobe/aio-cli-plugin-events/1.1.3 linux-x64 node-v10.24.1
 $ aio --help [COMMAND]
 USAGE
   $ aio COMMAND
@@ -75,7 +75,7 @@ OPTIONS
   --version      Show version
 ```
 
-_See code: [src/commands/event/index.js](https://github.com/adobe/aio-cli-plugin-events/blob/v1.1.2/src/commands/event/index.js)_
+_See code: [src/commands/event/index.js](https://github.com/adobe/aio-cli-plugin-events/blob/v1.1.3/src/commands/event/index.js)_
 
 ## `aio event:eventmetadata`
 
@@ -91,7 +91,7 @@ OPTIONS
   --version      Show version
 ```
 
-_See code: [src/commands/event/eventmetadata/index.js](https://github.com/adobe/aio-cli-plugin-events/blob/v1.1.2/src/commands/event/eventmetadata/index.js)_
+_See code: [src/commands/event/eventmetadata/index.js](https://github.com/adobe/aio-cli-plugin-events/blob/v1.1.3/src/commands/event/eventmetadata/index.js)_
 
 ## `aio event:eventmetadata:create PROVIDERID`
 
@@ -112,7 +112,7 @@ OPTIONS
   --version      Show version
 ```
 
-_See code: [src/commands/event/eventmetadata/create.js](https://github.com/adobe/aio-cli-plugin-events/blob/v1.1.2/src/commands/event/eventmetadata/create.js)_
+_See code: [src/commands/event/eventmetadata/create.js](https://github.com/adobe/aio-cli-plugin-events/blob/v1.1.3/src/commands/event/eventmetadata/create.js)_
 
 ## `aio event:eventmetadata:delete PROVIDERID [EVENTCODE]`
 
@@ -132,7 +132,7 @@ OPTIONS
   --version      Show version
 ```
 
-_See code: [src/commands/event/eventmetadata/delete.js](https://github.com/adobe/aio-cli-plugin-events/blob/v1.1.2/src/commands/event/eventmetadata/delete.js)_
+_See code: [src/commands/event/eventmetadata/delete.js](https://github.com/adobe/aio-cli-plugin-events/blob/v1.1.3/src/commands/event/eventmetadata/delete.js)_
 
 ## `aio event:eventmetadata:get PROVIDERID EVENTCODE`
 
@@ -154,7 +154,7 @@ OPTIONS
   --version      Show version
 ```
 
-_See code: [src/commands/event/eventmetadata/get.js](https://github.com/adobe/aio-cli-plugin-events/blob/v1.1.2/src/commands/event/eventmetadata/get.js)_
+_See code: [src/commands/event/eventmetadata/get.js](https://github.com/adobe/aio-cli-plugin-events/blob/v1.1.3/src/commands/event/eventmetadata/get.js)_
 
 ## `aio event:eventmetadata:list PROVIDERID`
 
@@ -178,7 +178,7 @@ ALIASES
   $ aio event:eventmetadata:ls
 ```
 
-_See code: [src/commands/event/eventmetadata/list.js](https://github.com/adobe/aio-cli-plugin-events/blob/v1.1.2/src/commands/event/eventmetadata/list.js)_
+_See code: [src/commands/event/eventmetadata/list.js](https://github.com/adobe/aio-cli-plugin-events/blob/v1.1.3/src/commands/event/eventmetadata/list.js)_
 
 ## `aio event:eventmetadata:update PROVIDERID EVENTCODE`
 
@@ -200,7 +200,7 @@ OPTIONS
   --version      Show version
 ```
 
-_See code: [src/commands/event/eventmetadata/update.js](https://github.com/adobe/aio-cli-plugin-events/blob/v1.1.2/src/commands/event/eventmetadata/update.js)_
+_See code: [src/commands/event/eventmetadata/update.js](https://github.com/adobe/aio-cli-plugin-events/blob/v1.1.3/src/commands/event/eventmetadata/update.js)_
 
 ## `aio event:provider`
 
@@ -216,7 +216,7 @@ OPTIONS
   --version      Show version
 ```
 
-_See code: [src/commands/event/provider/index.js](https://github.com/adobe/aio-cli-plugin-events/blob/v1.1.2/src/commands/event/provider/index.js)_
+_See code: [src/commands/event/provider/index.js](https://github.com/adobe/aio-cli-plugin-events/blob/v1.1.3/src/commands/event/provider/index.js)_
 
 ## `aio event:provider:create`
 
@@ -234,7 +234,7 @@ OPTIONS
   --version      Show version
 ```
 
-_See code: [src/commands/event/provider/create.js](https://github.com/adobe/aio-cli-plugin-events/blob/v1.1.2/src/commands/event/provider/create.js)_
+_See code: [src/commands/event/provider/create.js](https://github.com/adobe/aio-cli-plugin-events/blob/v1.1.3/src/commands/event/provider/create.js)_
 
 ## `aio event:provider:delete PROVIDERID`
 
@@ -253,7 +253,7 @@ OPTIONS
   --version      Show version
 ```
 
-_See code: [src/commands/event/provider/delete.js](https://github.com/adobe/aio-cli-plugin-events/blob/v1.1.2/src/commands/event/provider/delete.js)_
+_See code: [src/commands/event/provider/delete.js](https://github.com/adobe/aio-cli-plugin-events/blob/v1.1.3/src/commands/event/provider/delete.js)_
 
 ## `aio event:provider:get PROVIDERID`
 
@@ -275,7 +275,7 @@ OPTIONS
   --version             Show version
 ```
 
-_See code: [src/commands/event/provider/get.js](https://github.com/adobe/aio-cli-plugin-events/blob/v1.1.2/src/commands/event/provider/get.js)_
+_See code: [src/commands/event/provider/get.js](https://github.com/adobe/aio-cli-plugin-events/blob/v1.1.3/src/commands/event/provider/get.js)_
 
 ## `aio event:provider:list`
 
@@ -296,7 +296,7 @@ ALIASES
   $ aio event:provider:ls
 ```
 
-_See code: [src/commands/event/provider/list.js](https://github.com/adobe/aio-cli-plugin-events/blob/v1.1.2/src/commands/event/provider/list.js)_
+_See code: [src/commands/event/provider/list.js](https://github.com/adobe/aio-cli-plugin-events/blob/v1.1.3/src/commands/event/provider/list.js)_
 
 ## `aio event:provider:update PROVIDERID`
 
@@ -317,7 +317,7 @@ OPTIONS
   --version      Show version
 ```
 
-_See code: [src/commands/event/provider/update.js](https://github.com/adobe/aio-cli-plugin-events/blob/v1.1.2/src/commands/event/provider/update.js)_
+_See code: [src/commands/event/provider/update.js](https://github.com/adobe/aio-cli-plugin-events/blob/v1.1.3/src/commands/event/provider/update.js)_
 
 ## `aio event:registration`
 
@@ -333,7 +333,7 @@ OPTIONS
   --version      Show version
 ```
 
-_See code: [src/commands/event/registration/index.js](https://github.com/adobe/aio-cli-plugin-events/blob/v1.1.2/src/commands/event/registration/index.js)_
+_See code: [src/commands/event/registration/index.js](https://github.com/adobe/aio-cli-plugin-events/blob/v1.1.3/src/commands/event/registration/index.js)_
 
 ## `aio event:registration:create BODYJSONFILE`
 
@@ -369,7 +369,7 @@ ALIASES
   $ aio event:reg:create
 ```
 
-_See code: [src/commands/event/registration/create.js](https://github.com/adobe/aio-cli-plugin-events/blob/v1.1.2/src/commands/event/registration/create.js)_
+_See code: [src/commands/event/registration/create.js](https://github.com/adobe/aio-cli-plugin-events/blob/v1.1.3/src/commands/event/registration/create.js)_
 
 ## `aio event:registration:delete REGISTRATIONID`
 
@@ -391,7 +391,7 @@ ALIASES
   $ aio event:reg:delete
 ```
 
-_See code: [src/commands/event/registration/delete.js](https://github.com/adobe/aio-cli-plugin-events/blob/v1.1.2/src/commands/event/registration/delete.js)_
+_See code: [src/commands/event/registration/delete.js](https://github.com/adobe/aio-cli-plugin-events/blob/v1.1.3/src/commands/event/registration/delete.js)_
 
 ## `aio event:registration:get REGISTRATIONID`
 
@@ -415,7 +415,7 @@ ALIASES
   $ aio event:reg:get
 ```
 
-_See code: [src/commands/event/registration/get.js](https://github.com/adobe/aio-cli-plugin-events/blob/v1.1.2/src/commands/event/registration/get.js)_
+_See code: [src/commands/event/registration/get.js](https://github.com/adobe/aio-cli-plugin-events/blob/v1.1.3/src/commands/event/registration/get.js)_
 
 ## `aio event:registration:list`
 
@@ -438,7 +438,7 @@ ALIASES
   $ aio event:reg:ls
 ```
 
-_See code: [src/commands/event/registration/list.js](https://github.com/adobe/aio-cli-plugin-events/blob/v1.1.2/src/commands/event/registration/list.js)_
+_See code: [src/commands/event/registration/list.js](https://github.com/adobe/aio-cli-plugin-events/blob/v1.1.3/src/commands/event/registration/list.js)_
 <!-- commandsstop -->
 
 ## Contributing
