@@ -1,3 +1,4 @@
-EVENT CODE       LABEL   DESC   
-com.adobe.CODE01 LABEL01 DESC01 
-CODE02           LABEL2  DESC02 
+ EVENT CODE       LABEL   DESC   
+ ──────────────── ─────── ────── 
+ com.adobe.CODE01 LABEL01 DESC01 
+ CODE02           LABEL2  DESC02 
