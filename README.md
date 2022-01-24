@@ -351,11 +351,11 @@ ARGUMENTS
          "name": "<event registration name>",
          "description": "<event registration description>",
          "delivery_type": "WEBHOOK|WEBHOOK_BATCH|JOURNAL",
-         "webhook_url": "<webhook URL responding to challenge>"
+         "webhook_url": "<webhook URL responding to challenge>",
          "events_of_interest": [{
-           "provider_id": "<event provider id>"
+           "provider_id": "<event provider id>",
            "event_code": "<event provider event_code metadata>"
-         }, { <...more events> }]
+         }, { /* ...more events */ }]
       }
 
 OPTIONS
