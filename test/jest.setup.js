@@ -13,12 +13,15 @@ governing permissions and limitations under the License.
 const { stdout, stderr } = require('stdout-stderr')
 const fs = jest.requireActual('fs')
 const eol = require('eol')
+const path = require('path')
 
 jest.setTimeout(30000)
+jest.useFakeTimers()
 
 // don't touch the real fs
 const mockFs = {
-  readFileSync: jest.fn()
+  readFileSync: jest.fn(),
+  readFile: jest.fn()
 }
 jest.mock('fs', () => mockFs)
 
@@ -30,12 +33,12 @@ afterEach(() => { stdout.stop(); stderr.stop() })
 
 // helper for fixtures
 global.fixtureFile = (output) => {
-  return fs.readFileSync(`${__dirname}/__fixtures__/${output}`).toString()
+  return fs.readFileSync(path.join(__dirname, '__fixtures__', output)).toString()
 }
 
 // helper for fixtures
 global.fixtureJson = (output) => {
-  return JSON.parse(fs.readFileSync(`${__dirname}/__fixtures__/${output}`).toString())
+  return JSON.parse(fs.readFileSync(path.join(__dirname, '__fixtures__', output)))
 }
 
 // fixture matcher

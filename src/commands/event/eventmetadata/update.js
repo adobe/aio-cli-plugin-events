@@ -11,15 +11,14 @@ governing permissions and limitations under the License.
 */
 
 const BaseCommand = require('../../../BaseCommand.js')
-const { flags } = require('@oclif/command')
-const { cli } = require('cli-ux')
+const { Flags, CliUx: { ux: cli } } = require('@oclif/core')
 const { sentenceValidatorWithMinOneChar } = require('../../../utils/validator')
 const inquirer = require('inquirer')
 const aioLogger = require('@adobe/aio-lib-core-logging')('@adobe/aio-cli-plugin-events:eventmetadata:update', { provider: 'debug' })
 
 class EventmetadataUpdateCommand extends BaseCommand {
   async run () {
-    const { args, flags } = this.parse(EventmetadataUpdateCommand)
+    const { args, flags } = await this.parse(EventmetadataUpdateCommand)
     try {
       await this.initSdk()
       const response = await inquirer.prompt([{
@@ -64,12 +63,12 @@ EventmetadataUpdateCommand.args = [
 
 EventmetadataUpdateCommand.flags = {
   ...BaseCommand.flags,
-  json: flags.boolean({
+  json: Flags.boolean({
     description: 'Output json',
     char: 'j',
     exclusive: ['yml']
   }),
-  yml: flags.boolean({
+  yml: Flags.boolean({
     description: 'Output yml',
     char: 'y',
     exclusive: ['json']
