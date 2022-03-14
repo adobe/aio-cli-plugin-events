@@ -10,7 +10,7 @@
     "@oclif/command": "^1",
     "@oclif/config": "^1",
     "@oclif/errors": "^1.2.2",
-    "@oclif/plugin-help": "^3.0.1",
+    "@oclif/plugin-help": "^2.2.3",
     "debug": "^4.1.1"
   },
   "repository": "adobe/aio-cli-plugin-events",
