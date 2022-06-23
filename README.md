@@ -26,20 +26,15 @@ Adobe I/O Events Plugin for the Adobe I/O CLI
 * [Usage](#usage)
 * [Commands](#commands)
 <!-- tocstop -->
+
 # Usage
-<!-- usage -->
 ```sh-session
-$ npm install -g @adobe/aio-cli-plugin-events
-$ aio COMMAND
-running command...
-$ aio (-v|--version|version)
-@adobe/aio-cli-plugin-events/1.1.6 darwin-x64 node-v16.13.1
-$ aio --help [COMMAND]
-USAGE
-  $ aio COMMAND
-...
+$ aio plugins:install -g @adobe/aio-cli-plugin-events
+$ # OR
+$ aio discover -i
+$ aio event --help
 ```
-<!-- usagestop -->
+
 # Commands
 <!-- commands -->
 * [`aio event`](#aio-event)
