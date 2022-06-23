@@ -10,13 +10,13 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
-const Help = require('@oclif/plugin-help').default
+const { Help } = require('@oclif/core')
 const BaseCommand = require('../../BaseCommand.js')
 
 class IndexCommand extends BaseCommand {
   async run () {
     const help = new Help(this.config)
-    help.showHelp(['event', '--help'])
+    await help.showHelp(['event', '--help'])
   }
 }
 

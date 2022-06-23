@@ -11,7 +11,7 @@ governing permissions and limitations under the License.
 
 const IndexCommand = require('../../../../src/commands/event/eventmetadata')
 const BaseCommand = require('../../../../src/BaseCommand')
-const Help = require('@oclif/plugin-help').default
+const { Help } = require('@oclif/core')
 
 test('exports', async () => {
   expect(typeof IndexCommand).toEqual('function')
@@ -44,6 +44,7 @@ describe('instance methods', () => {
     })
 
     test('returns help file for event metadata command', () => {
+      command.config = {}
       const spy = jest.spyOn(Help.prototype, 'showHelp').mockReturnValue(true)
       return command.run().then(() => {
         expect(spy).toHaveBeenCalledWith(['event:eventmetadata', '--help'])

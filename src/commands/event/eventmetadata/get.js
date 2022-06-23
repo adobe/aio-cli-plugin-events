@@ -11,13 +11,12 @@ governing permissions and limitations under the License.
 */
 
 const BaseCommand = require('../../../BaseCommand.js')
-const { flags } = require('@oclif/command')
-const { cli } = require('cli-ux')
+const { Flags, CliUx: { ux: cli } } = require('@oclif/core')
 const aioLogger = require('@adobe/aio-lib-core-logging')('@adobe/aio-cli-plugin-events:eventmetadata:get', { provider: 'debug' })
 
 class EventmetadataGetCommand extends BaseCommand {
   async run () {
-    const { args, flags } = this.parse(EventmetadataGetCommand)
+    const { args, flags } = await this.parse(EventmetadataGetCommand)
 
     try {
       await this.initSdk()
@@ -49,12 +48,12 @@ EventmetadataGetCommand.args = [
 
 EventmetadataGetCommand.flags = {
   ...BaseCommand.flags,
-  json: flags.boolean({
+  json: Flags.boolean({
     description: 'Output json',
     char: 'j',
     exclusive: ['yml']
   }),
-  yml: flags.boolean({
+  yml: Flags.boolean({
     description: 'Output yml',
     char: 'y',
     exclusive: ['json']

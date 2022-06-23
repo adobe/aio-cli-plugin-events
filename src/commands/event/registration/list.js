@@ -9,15 +9,14 @@ the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTA
 OF ANY KIND, either express or implied. See the License for the specific language
 governing permissions and limitations under the License.
 */
-const { flags } = require('@oclif/command')
-const { cli } = require('cli-ux')
+const { Flags, CliUx: { ux: cli } } = require('@oclif/core')
 
 const BaseCommand = require('../../../BaseCommand')
 const aioLogger = require('@adobe/aio-lib-core-logging')('@adobe/aio-cli-plugin-events:registration:list', { provider: 'debug' })
 
 class ListCommand extends BaseCommand {
   async run () {
-    const { flags } = this.parse(ListCommand)
+    const { flags } = await this.parse(ListCommand)
 
     try {
       await this.initSdk()
@@ -41,7 +40,7 @@ class ListCommand extends BaseCommand {
           delivery_type: { minWidth: 10, header: 'DELIVERY_TYPE' },
           status: { minWidth: 10, header: 'STATUS' }
         }, {
-          printLine: this.log
+          printLine: this.log.bind(this)
         })
       }
     } catch (err) {
@@ -61,12 +60,12 @@ ListCommand.aliases = [
 
 ListCommand.flags = {
   ...BaseCommand.flags,
-  json: flags.boolean({
+  json: Flags.boolean({
     description: 'Output json',
     char: 'j',
     exclusive: ['yml']
   }),
-  yml: flags.boolean({
+  yml: Flags.boolean({
     description: 'Output yml',
     char: 'y',
     exclusive: ['json']
