@@ -11,15 +11,14 @@ governing permissions and limitations under the License.
 */
 
 const BaseCommand = require('../../../BaseCommand.js')
-const { flags } = require('@oclif/command')
-const { cli } = require('cli-ux')
+const { Flags, CliUx: { ux: cli } } = require('@oclif/core')
 const { sentenceValidatorWithMinOneChar, sentenceValidatorWithMinZeroChar } = require('../../../utils/validator')
 const inquirer = require('inquirer')
 const aioLogger = require('@adobe/aio-lib-core-logging')('@adobe/aio-cli-plugin-events:provider:create', { provider: 'debug' })
 
 class ProviderCreateCommand extends BaseCommand {
   async run () {
-    const { flags } = this.parse(ProviderCreateCommand)
+    const { flags } = await this.parse(ProviderCreateCommand)
     try {
       await this.initSdk()
       const response = await inquirer.prompt([{
@@ -62,12 +61,12 @@ ProviderCreateCommand.description = 'Create a new Provider'
 
 ProviderCreateCommand.flags = {
   ...BaseCommand.flags,
-  json: flags.boolean({
+  json: Flags.boolean({
     description: 'Output json',
     char: 'j',
     exclusive: ['yml']
   }),
-  yml: flags.boolean({
+  yml: Flags.boolean({
     description: 'Output yml',
     char: 'y',
     exclusive: ['json']

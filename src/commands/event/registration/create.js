@@ -10,8 +10,7 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
-const { flags } = require('@oclif/command')
-const { cli } = require('cli-ux')
+const { Flags, CliUx: { ux: cli } } = require('@oclif/core')
 const fs = require('fs')
 
 const BaseCommand = require('../../../BaseCommand')
@@ -19,7 +18,7 @@ const aioLogger = require('@adobe/aio-lib-core-logging')('@adobe/aio-cli-plugin-
 
 class CreateCommand extends BaseCommand {
   async run () {
-    const { args, flags } = this.parse(CreateCommand)
+    const { args, flags } = await this.parse(CreateCommand)
 
     try {
       await this.initSdk()
@@ -70,12 +69,12 @@ CreateCommand.aliases = [
 
 CreateCommand.flags = {
   ...BaseCommand.flags,
-  json: flags.boolean({
+  json: Flags.boolean({
     description: 'Output json',
     char: 'j',
     exclusive: ['yml']
   }),
-  yml: flags.boolean({
+  yml: Flags.boolean({
     description: 'Output yml',
     char: 'y',
     exclusive: ['json']

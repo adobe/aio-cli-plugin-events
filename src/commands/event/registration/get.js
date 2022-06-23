@@ -10,15 +10,14 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
-const { flags } = require('@oclif/command')
-const { cli } = require('cli-ux')
+const { Flags, CliUx: { ux: cli } } = require('@oclif/core')
 
 const BaseCommand = require('../../../BaseCommand')
 const aioLogger = require('@adobe/aio-lib-core-logging')('@adobe/aio-cli-plugin-events:registration:get', { provider: 'debug' })
 
 class GetCommand extends BaseCommand {
   async run () {
-    const { args, flags } = this.parse(GetCommand)
+    const { args, flags } = await this.parse(GetCommand)
 
     try {
       await this.initSdk()
@@ -52,12 +51,12 @@ GetCommand.aliases = [
 
 GetCommand.flags = {
   ...BaseCommand.flags,
-  json: flags.boolean({
+  json: Flags.boolean({
     description: 'Output json',
     char: 'j',
     exclusive: ['yml']
   }),
-  yml: flags.boolean({
+  yml: Flags.boolean({
     description: 'Output yml',
     char: 'y',
     exclusive: ['json']
