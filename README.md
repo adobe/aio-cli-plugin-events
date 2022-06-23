@@ -348,14 +348,14 @@ ARGUMENTS
       Path to a file in JSON format with the information to create a new Event Registration.
       The JSON should follow the following format:
       {
-      "name": "<event registration name>",
-      "description": "<event registration description>",
-      "delivery_type": "WEBHOOK|WEBHOOK_BATCH|JOURNAL",
-      "webhook_url": "<webhook URL responding to challenge>"
-      "events_of_interest": [{
-      "provider_id": "<event provider id>"
-      "event_code": "<event provider event_code metadata>"
-      }, { <...more events> }]
+         "name": "<event registration name>",
+         "description": "<event registration description>",
+         "delivery_type": "WEBHOOK|WEBHOOK_BATCH|JOURNAL",
+         "webhook_url": "<webhook URL responding to challenge>",
+         "events_of_interest": [{
+           "provider_id": "<event provider id>",
+           "event_code": "<event provider event_code metadata>"
+         }, { /* ...more events */ }]
       }
 
 OPTIONS
