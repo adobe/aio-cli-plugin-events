@@ -16,6 +16,7 @@ governing permissions and limitations under the License.
 [![Build Status](https://travis-ci.com/adobe/aio-cli-plugin-events.svg?branch=master)](https://travis-ci.com/adobe/aio-cli-plugin-events)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0) 
 [![Codecov Coverage](https://img.shields.io/codecov/c/github/adobe/aio-cli-plugin-events/master.svg?style=flat-square)](https://codecov.io/gh/adobe/aio-cli-plugin-events/)
+[![pre-release version](https://img.shields.io/npm/v/@adobe/aio-cli-plugin-events/next.svg)](https://npmjs.org/package/@adobe/aio-cli-plugin-events/v/next)
 
 # Adobe I/O Events CLI Plugin
 
