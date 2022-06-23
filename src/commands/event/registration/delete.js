@@ -11,13 +11,13 @@ governing permissions and limitations under the License.
 */
 
 const BaseCommand = require('../../../BaseCommand.js')
-const { cli } = require('cli-ux')
+const { CliUx: { ux: cli } } = require('@oclif/core')
 const inquirer = require('inquirer')
 const aioLogger = require('@adobe/aio-lib-core-logging')('@adobe/aio-cli-plugin-events:registration:delete', { provider: 'debug' })
 
 class DeleteCommand extends BaseCommand {
   async run () {
-    const { args } = this.parse(DeleteCommand)
+    const { args } = await this.parse(DeleteCommand)
 
     try {
       await this.initSdk()
