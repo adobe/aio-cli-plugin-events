@@ -9,7 +9,7 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
-const { Command, flags } = require('@oclif/command')
+const { Command, Flags } = require('@oclif/core')
 const aioLogger = require('@adobe/aio-lib-core-logging')('@adobe/aio-cli-plugin-events', { provider: 'debug' })
 const aioConfig = require('@adobe/aio-lib-core-config')
 const { getToken, context } = require('@adobe/aio-lib-ims')
@@ -147,9 +147,9 @@ class BaseCommand extends Command {
 }
 
 BaseCommand.flags = {
-  help: flags.boolean({ description: 'Show help' }),
-  verbose: flags.boolean({ char: 'v', description: 'Verbose output' }),
-  version: flags.boolean({ description: 'Show version' })
+  help: Flags.boolean({ description: 'Show help' }),
+  verbose: Flags.boolean({ char: 'v', description: 'Verbose output' }),
+  version: Flags.boolean({ description: 'Show version' })
 }
 
 module.exports = BaseCommand
