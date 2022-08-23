@@ -44,18 +44,26 @@ $ aio event --help
 * [`aio event:eventmetadata:delete PROVIDERID [EVENTCODE]`](#aio-eventeventmetadatadelete-providerid-eventcode)
 * [`aio event:eventmetadata:get PROVIDERID EVENTCODE`](#aio-eventeventmetadataget-providerid-eventcode)
 * [`aio event:eventmetadata:list PROVIDERID`](#aio-eventeventmetadatalist-providerid)
+* [`aio event:eventmetadata:ls PROVIDERID`](#aio-eventeventmetadatals-providerid)
 * [`aio event:eventmetadata:update PROVIDERID EVENTCODE`](#aio-eventeventmetadataupdate-providerid-eventcode)
 * [`aio event:provider`](#aio-eventprovider)
 * [`aio event:provider:create`](#aio-eventprovidercreate)
 * [`aio event:provider:delete PROVIDERID`](#aio-eventproviderdelete-providerid)
 * [`aio event:provider:get PROVIDERID`](#aio-eventproviderget-providerid)
 * [`aio event:provider:list`](#aio-eventproviderlist)
+* [`aio event:provider:ls`](#aio-eventproviderls)
 * [`aio event:provider:update PROVIDERID`](#aio-eventproviderupdate-providerid)
+* [`aio event:reg:create BODYJSONFILE`](#aio-eventregcreate-bodyjsonfile)
+* [`aio event:reg:delete REGISTRATIONID`](#aio-eventregdelete-registrationid)
+* [`aio event:reg:get REGISTRATIONID`](#aio-eventregget-registrationid)
+* [`aio event:reg:list`](#aio-eventreglist)
+* [`aio event:reg:ls`](#aio-eventregls)
 * [`aio event:registration`](#aio-eventregistration)
 * [`aio event:registration:create BODYJSONFILE`](#aio-eventregistrationcreate-bodyjsonfile)
 * [`aio event:registration:delete REGISTRATIONID`](#aio-eventregistrationdelete-registrationid)
 * [`aio event:registration:get REGISTRATIONID`](#aio-eventregistrationget-registrationid)
 * [`aio event:registration:list`](#aio-eventregistrationlist)
+* [`aio event:registration:ls`](#aio-eventregistrationls)
 
 ## `aio event`
 
@@ -63,15 +71,18 @@ Manage your Adobe I/O Events
 
 ```
 USAGE
-  $ aio event
+  $ aio event [--help] [-v] [--version]
 
-OPTIONS
+FLAGS
   -v, --verbose  Verbose output
   --help         Show help
   --version      Show version
+
+DESCRIPTION
+  Manage your Adobe I/O Events
 ```
 
-_See code: [src/commands/event/index.js](https://github.com/adobe/aio-cli-plugin-events/blob/v1.1.6/src/commands/event/index.js)_
+_See code: [src/commands/event/index.js](https://github.com/adobe/aio-cli-plugin-events/blob/v2.0.0/src/commands/event/index.js)_
 
 ## `aio event:eventmetadata`
 
@@ -79,15 +90,18 @@ Manage your Adobe I/O Events Providers' Event Metadata
 
 ```
 USAGE
-  $ aio event:eventmetadata
+  $ aio event:eventmetadata [--help] [-v] [--version]
 
-OPTIONS
+FLAGS
   -v, --verbose  Verbose output
   --help         Show help
   --version      Show version
+
+DESCRIPTION
+  Manage your Adobe I/O Events Providers' Event Metadata
 ```
 
-_See code: [src/commands/event/eventmetadata/index.js](https://github.com/adobe/aio-cli-plugin-events/blob/v1.1.6/src/commands/event/eventmetadata/index.js)_
+_See code: [src/commands/event/eventmetadata/index.js](https://github.com/adobe/aio-cli-plugin-events/blob/v2.0.0/src/commands/event/eventmetadata/index.js)_
 
 ## `aio event:eventmetadata:create PROVIDERID`
 
@@ -95,20 +109,23 @@ Create an Event Metadata for a Provider
 
 ```
 USAGE
-  $ aio event:eventmetadata:create PROVIDERID
+  $ aio event:eventmetadata:create [PROVIDERID] [--help] [-v] [--version] [-j | -y]
 
 ARGUMENTS
   PROVIDERID  The requested eventmetadata event code
 
-OPTIONS
+FLAGS
   -j, --json     Output json
   -v, --verbose  Verbose output
   -y, --yml      Output yml
   --help         Show help
   --version      Show version
+
+DESCRIPTION
+  Create an Event Metadata for a Provider
 ```
 
-_See code: [src/commands/event/eventmetadata/create.js](https://github.com/adobe/aio-cli-plugin-events/blob/v1.1.6/src/commands/event/eventmetadata/create.js)_
+_See code: [src/commands/event/eventmetadata/create.js](https://github.com/adobe/aio-cli-plugin-events/blob/v2.0.0/src/commands/event/eventmetadata/create.js)_
 
 ## `aio event:eventmetadata:delete PROVIDERID [EVENTCODE]`
 
@@ -116,19 +133,22 @@ Delete Event Metadata for a Provider
 
 ```
 USAGE
-  $ aio event:eventmetadata:delete PROVIDERID [EVENTCODE]
+  $ aio event:eventmetadata:delete [PROVIDERID] [EVENTCODE] [--help] [-v] [--version]
 
 ARGUMENTS
   PROVIDERID  The requested provider ID
   EVENTCODE   The requested eventmetadata event code
 
-OPTIONS
+FLAGS
   -v, --verbose  Verbose output
   --help         Show help
   --version      Show version
+
+DESCRIPTION
+  Delete Event Metadata for a Provider
 ```
 
-_See code: [src/commands/event/eventmetadata/delete.js](https://github.com/adobe/aio-cli-plugin-events/blob/v1.1.6/src/commands/event/eventmetadata/delete.js)_
+_See code: [src/commands/event/eventmetadata/delete.js](https://github.com/adobe/aio-cli-plugin-events/blob/v2.0.0/src/commands/event/eventmetadata/delete.js)_
 
 ## `aio event:eventmetadata:get PROVIDERID EVENTCODE`
 
@@ -136,21 +156,24 @@ Get details of an Event Code of a Provider
 
 ```
 USAGE
-  $ aio event:eventmetadata:get PROVIDERID EVENTCODE
+  $ aio event:eventmetadata:get [PROVIDERID] [EVENTCODE] [--help] [-v] [--version] [-j | -y]
 
 ARGUMENTS
   PROVIDERID  The requested provider ID
   EVENTCODE   The requested eventmetadata event code
 
-OPTIONS
+FLAGS
   -j, --json     Output json
   -v, --verbose  Verbose output
   -y, --yml      Output yml
   --help         Show help
   --version      Show version
+
+DESCRIPTION
+  Get details of an Event Code of a Provider
 ```
 
-_See code: [src/commands/event/eventmetadata/get.js](https://github.com/adobe/aio-cli-plugin-events/blob/v1.1.6/src/commands/event/eventmetadata/get.js)_
+_See code: [src/commands/event/eventmetadata/get.js](https://github.com/adobe/aio-cli-plugin-events/blob/v2.0.0/src/commands/event/eventmetadata/get.js)_
 
 ## `aio event:eventmetadata:list PROVIDERID`
 
@@ -158,23 +181,51 @@ List all Event Metadata for a Provider
 
 ```
 USAGE
-  $ aio event:eventmetadata:list PROVIDERID
+  $ aio event:eventmetadata:list [PROVIDERID] [--help] [-v] [--version] [-j | -y]
 
 ARGUMENTS
   PROVIDERID  The requested provider ID
 
-OPTIONS
+FLAGS
   -j, --json     Output json
   -v, --verbose  Verbose output
   -y, --yml      Output yml
   --help         Show help
   --version      Show version
 
+DESCRIPTION
+  List all Event Metadata for a Provider
+
 ALIASES
   $ aio event:eventmetadata:ls
 ```
 
-_See code: [src/commands/event/eventmetadata/list.js](https://github.com/adobe/aio-cli-plugin-events/blob/v1.1.6/src/commands/event/eventmetadata/list.js)_
+_See code: [src/commands/event/eventmetadata/list.js](https://github.com/adobe/aio-cli-plugin-events/blob/v2.0.0/src/commands/event/eventmetadata/list.js)_
+
+## `aio event:eventmetadata:ls PROVIDERID`
+
+List all Event Metadata for a Provider
+
+```
+USAGE
+  $ aio event:eventmetadata:ls [PROVIDERID] [--help] [-v] [--version] [-j | -y]
+
+ARGUMENTS
+  PROVIDERID  The requested provider ID
+
+FLAGS
+  -j, --json     Output json
+  -v, --verbose  Verbose output
+  -y, --yml      Output yml
+  --help         Show help
+  --version      Show version
+
+DESCRIPTION
+  List all Event Metadata for a Provider
+
+ALIASES
+  $ aio event:eventmetadata:ls
+```
 
 ## `aio event:eventmetadata:update PROVIDERID EVENTCODE`
 
@@ -182,21 +233,24 @@ Update an Event Metadata for a Provider
 
 ```
 USAGE
-  $ aio event:eventmetadata:update PROVIDERID EVENTCODE
+  $ aio event:eventmetadata:update [PROVIDERID] [EVENTCODE] [--help] [-v] [--version] [-j | -y]
 
 ARGUMENTS
   PROVIDERID  The requested provider ID
   EVENTCODE   The requested eventmetadata event code
 
-OPTIONS
+FLAGS
   -j, --json     Output json
   -v, --verbose  Verbose output
   -y, --yml      Output yml
   --help         Show help
   --version      Show version
+
+DESCRIPTION
+  Update an Event Metadata for a Provider
 ```
 
-_See code: [src/commands/event/eventmetadata/update.js](https://github.com/adobe/aio-cli-plugin-events/blob/v1.1.6/src/commands/event/eventmetadata/update.js)_
+_See code: [src/commands/event/eventmetadata/update.js](https://github.com/adobe/aio-cli-plugin-events/blob/v2.0.0/src/commands/event/eventmetadata/update.js)_
 
 ## `aio event:provider`
 
@@ -204,15 +258,18 @@ Manage your Adobe I/O Events Providers
 
 ```
 USAGE
-  $ aio event:provider
+  $ aio event:provider [--help] [-v] [--version]
 
-OPTIONS
+FLAGS
   -v, --verbose  Verbose output
   --help         Show help
   --version      Show version
+
+DESCRIPTION
+  Manage your Adobe I/O Events Providers
 ```
 
-_See code: [src/commands/event/provider/index.js](https://github.com/adobe/aio-cli-plugin-events/blob/v1.1.6/src/commands/event/provider/index.js)_
+_See code: [src/commands/event/provider/index.js](https://github.com/adobe/aio-cli-plugin-events/blob/v2.0.0/src/commands/event/provider/index.js)_
 
 ## `aio event:provider:create`
 
@@ -220,17 +277,20 @@ Create a new Provider
 
 ```
 USAGE
-  $ aio event:provider:create
+  $ aio event:provider:create [--help] [-v] [--version] [-j | -y]
 
-OPTIONS
+FLAGS
   -j, --json     Output json
   -v, --verbose  Verbose output
   -y, --yml      Output yml
   --help         Show help
   --version      Show version
+
+DESCRIPTION
+  Create a new Provider
 ```
 
-_See code: [src/commands/event/provider/create.js](https://github.com/adobe/aio-cli-plugin-events/blob/v1.1.6/src/commands/event/provider/create.js)_
+_See code: [src/commands/event/provider/create.js](https://github.com/adobe/aio-cli-plugin-events/blob/v2.0.0/src/commands/event/provider/create.js)_
 
 ## `aio event:provider:delete PROVIDERID`
 
@@ -238,18 +298,21 @@ Delete Provider by id
 
 ```
 USAGE
-  $ aio event:provider:delete PROVIDERID
+  $ aio event:provider:delete [PROVIDERID] [--help] [-v] [--version]
 
 ARGUMENTS
   PROVIDERID  The requested provider ID
 
-OPTIONS
+FLAGS
   -v, --verbose  Verbose output
   --help         Show help
   --version      Show version
+
+DESCRIPTION
+  Delete Provider by id
 ```
 
-_See code: [src/commands/event/provider/delete.js](https://github.com/adobe/aio-cli-plugin-events/blob/v1.1.6/src/commands/event/provider/delete.js)_
+_See code: [src/commands/event/provider/delete.js](https://github.com/adobe/aio-cli-plugin-events/blob/v2.0.0/src/commands/event/provider/delete.js)_
 
 ## `aio event:provider:get PROVIDERID`
 
@@ -257,21 +320,24 @@ Get details of Provider by id
 
 ```
 USAGE
-  $ aio event:provider:get PROVIDERID
+  $ aio event:provider:get [PROVIDERID] [--help] [-v] [--version] [--fetchEventMetadata] [-j | -y]
 
 ARGUMENTS
   PROVIDERID  The requested provider ID
 
-OPTIONS
+FLAGS
   -j, --json            Output json
   -v, --verbose         Verbose output
   -y, --yml             Output yml
   --fetchEventMetadata  Fetch event metadata with provider
   --help                Show help
   --version             Show version
+
+DESCRIPTION
+  Get details of Provider by id
 ```
 
-_See code: [src/commands/event/provider/get.js](https://github.com/adobe/aio-cli-plugin-events/blob/v1.1.6/src/commands/event/provider/get.js)_
+_See code: [src/commands/event/provider/get.js](https://github.com/adobe/aio-cli-plugin-events/blob/v2.0.0/src/commands/event/provider/get.js)_
 
 ## `aio event:provider:list`
 
@@ -279,20 +345,45 @@ Get list of all Providers for the Organization
 
 ```
 USAGE
-  $ aio event:provider:list
+  $ aio event:provider:list [--help] [-v] [--version] [-j | -y]
 
-OPTIONS
+FLAGS
   -j, --json     Output json
   -v, --verbose  Verbose output
   -y, --yml      Output yml
   --help         Show help
   --version      Show version
 
+DESCRIPTION
+  Get list of all Providers for the Organization
+
 ALIASES
   $ aio event:provider:ls
 ```
 
-_See code: [src/commands/event/provider/list.js](https://github.com/adobe/aio-cli-plugin-events/blob/v1.1.6/src/commands/event/provider/list.js)_
+_See code: [src/commands/event/provider/list.js](https://github.com/adobe/aio-cli-plugin-events/blob/v2.0.0/src/commands/event/provider/list.js)_
+
+## `aio event:provider:ls`
+
+Get list of all Providers for the Organization
+
+```
+USAGE
+  $ aio event:provider:ls [--help] [-v] [--version] [-j | -y]
+
+FLAGS
+  -j, --json     Output json
+  -v, --verbose  Verbose output
+  -y, --yml      Output yml
+  --help         Show help
+  --version      Show version
+
+DESCRIPTION
+  Get list of all Providers for the Organization
+
+ALIASES
+  $ aio event:provider:ls
+```
 
 ## `aio event:provider:update PROVIDERID`
 
@@ -300,133 +391,126 @@ Update an existing Provider
 
 ```
 USAGE
-  $ aio event:provider:update PROVIDERID
+  $ aio event:provider:update [PROVIDERID] [--help] [-v] [--version] [-j | -y]
 
 ARGUMENTS
   PROVIDERID  The requested provider ID
 
-OPTIONS
+FLAGS
   -j, --json     Output json
   -v, --verbose  Verbose output
   -y, --yml      Output yml
   --help         Show help
   --version      Show version
+
+DESCRIPTION
+  Update an existing Provider
 ```
 
-_See code: [src/commands/event/provider/update.js](https://github.com/adobe/aio-cli-plugin-events/blob/v1.1.6/src/commands/event/provider/update.js)_
+_See code: [src/commands/event/provider/update.js](https://github.com/adobe/aio-cli-plugin-events/blob/v2.0.0/src/commands/event/provider/update.js)_
 
-## `aio event:registration`
-
-Manage your Adobe I/O Events Registrations
-
-```
-USAGE
-  $ aio event:registration
-
-OPTIONS
-  -v, --verbose  Verbose output
-  --help         Show help
-  --version      Show version
-```
-
-_See code: [src/commands/event/registration/index.js](https://github.com/adobe/aio-cli-plugin-events/blob/v1.1.6/src/commands/event/registration/index.js)_
-
-## `aio event:registration:create BODYJSONFILE`
+## `aio event:reg:create BODYJSONFILE`
 
 Create a new Event Registration in your Workspace
 
 ```
 USAGE
-  $ aio event:registration:create BODYJSONFILE
+  $ aio event:reg:create [BODYJSONFILE] [--help] [-v] [--version] [-j | -y]
 
 ARGUMENTS
   BODYJSONFILE
       Path to a file in JSON format with the information to create a new Event Registration.
       The JSON should follow the following format:
       {
-         "name": "<event registration name>",
-         "description": "<event registration description>",
-         "delivery_type": "WEBHOOK|WEBHOOK_BATCH|JOURNAL",
-         "webhook_url": "<webhook URL responding to challenge>",
-         "events_of_interest": [{
-           "provider_id": "<event provider id>",
-           "event_code": "<event provider event_code metadata>"
-         }, { /* ...more events */ }]
+      "name": "<event registration name>",
+      "description": "<event registration description>",
+      "delivery_type": "WEBHOOK|WEBHOOK_BATCH|JOURNAL",
+      "webhook_url": "<webhook URL responding to challenge>",
+      "events_of_interest": [{
+      "provider_id": "<event provider id>",
+      "event_code": "<event provider event_code metadata>"
+      }, { /* ...more events */ }]
       }
 
-OPTIONS
+FLAGS
   -j, --json     Output json
   -v, --verbose  Verbose output
   -y, --yml      Output yml
   --help         Show help
   --version      Show version
+
+DESCRIPTION
+  Create a new Event Registration in your Workspace
 
 ALIASES
   $ aio event:reg:create
 ```
 
-_See code: [src/commands/event/registration/create.js](https://github.com/adobe/aio-cli-plugin-events/blob/v1.1.6/src/commands/event/registration/create.js)_
-
-## `aio event:registration:delete REGISTRATIONID`
+## `aio event:reg:delete REGISTRATIONID`
 
 Delete Registration
 
 ```
 USAGE
-  $ aio event:registration:delete REGISTRATIONID
+  $ aio event:reg:delete [REGISTRATIONID] [--help] [-v] [--version]
 
 ARGUMENTS
   REGISTRATIONID  The requested registration ID
 
-OPTIONS
+FLAGS
   -v, --verbose  Verbose output
   --help         Show help
   --version      Show version
+
+DESCRIPTION
+  Delete Registration
 
 ALIASES
   $ aio event:reg:delete
 ```
 
-_See code: [src/commands/event/registration/delete.js](https://github.com/adobe/aio-cli-plugin-events/blob/v1.1.6/src/commands/event/registration/delete.js)_
-
-## `aio event:registration:get REGISTRATIONID`
+## `aio event:reg:get REGISTRATIONID`
 
 Get an Event Registration in your Workspace
 
 ```
 USAGE
-  $ aio event:registration:get REGISTRATIONID
+  $ aio event:reg:get [REGISTRATIONID] [--help] [-v] [--version] [-j | -y]
 
 ARGUMENTS
   REGISTRATIONID  The requested registration ID
 
-OPTIONS
+FLAGS
   -j, --json     Output json
   -v, --verbose  Verbose output
   -y, --yml      Output yml
   --help         Show help
   --version      Show version
+
+DESCRIPTION
+  Get an Event Registration in your Workspace
 
 ALIASES
   $ aio event:reg:get
 ```
 
-_See code: [src/commands/event/registration/get.js](https://github.com/adobe/aio-cli-plugin-events/blob/v1.1.6/src/commands/event/registration/get.js)_
-
-## `aio event:registration:list`
+## `aio event:reg:list`
 
 List your Event Registrations in your Workspace
 
 ```
 USAGE
-  $ aio event:registration:list
+  $ aio event:reg:list [--help] [-v] [--version] [-j | -y]
 
-OPTIONS
+FLAGS
   -j, --json     Output json
   -v, --verbose  Verbose output
   -y, --yml      Output yml
   --help         Show help
   --version      Show version
+
+DESCRIPTION
+  List your Event Registrations in your Workspace
 
 ALIASES
   $ aio event:registration:ls
@@ -434,7 +518,189 @@ ALIASES
   $ aio event:reg:ls
 ```
 
-_See code: [src/commands/event/registration/list.js](https://github.com/adobe/aio-cli-plugin-events/blob/v1.1.6/src/commands/event/registration/list.js)_
+## `aio event:reg:ls`
+
+List your Event Registrations in your Workspace
+
+```
+USAGE
+  $ aio event:reg:ls [--help] [-v] [--version] [-j | -y]
+
+FLAGS
+  -j, --json     Output json
+  -v, --verbose  Verbose output
+  -y, --yml      Output yml
+  --help         Show help
+  --version      Show version
+
+DESCRIPTION
+  List your Event Registrations in your Workspace
+
+ALIASES
+  $ aio event:registration:ls
+  $ aio event:reg:list
+  $ aio event:reg:ls
+```
+
+## `aio event:registration`
+
+Manage your Adobe I/O Events Registrations
+
+```
+USAGE
+  $ aio event:registration [--help] [-v] [--version]
+
+FLAGS
+  -v, --verbose  Verbose output
+  --help         Show help
+  --version      Show version
+
+DESCRIPTION
+  Manage your Adobe I/O Events Registrations
+```
+
+_See code: [src/commands/event/registration/index.js](https://github.com/adobe/aio-cli-plugin-events/blob/v2.0.0/src/commands/event/registration/index.js)_
+
+## `aio event:registration:create BODYJSONFILE`
+
+Create a new Event Registration in your Workspace
+
+```
+USAGE
+  $ aio event:registration:create [BODYJSONFILE] [--help] [-v] [--version] [-j | -y]
+
+ARGUMENTS
+  BODYJSONFILE
+      Path to a file in JSON format with the information to create a new Event Registration.
+      The JSON should follow the following format:
+      {
+      "name": "<event registration name>",
+      "description": "<event registration description>",
+      "delivery_type": "WEBHOOK|WEBHOOK_BATCH|JOURNAL",
+      "webhook_url": "<webhook URL responding to challenge>",
+      "events_of_interest": [{
+      "provider_id": "<event provider id>",
+      "event_code": "<event provider event_code metadata>"
+      }, { /* ...more events */ }]
+      }
+
+FLAGS
+  -j, --json     Output json
+  -v, --verbose  Verbose output
+  -y, --yml      Output yml
+  --help         Show help
+  --version      Show version
+
+DESCRIPTION
+  Create a new Event Registration in your Workspace
+
+ALIASES
+  $ aio event:reg:create
+```
+
+_See code: [src/commands/event/registration/create.js](https://github.com/adobe/aio-cli-plugin-events/blob/v2.0.0/src/commands/event/registration/create.js)_
+
+## `aio event:registration:delete REGISTRATIONID`
+
+Delete Registration
+
+```
+USAGE
+  $ aio event:registration:delete [REGISTRATIONID] [--help] [-v] [--version]
+
+ARGUMENTS
+  REGISTRATIONID  The requested registration ID
+
+FLAGS
+  -v, --verbose  Verbose output
+  --help         Show help
+  --version      Show version
+
+DESCRIPTION
+  Delete Registration
+
+ALIASES
+  $ aio event:reg:delete
+```
+
+_See code: [src/commands/event/registration/delete.js](https://github.com/adobe/aio-cli-plugin-events/blob/v2.0.0/src/commands/event/registration/delete.js)_
+
+## `aio event:registration:get REGISTRATIONID`
+
+Get an Event Registration in your Workspace
+
+```
+USAGE
+  $ aio event:registration:get [REGISTRATIONID] [--help] [-v] [--version] [-j | -y]
+
+ARGUMENTS
+  REGISTRATIONID  The requested registration ID
+
+FLAGS
+  -j, --json     Output json
+  -v, --verbose  Verbose output
+  -y, --yml      Output yml
+  --help         Show help
+  --version      Show version
+
+DESCRIPTION
+  Get an Event Registration in your Workspace
+
+ALIASES
+  $ aio event:reg:get
+```
+
+_See code: [src/commands/event/registration/get.js](https://github.com/adobe/aio-cli-plugin-events/blob/v2.0.0/src/commands/event/registration/get.js)_
+
+## `aio event:registration:list`
+
+List your Event Registrations in your Workspace
+
+```
+USAGE
+  $ aio event:registration:list [--help] [-v] [--version] [-j | -y]
+
+FLAGS
+  -j, --json     Output json
+  -v, --verbose  Verbose output
+  -y, --yml      Output yml
+  --help         Show help
+  --version      Show version
+
+DESCRIPTION
+  List your Event Registrations in your Workspace
+
+ALIASES
+  $ aio event:registration:ls
+  $ aio event:reg:list
+  $ aio event:reg:ls
+```
+
+_See code: [src/commands/event/registration/list.js](https://github.com/adobe/aio-cli-plugin-events/blob/v2.0.0/src/commands/event/registration/list.js)_
+
+## `aio event:registration:ls`
+
+List your Event Registrations in your Workspace
+
+```
+USAGE
+  $ aio event:registration:ls [--help] [-v] [--version] [-j | -y]
+
+FLAGS
+  -j, --json     Output json
+  -v, --verbose  Verbose output
+  -y, --yml      Output yml
+  --help         Show help
+  --version      Show version
+
+DESCRIPTION
+  List your Event Registrations in your Workspace
+
+ALIASES
+  $ aio event:registration:ls
+  $ aio event:reg:list
+  $ aio event:reg:ls
+```
 <!-- commandsstop -->
 
 ## Contributing
