@@ -44,22 +44,30 @@ $ aio event --help
 * [`aio event eventmetadata delete PROVIDERID [EVENTCODE]`](#aio-event-eventmetadata-delete-providerid-eventcode)
 * [`aio event eventmetadata get PROVIDERID EVENTCODE`](#aio-event-eventmetadata-get-providerid-eventcode)
 * [`aio event eventmetadata list PROVIDERID`](#aio-event-eventmetadata-list-providerid)
+* [`aio event eventmetadata ls PROVIDERID`](#aio-event-eventmetadata-ls-providerid)
 * [`aio event eventmetadata update PROVIDERID EVENTCODE`](#aio-event-eventmetadata-update-providerid-eventcode)
 * [`aio event provider`](#aio-event-provider)
 * [`aio event provider create`](#aio-event-provider-create)
 * [`aio event provider delete PROVIDERID`](#aio-event-provider-delete-providerid)
 * [`aio event provider get PROVIDERID`](#aio-event-provider-get-providerid)
 * [`aio event provider list`](#aio-event-provider-list)
+* [`aio event provider ls`](#aio-event-provider-ls)
 * [`aio event provider update PROVIDERID`](#aio-event-provider-update-providerid)
+* [`aio event reg create BODYJSONFILE`](#aio-event-reg-create-bodyjsonfile)
+* [`aio event reg delete REGISTRATIONID`](#aio-event-reg-delete-registrationid)
+* [`aio event reg get REGISTRATIONID`](#aio-event-reg-get-registrationid)
+* [`aio event reg list`](#aio-event-reg-list)
+* [`aio event reg ls`](#aio-event-reg-ls)
 * [`aio event registration`](#aio-event-registration)
 * [`aio event registration create BODYJSONFILE`](#aio-event-registration-create-bodyjsonfile)
 * [`aio event registration delete REGISTRATIONID`](#aio-event-registration-delete-registrationid)
 * [`aio event registration get REGISTRATIONID`](#aio-event-registration-get-registrationid)
 * [`aio event registration list`](#aio-event-registration-list)
+* [`aio event registration ls`](#aio-event-registration-ls)
 
 ## `aio event`
 
-Manage your Adobe Developer Platform Events
+Manage your Adobe I/O Events
 
 ```
 USAGE
@@ -71,10 +79,10 @@ FLAGS
   --version      Show version
 
 DESCRIPTION
-  Manage your Adobe Developer Platform Events
+  Manage your Adobe I/O Events
 ```
 
-_See code: [src/commands/event/index.js](https://github.com/adobe/aio-cli-plugin-events/blob/v2.0.1/src/commands/event/index.js)_
+_See code: [src/commands/event/index.js](https://github.com/adobe/aio-cli-plugin-events/blob/v2.0.2/src/commands/event/index.js)_
 
 ## `aio event eventmetadata`
 
@@ -166,6 +174,31 @@ List all Event Metadata for a Provider
 ```
 USAGE
   $ aio event eventmetadata list [PROVIDERID] [--help] [-v] [--version] [-j | -y]
+
+ARGUMENTS
+  PROVIDERID  The requested provider ID
+
+FLAGS
+  -j, --json     Output json
+  -v, --verbose  Verbose output
+  -y, --yml      Output yml
+  --help         Show help
+  --version      Show version
+
+DESCRIPTION
+  List all Event Metadata for a Provider
+
+ALIASES
+  $ aio event eventmetadata ls
+```
+
+## `aio event eventmetadata ls PROVIDERID`
+
+List all Event Metadata for a Provider
+
+```
+USAGE
+  $ aio event eventmetadata ls [PROVIDERID] [--help] [-v] [--version] [-j | -y]
 
 ARGUMENTS
   PROVIDERID  The requested provider ID
@@ -308,6 +341,28 @@ ALIASES
   $ aio event provider ls
 ```
 
+## `aio event provider ls`
+
+Get list of all Providers for the Organization
+
+```
+USAGE
+  $ aio event provider ls [--help] [-v] [--version] [-j | -y]
+
+FLAGS
+  -j, --json     Output json
+  -v, --verbose  Verbose output
+  -y, --yml      Output yml
+  --help         Show help
+  --version      Show version
+
+DESCRIPTION
+  Get list of all Providers for the Organization
+
+ALIASES
+  $ aio event provider ls
+```
+
 ## `aio event provider update PROVIDERID`
 
 Update an existing Provider
@@ -328,6 +383,139 @@ FLAGS
 
 DESCRIPTION
   Update an existing Provider
+```
+
+## `aio event reg create BODYJSONFILE`
+
+Create a new Event Registration in your Workspace
+
+```
+USAGE
+  $ aio event reg create [BODYJSONFILE] [--help] [-v] [--version] [-j | -y]
+
+ARGUMENTS
+  BODYJSONFILE
+      Path to a file in JSON format with the information to create a new Event Registration.
+      The JSON should follow the following format:
+      {
+      "name": "<event registration name>",
+      "description": "<event registration description>",
+      "delivery_type": "WEBHOOK|WEBHOOK_BATCH|JOURNAL",
+      "webhook_url": "<webhook URL responding to challenge>",
+      "events_of_interest": [{
+      "provider_id": "<event provider id>",
+      "event_code": "<event provider event_code metadata>"
+      }, { /* ...more events */ }]
+      }
+
+FLAGS
+  -j, --json     Output json
+  -v, --verbose  Verbose output
+  -y, --yml      Output yml
+  --help         Show help
+  --version      Show version
+
+DESCRIPTION
+  Create a new Event Registration in your Workspace
+
+ALIASES
+  $ aio event reg create
+```
+
+## `aio event reg delete REGISTRATIONID`
+
+Delete Registration
+
+```
+USAGE
+  $ aio event reg delete [REGISTRATIONID] [--help] [-v] [--version]
+
+ARGUMENTS
+  REGISTRATIONID  The requested registration ID
+
+FLAGS
+  -v, --verbose  Verbose output
+  --help         Show help
+  --version      Show version
+
+DESCRIPTION
+  Delete Registration
+
+ALIASES
+  $ aio event reg delete
+```
+
+## `aio event reg get REGISTRATIONID`
+
+Get an Event Registration in your Workspace
+
+```
+USAGE
+  $ aio event reg get [REGISTRATIONID] [--help] [-v] [--version] [-j | -y]
+
+ARGUMENTS
+  REGISTRATIONID  The requested registration ID
+
+FLAGS
+  -j, --json     Output json
+  -v, --verbose  Verbose output
+  -y, --yml      Output yml
+  --help         Show help
+  --version      Show version
+
+DESCRIPTION
+  Get an Event Registration in your Workspace
+
+ALIASES
+  $ aio event reg get
+```
+
+## `aio event reg list`
+
+List your Event Registrations in your Workspace
+
+```
+USAGE
+  $ aio event reg list [--help] [-v] [--version] [-j | -y]
+
+FLAGS
+  -j, --json     Output json
+  -v, --verbose  Verbose output
+  -y, --yml      Output yml
+  --help         Show help
+  --version      Show version
+
+DESCRIPTION
+  List your Event Registrations in your Workspace
+
+ALIASES
+  $ aio event registration ls
+  $ aio event reg list
+  $ aio event reg ls
+```
+
+## `aio event reg ls`
+
+List your Event Registrations in your Workspace
+
+```
+USAGE
+  $ aio event reg ls [--help] [-v] [--version] [-j | -y]
+
+FLAGS
+  -j, --json     Output json
+  -v, --verbose  Verbose output
+  -y, --yml      Output yml
+  --help         Show help
+  --version      Show version
+
+DESCRIPTION
+  List your Event Registrations in your Workspace
+
+ALIASES
+  $ aio event registration ls
+  $ aio event reg list
+  $ aio event reg ls
 ```
 
 ## `aio event registration`
@@ -439,6 +627,30 @@ List your Event Registrations in your Workspace
 ```
 USAGE
   $ aio event registration list [--help] [-v] [--version] [-j | -y]
+
+FLAGS
+  -j, --json     Output json
+  -v, --verbose  Verbose output
+  -y, --yml      Output yml
+  --help         Show help
+  --version      Show version
+
+DESCRIPTION
+  List your Event Registrations in your Workspace
+
+ALIASES
+  $ aio event registration ls
+  $ aio event reg list
+  $ aio event reg ls
+```
+
+## `aio event registration ls`
+
+List your Event Registrations in your Workspace
+
+```
+USAGE
+  $ aio event registration ls [--help] [-v] [--version] [-j | -y]
 
 FLAGS
   -j, --json     Output json
