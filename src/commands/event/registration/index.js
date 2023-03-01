@@ -21,5 +21,6 @@ class IndexCommand extends BaseCommand {
 }
 
 IndexCommand.description = 'Manage your Adobe I/O Events Registrations'
+IndexCommand.aliases = ['event:reg']
 
 module.exports = IndexCommand
