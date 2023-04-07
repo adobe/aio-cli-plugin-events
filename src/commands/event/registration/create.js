@@ -32,9 +32,9 @@ class CreateCommand extends BaseCommand {
 
       aioLogger.debug(`create event registration with body ${body}`)
       cli.action.start('Creating new Event Registration')
-      const registration = await this.eventClient.createWebhookRegistration(this.conf.org.id, this.conf.integration.id, body)
+      const registration = await this.eventClient.createRegistration(this.conf.org.id, this.conf.project.id, this.conf.workspace.id, body)
       cli.action.stop()
-      aioLogger.debug(`create successful, id: ${registration.id}, name: ${registration.name}`)
+      aioLogger.debug(`create successful, id: ${registration.registration_id}, name: ${registration.name}`)
 
       if (flags.json) {
         this.printJson(registration)
@@ -90,7 +90,7 @@ The JSON should follow the following format:
 {
   "name": "<event registration name>",
   "description": "<event registration description>",
-  "delivery_type": "WEBHOOK|WEBHOOK_BATCH|JOURNAL",
+  "delivery_type": "webhook|webhook_batch|journal",
   "webhook_url": "<webhook URL responding to challenge>",
   "events_of_interest": [{
     "provider_id": "<event provider id>",
