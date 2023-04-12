@@ -29,8 +29,8 @@ class DeleteCommand extends BaseCommand {
       }])
       if (response.delete) {
         cli.action.start('Deleting Registration')
-        await this.eventClient.deleteWebhookRegistration(this.conf.org.id,
-          this.conf.integration.id, args.registrationId)
+        await this.eventClient.deleteRegistration(this.conf.org.id,
+          this.conf.project.id, this.conf.workspace.id, args.registrationId)
         cli.action.stop()
         this.log('Registration ' + args.registrationId +
                     ' has been deleted successfully')

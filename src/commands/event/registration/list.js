@@ -23,22 +23,21 @@ class ListCommand extends BaseCommand {
 
       aioLogger.debug(`list registrations in the workspace ${this.conf.workspace.id}`)
       cli.action.start(`Retrieving Registrations for the Workspace ${this.conf.workspace.id}`)
-      const registrations = await this.eventClient.getAllWebhookRegistrations(this.conf.org.id, this.conf.integration.id)
+      const registrationHalModel = await this.eventClient.getAllRegistrationsForWorkspace(this.conf.org.id, this.conf.project.id, this.conf.workspace.id)
       cli.action.stop()
-      aioLogger.debug(`list successful, got ${registrations.length} elements with ids: ${registrations.map(r => r.id)}`)
-
+      aioLogger.debug(`list successful, got ${registrationHalModel._embedded.registrations.length} elements with ids: ${registrationHalModel._embedded.registrations.map(r => r.id)}`)
       if (flags.json) {
-        this.printJson(registrations)
+        this.printJson(registrationHalModel)
       } else if (flags.yml) {
-        this.printYaml(registrations)
+        this.printYaml(registrationHalModel)
       } else {
         // print formatted result
-        cli.table(registrations, {
+        cli.table(registrationHalModel._embedded.registrations, {
           registration_id: { minWidth: 38, header: 'ID' },
           name: { minWidth: 25, header: 'NAME' },
-          integration_status: { minWidth: 10, header: 'INTEGRATION_STATUS' },
+          enabled: { minWidth: 10, header: 'ENABLED' },
           delivery_type: { minWidth: 10, header: 'DELIVERY_TYPE' },
-          status: { minWidth: 10, header: 'STATUS' }
+          webhook_status: { minWidth: 10, header: 'WEBHOOK_STATUS' }
         }, {
           printLine: this.log.bind(this)
         })

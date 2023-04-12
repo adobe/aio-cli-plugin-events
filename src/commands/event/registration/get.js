@@ -24,7 +24,7 @@ class GetCommand extends BaseCommand {
 
       aioLogger.debug(`get registration: ${args.registrationId}`)
       cli.action.start(`Retrieving Registration with id ${args.registrationId}`)
-      const registration = await this.eventClient.getWebhookRegistration(this.conf.org.id, this.conf.integration.id, args.registrationId)
+      const registration = await this.eventClient.getRegistration(this.conf.org.id, this.conf.project.id, this.conf.workspace.id, args.registrationId)
       cli.action.stop()
       aioLogger.debug(`get successful, name: ${registration.name}`)
 

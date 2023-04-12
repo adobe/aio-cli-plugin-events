@@ -55,7 +55,7 @@ describe('console:registration:delete', () => {
 
   describe('successfully get event metadata', () => {
     beforeEach(async () => {
-      command.eventClient = { deleteWebhookRegistration: jest.fn().mockReturnValue('OK') }
+      command.eventClient = { deleteRegistration: jest.fn().mockReturnValue('OK') }
     })
 
     test('registrationId', async () => {
@@ -63,7 +63,7 @@ describe('console:registration:delete', () => {
       inquirer.prompt.mockResolvedValueOnce({ delete: true })
       await command.run()
       expect(stdout.output).toMatch('Registration registrationId has been deleted successfully')
-      expect(command.eventClient.deleteWebhookRegistration).toHaveBeenCalledWith('ORGID', 'INTEGRATIONID', 'registrationId')
+      expect(command.eventClient.deleteRegistration).toHaveBeenCalledWith('ORGID', 'PROJECTID', 'WORKSPACEID', 'registrationId')
     })
 
     test('cancel delete provider', async () => {
@@ -71,7 +71,7 @@ describe('console:registration:delete', () => {
       inquirer.prompt.mockResolvedValueOnce({ delete: false })
       await expect(command.run()).resolves.not.toThrowError()
       expect(stdout.output).toBe('Delete operation has been cancelled\n')
-      expect(command.eventClient.deleteWebhookRegistration).not.toHaveBeenCalled()
+      expect(command.eventClient.deleteRegistration).not.toHaveBeenCalled()
     })
   })
 
@@ -79,7 +79,7 @@ describe('console:registration:delete', () => {
     beforeEach(() => {
       command.initSdk = jest.fn()
       jest.fn().mockResolvedValue(command.eventClient)
-      command.eventClient = { deleteWebhookRegistration: jest.fn().mockRejectedValue(new Error('fake error')) }
+      command.eventClient = { deleteRegistration: jest.fn().mockRejectedValue(new Error('fake error')) }
     })
 
     test('registrationId with error', async () => {
