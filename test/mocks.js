@@ -387,5 +387,5 @@ const data = {
 }
 
 module.exports = {
-  data: data
+  data
 }
