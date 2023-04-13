@@ -60,7 +60,7 @@
   },
   "main": "src/index.js",
   "scripts": {
-    "pretest": "eslint src test e2e",
+    "posttest": "eslint src test e2e",
     "test": "npm run unit-tests",
     "unit-tests": "jest --ci",
     "prepack": "oclif manifest && oclif readme --no-aliases",
