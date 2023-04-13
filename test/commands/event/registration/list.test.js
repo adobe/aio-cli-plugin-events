@@ -58,28 +58,28 @@ describe('console:registration:list', () => {
 
   describe('successfully get event metadata', () => {
     beforeEach(async () => {
-      command.eventClient = { getAllWebhookRegistrations: jest.fn().mockReturnValue(mock.data.getAllWebhookRegistrationsResponse) }
+      command.eventClient = { getAllRegistrationsForWorkspace: jest.fn().mockReturnValue(mock.data.getAllWebhookRegistrationsResponse) }
     })
 
     test('no flags', async () => {
       command.argv = []
       await command.run()
       expect(stdout.output).toMatchFixture('registration/list.txt')
-      expect(command.eventClient.getAllWebhookRegistrations).toHaveBeenCalledWith('ORGID', 'INTEGRATIONID')
+      expect(command.eventClient.getAllRegistrationsForWorkspace).toHaveBeenCalledWith('ORGID', 'PROJECTID', 'WORKSPACEID')
     })
 
     test('--json', async () => {
       command.argv = ['--json']
       await expect(command.run()).resolves.not.toThrowError()
       expect(JSON.parse(stdout.output)).toMatchFixtureJson('registration/list.json')
-      expect(command.eventClient.getAllWebhookRegistrations).toHaveBeenCalledWith('ORGID', 'INTEGRATIONID')
+      expect(command.eventClient.getAllRegistrationsForWorkspace).toHaveBeenCalledWith('ORGID', 'PROJECTID', 'WORKSPACEID')
     })
 
     test('registrationId --yml', async () => {
       command.argv = ['--yml']
       await expect(command.run()).resolves.not.toThrowError()
       expect(stdout.output).toMatchFixture('registration/list.yml')
-      expect(command.eventClient.getAllWebhookRegistrations).toHaveBeenCalledWith('ORGID', 'INTEGRATIONID')
+      expect(command.eventClient.getAllRegistrationsForWorkspace).toHaveBeenCalledWith('ORGID', 'PROJECTID', 'WORKSPACEID')
     })
   })
 
@@ -87,7 +87,7 @@ describe('console:registration:list', () => {
     beforeEach(() => {
       command.initSdk = jest.fn()
       jest.fn().mockResolvedValue(command.eventClient)
-      command.eventClient = { getAllWebhookRegistrations: jest.fn().mockRejectedValue(new Error('fake error')) }
+      command.eventClient = { getAllRegistrationsForWorkspace: jest.fn().mockRejectedValue(new Error('fake error')) }
     })
 
     afterEach(() => {

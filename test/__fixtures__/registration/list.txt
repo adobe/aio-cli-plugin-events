@@ -1,4 +1,4 @@
- ID                                    NAME                     INTEGRATION_STATUS DELIVERY_TYPE STATUS    
- ───────────────────────────────────── ──────────────────────── ────────────────── ───────────── ───────── 
- REGID1                                bowling 1                ENABLED            WEBHOOK       VERIFIED  
- REGID2                                table tenis 2            ENABLED            WEBHOOK       VERIFIED  
+ ID                                    NAME                     ENABLED   DELIVERY_TYPE WEBHOOK_STATUS 
+ ───────────────────────────────────── ──────────────────────── ───────── ───────────── ────────────── 
+ REGID1                                bowling 1                true      webhook       verified       
+ REGID2                                table tenis 2            true      webhook       verified       
