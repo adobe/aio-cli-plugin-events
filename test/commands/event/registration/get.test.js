@@ -59,28 +59,28 @@ describe('console:registration:get', () => {
 
   describe('successfully get registration', () => {
     beforeEach(async () => {
-      command.eventClient = { getWebhookRegistration: jest.fn().mockReturnValue(mock.data.getWebhookRegistrationResponse) }
+      command.eventClient = { getRegistration: jest.fn().mockReturnValue(mock.data.getWebhookRegistrationResponse) }
     })
 
     test('registrationId', async () => {
       command.argv = ['registrationId']
       await expect(command.run()).resolves.not.toThrowError()
       expect(stdout.output).toMatchFixture('registration/get.txt')
-      expect(command.eventClient.getWebhookRegistration).toHaveBeenCalledWith('ORGID', 'INTEGRATIONID', 'registrationId')
+      expect(command.eventClient.getRegistration).toHaveBeenCalledWith('ORGID', 'PROJECTID', 'WORKSPACEID', 'registrationId')
     })
 
     test('registrationId --json', async () => {
       command.argv = ['registrationId', '--json']
       await expect(command.run()).resolves.not.toThrowError()
       expect(JSON.parse(stdout.output)).toMatchFixtureJson('registration/get.json')
-      expect(command.eventClient.getWebhookRegistration).toHaveBeenCalledWith('ORGID', 'INTEGRATIONID', 'registrationId')
+      expect(command.eventClient.getRegistration).toHaveBeenCalledWith('ORGID', 'PROJECTID', 'WORKSPACEID', 'registrationId')
     })
 
     test('registrationId --yml', async () => {
       command.argv = ['registrationId', '--yml']
       await expect(command.run()).resolves.not.toThrowError()
       expect(stdout.output).toMatchFixture('registration/get.yml')
-      expect(command.eventClient.getWebhookRegistration).toHaveBeenCalledWith('ORGID', 'INTEGRATIONID', 'registrationId')
+      expect(command.eventClient.getRegistration).toHaveBeenCalledWith('ORGID', 'PROJECTID', 'WORKSPACEID', 'registrationId')
     })
   })
 
@@ -88,7 +88,7 @@ describe('console:registration:get', () => {
     beforeEach(() => {
       command.initSdk = jest.fn()
       jest.fn().mockResolvedValue(command.eventClient)
-      command.eventClient = { getWebhookRegistration: jest.fn().mockRejectedValue(new Error('fake error')) }
+      command.eventClient = { getRegistration: jest.fn().mockRejectedValue(new Error('fake error')) }
     })
 
     afterEach(() => {

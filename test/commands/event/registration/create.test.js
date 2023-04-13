@@ -64,14 +64,14 @@ describe('console:registration:create', () => {
 
   describe('success test cases', () => {
     beforeEach(async () => {
-      command.eventClient = { createWebhookRegistration: jest.fn().mockReturnValue(mock.data.createWebhookRegistrationResponse) }
+      command.eventClient = { createRegistration: jest.fn().mockReturnValue(mock.data.createWebhookRegistrationResponse) }
     })
 
     test('with valid input file fakefile.json', async () => {
       command.argv = ['fakefile.json']
       mockFs.readFileSync.mockReturnValue(jsonToBuffer(mock.data.createWebhookRegistrationInputJSON))
       await command.run()
-      expect(command.eventClient.createWebhookRegistration).toHaveBeenCalledWith('ORGID', 'INTEGRATIONID', mock.data.createWebhookRegistrationInputJSON)
+      expect(command.eventClient.createRegistration).toHaveBeenCalledWith('ORGID', 'PROJECTID', 'WORKSPACEID', mock.data.createWebhookRegistrationInputJSON)
       expect(stdout.output).toMatchFixture('registration/create.txt')
     })
 
@@ -79,14 +79,14 @@ describe('console:registration:create', () => {
       command.argv = ['fakefile.json']
       mockFs.readFileSync.mockReturnValue(jsonToBuffer(mock.data.createWebhookRegistrationInputJSONNoClientId))
       await command.run()
-      expect(command.eventClient.createWebhookRegistration).toHaveBeenCalledWith('ORGID', 'INTEGRATIONID', { ...mock.data.createWebhookRegistrationInputJSON, client_id: 'CLIENTID' })
+      expect(command.eventClient.createRegistration).toHaveBeenCalledWith('ORGID', 'PROJECTID', 'WORKSPACEID', { ...mock.data.createWebhookRegistrationInputJSON, client_id: 'CLIENTID' })
     })
 
     test('fakefile.json --json', async () => {
       command.argv = ['fakefile.json', '--json']
       mockFs.readFileSync.mockReturnValue(jsonToBuffer(mock.data.createWebhookRegistrationInputJSON))
       await command.run()
-      expect(command.eventClient.createWebhookRegistration).toHaveBeenCalledWith('ORGID', 'INTEGRATIONID', mock.data.createWebhookRegistrationInputJSON)
+      expect(command.eventClient.createRegistration).toHaveBeenCalledWith('ORGID', 'PROJECTID', 'WORKSPACEID', mock.data.createWebhookRegistrationInputJSON)
       expect(JSON.parse(stdout.output)).toMatchFixtureJson('registration/create.json')
     })
 
@@ -94,14 +94,14 @@ describe('console:registration:create', () => {
       command.argv = ['fakefile.json', '--yml']
       mockFs.readFileSync.mockReturnValue(jsonToBuffer(mock.data.createWebhookRegistrationInputJSON))
       await command.run()
-      expect(command.eventClient.createWebhookRegistration).toHaveBeenCalledWith('ORGID', 'INTEGRATIONID', mock.data.createWebhookRegistrationInputJSON)
+      expect(command.eventClient.createRegistration).toHaveBeenCalledWith('ORGID', 'PROJECTID', 'WORKSPACEID', mock.data.createWebhookRegistrationInputJSON)
       expect(stdout.output).toMatchFixture('registration/create.yml')
     })
   })
 
   describe('failure test cases', () => {
     beforeEach(() => {
-      command.eventClient = { createWebhookRegistration: jest.fn().mockRejectedValue(new Error('Error fake')) }
+      command.eventClient = { createRegistration: jest.fn().mockRejectedValue(new Error('Error fake')) }
     })
     test('throw error on bad JSON input file', async () => {
       command.argv = ['fakefile.json']

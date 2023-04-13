@@ -53,6 +53,7 @@ $ aio event --help
 * [`aio event provider list`](#aio-event-provider-list)
 * [`aio event provider ls`](#aio-event-provider-ls)
 * [`aio event provider update PROVIDERID`](#aio-event-provider-update-providerid)
+* [`aio event reg`](#aio-event-reg)
 * [`aio event reg create BODYJSONFILE`](#aio-event-reg-create-bodyjsonfile)
 * [`aio event reg delete REGISTRATIONID`](#aio-event-reg-delete-registrationid)
 * [`aio event reg get REGISTRATIONID`](#aio-event-reg-get-registrationid)
@@ -82,7 +83,7 @@ DESCRIPTION
   Manage your Adobe I/O Events
 ```
 
-_See code: [src/commands/event/index.js](https://github.com/adobe/aio-cli-plugin-events/blob/v2.0.2/src/commands/event/index.js)_
+_See code: [src/commands/event/index.ts](https://github.com/adobe/aio-cli-plugin-events/blob/v3.0.1/src/commands/event/index.ts)_
 
 ## `aio event eventmetadata`
 
@@ -107,7 +108,7 @@ Create an Event Metadata for a Provider
 
 ```
 USAGE
-  $ aio event eventmetadata create [PROVIDERID] [--help] [-v] [--version] [-j | -y]
+  $ aio event eventmetadata create PROVIDERID [--help] [-v] [--version] [-j | -y]
 
 ARGUMENTS
   PROVIDERID  The requested eventmetadata event code
@@ -129,7 +130,7 @@ Delete Event Metadata for a Provider
 
 ```
 USAGE
-  $ aio event eventmetadata delete [PROVIDERID] [EVENTCODE] [--help] [-v] [--version]
+  $ aio event eventmetadata delete PROVIDERID [EVENTCODE] [--help] [-v] [--version]
 
 ARGUMENTS
   PROVIDERID  The requested provider ID
@@ -150,7 +151,7 @@ Get details of an Event Code of a Provider
 
 ```
 USAGE
-  $ aio event eventmetadata get [PROVIDERID] [EVENTCODE] [--help] [-v] [--version] [-j | -y]
+  $ aio event eventmetadata get PROVIDERID EVENTCODE [--help] [-v] [--version] [-j | -y]
 
 ARGUMENTS
   PROVIDERID  The requested provider ID
@@ -173,7 +174,7 @@ List all Event Metadata for a Provider
 
 ```
 USAGE
-  $ aio event eventmetadata list [PROVIDERID] [--help] [-v] [--version] [-j | -y]
+  $ aio event eventmetadata list PROVIDERID [--help] [-v] [--version] [-j | -y]
 
 ARGUMENTS
   PROVIDERID  The requested provider ID
@@ -198,7 +199,7 @@ List all Event Metadata for a Provider
 
 ```
 USAGE
-  $ aio event eventmetadata ls [PROVIDERID] [--help] [-v] [--version] [-j | -y]
+  $ aio event eventmetadata ls PROVIDERID [--help] [-v] [--version] [-j | -y]
 
 ARGUMENTS
   PROVIDERID  The requested provider ID
@@ -223,7 +224,7 @@ Update an Event Metadata for a Provider
 
 ```
 USAGE
-  $ aio event eventmetadata update [PROVIDERID] [EVENTCODE] [--help] [-v] [--version] [-j | -y]
+  $ aio event eventmetadata update PROVIDERID EVENTCODE [--help] [-v] [--version] [-j | -y]
 
 ARGUMENTS
   PROVIDERID  The requested provider ID
@@ -282,7 +283,7 @@ Delete Provider by id
 
 ```
 USAGE
-  $ aio event provider delete [PROVIDERID] [--help] [-v] [--version]
+  $ aio event provider delete PROVIDERID [--help] [-v] [--version]
 
 ARGUMENTS
   PROVIDERID  The requested provider ID
@@ -302,7 +303,7 @@ Get details of Provider by id
 
 ```
 USAGE
-  $ aio event provider get [PROVIDERID] [--help] [-v] [--version] [--fetchEventMetadata] [-j | -y]
+  $ aio event provider get PROVIDERID [--help] [-v] [--version] [--fetchEventMetadata] [-j | -y]
 
 ARGUMENTS
   PROVIDERID  The requested provider ID
@@ -369,7 +370,7 @@ Update an existing Provider
 
 ```
 USAGE
-  $ aio event provider update [PROVIDERID] [--help] [-v] [--version] [-j | -y]
+  $ aio event provider update PROVIDERID [--help] [-v] [--version] [-j | -y]
 
 ARGUMENTS
   PROVIDERID  The requested provider ID
@@ -385,13 +386,33 @@ DESCRIPTION
   Update an existing Provider
 ```
 
+## `aio event reg`
+
+Manage your Adobe I/O Events Registrations
+
+```
+USAGE
+  $ aio event reg [--help] [-v] [--version]
+
+FLAGS
+  -v, --verbose  Verbose output
+  --help         Show help
+  --version      Show version
+
+DESCRIPTION
+  Manage your Adobe I/O Events Registrations
+
+ALIASES
+  $ aio event reg
+```
+
 ## `aio event reg create BODYJSONFILE`
 
 Create a new Event Registration in your Workspace
 
 ```
 USAGE
-  $ aio event reg create [BODYJSONFILE] [--help] [-v] [--version] [-j | -y]
+  $ aio event reg create BODYJSONFILE [--help] [-v] [--version] [-j | -y]
 
 ARGUMENTS
   BODYJSONFILE
@@ -400,7 +421,7 @@ ARGUMENTS
       {
       "name": "<event registration name>",
       "description": "<event registration description>",
-      "delivery_type": "WEBHOOK|WEBHOOK_BATCH|JOURNAL",
+      "delivery_type": "webhook|webhook_batch|journal",
       "webhook_url": "<webhook URL responding to challenge>",
       "events_of_interest": [{
       "provider_id": "<event provider id>",
@@ -428,7 +449,7 @@ Delete Registration
 
 ```
 USAGE
-  $ aio event reg delete [REGISTRATIONID] [--help] [-v] [--version]
+  $ aio event reg delete REGISTRATIONID [--help] [-v] [--version]
 
 ARGUMENTS
   REGISTRATIONID  The requested registration ID
@@ -451,7 +472,7 @@ Get an Event Registration in your Workspace
 
 ```
 USAGE
-  $ aio event reg get [REGISTRATIONID] [--help] [-v] [--version] [-j | -y]
+  $ aio event reg get REGISTRATIONID [--help] [-v] [--version] [-j | -y]
 
 ARGUMENTS
   REGISTRATIONID  The requested registration ID
@@ -533,6 +554,9 @@ FLAGS
 
 DESCRIPTION
   Manage your Adobe I/O Events Registrations
+
+ALIASES
+  $ aio event reg
 ```
 
 ## `aio event registration create BODYJSONFILE`
@@ -541,7 +565,7 @@ Create a new Event Registration in your Workspace
 
 ```
 USAGE
-  $ aio event registration create [BODYJSONFILE] [--help] [-v] [--version] [-j | -y]
+  $ aio event registration create BODYJSONFILE [--help] [-v] [--version] [-j | -y]
 
 ARGUMENTS
   BODYJSONFILE
@@ -550,7 +574,7 @@ ARGUMENTS
       {
       "name": "<event registration name>",
       "description": "<event registration description>",
-      "delivery_type": "WEBHOOK|WEBHOOK_BATCH|JOURNAL",
+      "delivery_type": "webhook|webhook_batch|journal",
       "webhook_url": "<webhook URL responding to challenge>",
       "events_of_interest": [{
       "provider_id": "<event provider id>",
@@ -578,7 +602,7 @@ Delete Registration
 
 ```
 USAGE
-  $ aio event registration delete [REGISTRATIONID] [--help] [-v] [--version]
+  $ aio event registration delete REGISTRATIONID [--help] [-v] [--version]
 
 ARGUMENTS
   REGISTRATIONID  The requested registration ID
@@ -601,7 +625,7 @@ Get an Event Registration in your Workspace
 
 ```
 USAGE
-  $ aio event registration get [REGISTRATIONID] [--help] [-v] [--version] [-j | -y]
+  $ aio event registration get REGISTRATIONID [--help] [-v] [--version] [-j | -y]
 
 ARGUMENTS
   REGISTRATIONID  The requested registration ID
