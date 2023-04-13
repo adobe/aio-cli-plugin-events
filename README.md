@@ -83,7 +83,7 @@ DESCRIPTION
   Manage your Adobe I/O Events
 ```
 
-_See code: [src/commands/event/index.js](https://github.com/adobe/aio-cli-plugin-events/blob/v3.0.0/src/commands/event/index.js)_
+_See code: [src/commands/event/index.ts](https://github.com/adobe/aio-cli-plugin-events/blob/v3.0.1/src/commands/event/index.ts)_
 
 ## `aio event eventmetadata`
 
