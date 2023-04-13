@@ -6,6 +6,12 @@ const process = require('process')
 const WEBHOOK = 'webhook'
 const JOURNAL = 'journal'
 
+/**
+ * get the delivery type of the registration
+ *
+ * @param {object} registration - registration object
+ * @returns {string} delivery type of the registration WEBHOOK or JOURNAL
+ */
 function getDeliveryType (registration) {
   if (registration.delivery_type) {
     return registration.delivery_type
@@ -17,6 +23,12 @@ function getDeliveryType (registration) {
   }
 }
 
+/**
+ *
+ * @param {*} registration - registration object
+ * @param {*} providerMetadataToProviderIdMapping - mapping of provider metadata to provider id
+ * @returns {Array} of events of interest {provider_id, event_code}
+ */
 function getEventsOfInterestForRegistration (registration,
   providerMetadataToProviderIdMapping) {
   const eventsOfInterest = []
@@ -35,6 +47,11 @@ function getEventsOfInterestForRegistration (registration,
   return eventsOfInterest
 }
 
+/**
+ *
+ * @param {*} projectConfig - project config object
+ * @returns {*} Object containing orgId, X_API_KEY, eventsClient
+ */
 async function initEventsSdk (projectConfig) {
   const orgId = projectConfig.org.id
   const orgCode = projectConfig.org.ims_org_id
@@ -44,6 +61,10 @@ async function initEventsSdk (projectConfig) {
   return { orgId, X_API_KEY, eventsClient }
 }
 
+/**
+ *
+ * @returns {*} Object containing mapping of provider metadata to provider id
+ */
 function getProviderMetadataToProviderIdMapping () {
   const entries = process.env.AIO_events_providermetadata_to_provider_mapping.split(',')
   const providerMetadataToProviderIdMap = {}
