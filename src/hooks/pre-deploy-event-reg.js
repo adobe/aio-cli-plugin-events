@@ -1,56 +1,65 @@
+/*
+Copyright 2019 Adobe. All rights reserved.
+This file is licensed to you under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License. You may obtain a copy
+of the License at http://www.apache.org/licenses/LICENSE-2.0
+Unless required by applicable law or agreed to in writing, software distributed under
+the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
+OF ANY KIND, either express or implied. See the License for the specific language
+governing permissions and limitations under the License.
+*/
 
 const {
   initEventsSdk, getProviderMetadataToProviderIdMapping,
-  getDeliveryType, getEventsOfInterestForRegistration, JOURNAL
+  getDeliveryType, getEventsOfInterestForRegistration, getRegistrationsFromAioConfig, JOURNAL
 } = require('./utils/hook-utils')
 
 module.exports = async function ({ appConfig }) {
-  console.log('pre-deploy-event-reg ', appConfig.events)
   const project = appConfig.project
   const events = appConfig.events
   if (!project) {
-    // this should not be an error, projects can be deployed without a project
-    console.log(
-      'No project found, skipping event registration in pre-app-deploy hook')
-    return
+    throw new Error('No project found, skipping event registration in pre-app-deploy hook')
   }
-  // this code is also dependent on .env values
-  // [SERVICE_API_KEY, AIO_events_providermetadata_to_provider_mapping]
-  // so it should return gracefully if they are not present
-
-  console.log(project.name)
   const workspace = {
     name: project.workspace.name,
     id: project.workspace.id
   }
-  const eventsSdk = await initEventsSdk(project)
-  const orgId = eventsSdk.orgId
-  const X_API_KEY = eventsSdk.X_API_KEY
-  const eventsClient = eventsSdk.eventsClient
+
+  const {orgId, X_API_KEY: clientId, eventsClient} = await initEventsSdk(project)
+  if (!eventsClient) {
+    throw new Error('Events SDK could not be initialised correctly. Skipping event registration in pre-app-deploy hook')
+  }
   const registrations = events.registrations
+
   const providerMetadataToProviderIdMapping = getProviderMetadataToProviderIdMapping()
+  if (!providerMetadataToProviderIdMapping) {
+    throw new Error('Required env variables missing. Skipping event registration in pre-app-deploy hook')
+  }
+  const existingRegistrations = getRegistrationsFromAioConfig(project.workspace.details.registrations)
 
   for (const registrationName in registrations) {
     const deliveryType = getDeliveryType(registrations[registrationName])
-    console.log('Delivery Type of registration ' + registrationName + ' is ' + deliveryType)
+    const body = {
+      name: registrationName,
+      client_id: clientId,
+      description: registrations[registrationName].description,
+      delivery_type: getDeliveryType(registrations[registrationName]),
+      events_of_interest: getEventsOfInterestForRegistration(
+        registrations[registrationName],
+        providerMetadataToProviderIdMapping)
+    }
     if (deliveryType === JOURNAL) {
-      console.log('Creating registration ' + registrationName)
-      const body = {
-        name: registrationName,
-        client_id: X_API_KEY,
-        description: registrations[registrationName].description,
-        delivery_type: getDeliveryType(registrations[registrationName]),
-        events_of_interest: getEventsOfInterestForRegistration(
-          registrations[registrationName],
-          providerMetadataToProviderIdMapping)
-      }
-      console.log('Creating registration with body' + body)
-      try {
+      if (existingRegistrations[registrationName]) {
+        console.log('Updating registration with name:' + registrationName + ', and registrationId:' +
+                        existingRegistrations[registrationName].registration_id)
+        await eventsClient.updateRegistration(orgId, project.id, workspace.id,
+          existingRegistrations[registrationName].registration_id, body)
+        console.log('Updated:' + registrationName)
+      } else {
+        console.log('Creating registration with name:' + registrationName)
         await eventsClient.createRegistration(orgId, project.id, workspace.id, body)
-      } catch (e) {
-        console.log(e)
+        console.log('Created:' + registrationName)
       }
-      console.log('Created:' + body)
     }
   }
 }

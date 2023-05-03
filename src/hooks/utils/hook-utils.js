@@ -1,3 +1,14 @@
+/*
+Copyright 2019 Adobe. All rights reserved.
+This file is licensed to you under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License. You may obtain a copy
+of the License at http://www.apache.org/licenses/LICENSE-2.0
+Unless required by applicable law or agreed to in writing, software distributed under
+the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
+OF ANY KIND, either express or implied. See the License for the specific language
+governing permissions and limitations under the License.
+*/
+
 const eventsSdk = require('@adobe/aio-lib-events')
 const { CLI } = require('@adobe/aio-lib-ims/src/context')
 const { getToken } = require('@adobe/aio-lib-ims')
@@ -55,8 +66,12 @@ function getEventsOfInterestForRegistration (registration,
 async function initEventsSdk (projectConfig) {
   const orgId = projectConfig.org.id
   const orgCode = projectConfig.org.ims_org_id
-  const accessToken = await getToken(CLI)
   const X_API_KEY = process.env.SERVICE_API_KEY
+  if (!X_API_KEY) {
+    throw new Error('Required SERVICE_API_KEY is missing from .env file')
+    return
+  }
+  const accessToken = await getToken(CLI)
   const eventsClient = await eventsSdk.init(orgCode, X_API_KEY, accessToken)
   return { orgId, X_API_KEY, eventsClient }
 }
@@ -66,6 +81,10 @@ async function initEventsSdk (projectConfig) {
  * @returns {*} Object containing mapping of provider metadata to provider id
  */
 function getProviderMetadataToProviderIdMapping () {
+  if (!process.env.AIO_events_providermetadata_to_provider_mapping) {
+    throw new Error('No environment variables for provider metadata to provider id mappings found.')
+    return
+  }
   const entries = process.env.AIO_events_providermetadata_to_provider_mapping.split(',')
   const providerMetadataToProviderIdMap = {}
   entries.forEach(providerMetadataToProviderId => {
@@ -76,11 +95,26 @@ function getProviderMetadataToProviderIdMapping () {
   return providerMetadataToProviderIdMap
 }
 
+/**
+ * @param eventRegistrations
+ */
+function getRegistrationsFromAioConfig (eventRegistrations) {
+  const registrationNameToRegistrations = {}
+  if (eventRegistrations) {
+    for (const registration of eventRegistrations) {
+      registrationNameToRegistrations[registration.name] = registration
+    }
+    console.log(JSON.stringify(registrationNameToRegistrations))
+  }
+  return registrationNameToRegistrations
+}
+
 module.exports = {
   initEventsSdk,
   getProviderMetadataToProviderIdMapping,
   getDeliveryType,
   getEventsOfInterestForRegistration,
+  getRegistrationsFromAioConfig,
   WEBHOOK,
   JOURNAL
 }

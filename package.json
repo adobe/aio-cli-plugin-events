@@ -10,12 +10,14 @@
   "dependencies": {
     "@adobe/aio-lib-console": "^4.0.0",
     "@adobe/aio-lib-core-config": "^3.0.0",
+    
     "@adobe/aio-lib-core-logging": "^2.0.0",
     "@adobe/aio-lib-events": "^3.0.0",
     "@adobe/aio-lib-ims": "^6.0.1",
     "@oclif/core": "^1.5.2",
+    "inquirer": "^8.2.5",
     "js-yaml": "^3.13.1",
-    "inquirer": "^8.2.5"
+    "process": "^0.11.10"
   },
   "repository": "adobe/aio-cli-plugin-events",
   "devDependencies": {
@@ -26,7 +28,6 @@
     "chalk": "^4.0.0",
     "eol": "^0.9.1",
     "eslint": "^8.38.0",
-    "execa": "^4.0.2",
     "eslint-config-oclif": "^3.1.0",
     "eslint-config-standard": "^17.0.0",
     "eslint-plugin-import": "^2.27.5",
@@ -36,6 +37,7 @@
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^6.1.1",
     "eslint-plugin-standard": "^4.0.1",
+    "execa": "^4.0.2",
     "jest": "^27.5.1",
     "jest-haste-map": "^27.5.1",
     "jest-junit": "^10.0.0",
@@ -65,7 +67,6 @@
       "post-undeploy-event-reg": "./src/hooks/post-deploy-event-reg.js"
     }
   },
-
   "scripts": {
     "posttest": "eslint src test e2e",
     "test": "npm run unit-tests",
