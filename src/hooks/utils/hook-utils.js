@@ -47,7 +47,6 @@ function getEventsOfInterestForRegistration (registration,
   eventsOfInterestCompressed.forEach(eventOfInterest => {
     const providerId = providerMetadataToProviderIdMapping[eventOfInterest.provider_metadata]
     const eventCodesList = eventOfInterest.event_codes
-    console.log(eventCodesList)
     for (const eventCode of eventCodesList) {
       eventsOfInterest.push({
         provider_id: providerId,
@@ -69,7 +68,6 @@ async function initEventsSdk (projectConfig) {
   const X_API_KEY = process.env.SERVICE_API_KEY
   if (!X_API_KEY) {
     throw new Error('Required SERVICE_API_KEY is missing from .env file')
-    return
   }
   const accessToken = await getToken(CLI)
   const eventsClient = await eventsSdk.init(orgCode, X_API_KEY, accessToken)
@@ -83,7 +81,6 @@ async function initEventsSdk (projectConfig) {
 function getProviderMetadataToProviderIdMapping () {
   if (!process.env.AIO_events_providermetadata_to_provider_mapping) {
     throw new Error('No environment variables for provider metadata to provider id mappings found.')
-    return
   }
   const entries = process.env.AIO_events_providermetadata_to_provider_mapping.split(',')
   const providerMetadataToProviderIdMap = {}
@@ -91,7 +88,6 @@ function getProviderMetadataToProviderIdMapping () {
     const tokens = providerMetadataToProviderId.split(':')
     providerMetadataToProviderIdMap[tokens[0].trim()] = tokens[1].trim()
   })
-  console.log(providerMetadataToProviderIdMap)
   return providerMetadataToProviderIdMap
 }
 
@@ -104,7 +100,6 @@ function getRegistrationsFromAioConfig (eventRegistrations) {
     for (const registration of eventRegistrations) {
       registrationNameToRegistrations[registration.name] = registration
     }
-    console.log(JSON.stringify(registrationNameToRegistrations))
   }
   return registrationNameToRegistrations
 }

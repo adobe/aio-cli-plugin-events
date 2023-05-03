@@ -25,7 +25,7 @@ module.exports = async function ({ appConfig }) {
     id: project.workspace.id
   }
 
-  const {orgId, X_API_KEY: clientId, eventsClient} = await initEventsSdk(project)
+  const { orgId, X_API_KEY: clientId, eventsClient } = await initEventsSdk(project)
   if (!eventsClient) {
     throw new Error('Events SDK could not be initialised correctly. Skipping event registration in pre-app-deploy hook')
   }
