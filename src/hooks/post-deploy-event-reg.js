@@ -8,7 +8,10 @@ the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTA
 OF ANY KIND, either express or implied. See the License for the specific language
 governing permissions and limitations under the License.
 */
+const {
+  WEBHOOK, deployRegistration
+} = require('./utils/hook-utils')
 
 module.exports = async function ({ appConfig }) {
-  console.log('post-deploy-event-reg ', appConfig.events)
+  await deployRegistration({ appConfig }, WEBHOOK, 'post-deploy-hook')
 }

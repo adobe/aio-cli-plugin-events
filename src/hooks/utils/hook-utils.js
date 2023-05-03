@@ -104,12 +104,75 @@ function getRegistrationsFromAioConfig (eventRegistrations) {
   return registrationNameToRegistrations
 }
 
+/**
+ * @param registrationName
+ * @param body
+ * @param eventsSDK
+ * @param registration
+ * @param deliveryType
+ * @param providerMetadataToProviderIdMapping
+ * @param existingRegistration
+ * @param project
+ */
+async function createOrUpdateRegistration (body, eventsSDK, existingRegistration, project) {
+  if (existingRegistration) {
+    await eventsSDK.eventsClient.updateRegistration(eventsSDK.orgId, project.id, project.workspace.id,
+      existingRegistration.registration_id, body)
+    console.log('Updated:' + body.name + ' with registration id:' +
+      existingRegistration.registration_id)
+  } else {
+    await eventsSDK.eventsClient.createRegistration(eventsSDK.orgId, project.id, project.workspace.id, body)
+    console.log('Created:' + body.name)
+  }
+}
+
+/**
+ * @param root0
+ * @param root0.appConfig
+ * @param root0.appConfig.events
+ * @param root0.appConfig.project
+ * @param expectedDeliveryType
+ * @param hookType
+ */
+async function deployRegistration ({ appConfig: { events, project } }, expectedDeliveryType, hookType) {
+  if (!project) {
+    throw new Error(`No project found, skipping event registration in ${hookType} hook`)
+  }
+
+  if (!events) {
+    console.log(`No events to register, skipping event registration in ${hookType} hook`)
+  }
+
+  const eventsSDK = await initEventsSdk(project)
+  if (!eventsSDK.eventsClient) {
+    throw new Error(`Events SDK could not be initialised correctly. Skipping event registration in ${hookType} hook`)
+  }
+  const registrations = events.registrations
+
+  const providerMetadataToProviderIdMapping = getProviderMetadataToProviderIdMapping()
+  if (!providerMetadataToProviderIdMapping) {
+    throw new Error(`Required env variables missing. Skipping event registration in ${hookType} hook`)
+  }
+  const existingRegistrations = getRegistrationsFromAioConfig(project.workspace.details.registrations)
+
+  for (const registrationName in registrations) {
+    const deliveryType = getDeliveryType(registrations[registrationName])
+    if (deliveryType === expectedDeliveryType) {
+      const body = {
+        name: registrationName,
+        client_id: eventsSDK.X_API_KEY,
+        description: registrations[registrationName].description,
+        delivery_type: deliveryType,
+        events_of_interest: getEventsOfInterestForRegistration(
+          registrations[registrationName], providerMetadataToProviderIdMapping)
+      }
+      await createOrUpdateRegistration(body, eventsSDK, existingRegistrations[registrationName], project)
+    }
+  }
+}
+
 module.exports = {
-  initEventsSdk,
-  getProviderMetadataToProviderIdMapping,
-  getDeliveryType,
-  getEventsOfInterestForRegistration,
-  getRegistrationsFromAioConfig,
   WEBHOOK,
-  JOURNAL
+  JOURNAL,
+  deployRegistration
 }

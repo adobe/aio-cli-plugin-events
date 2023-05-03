@@ -10,53 +10,9 @@ governing permissions and limitations under the License.
 */
 
 const {
-  initEventsSdk, getProviderMetadataToProviderIdMapping,
-  getDeliveryType, getEventsOfInterestForRegistration, getRegistrationsFromAioConfig, JOURNAL
+  JOURNAL, deployRegistration
 } = require('./utils/hook-utils')
 
 module.exports = async function ({ appConfig }) {
-  const project = appConfig.project
-  const events = appConfig.events
-  if (!project) {
-    throw new Error('No project found, skipping event registration in pre-app-deploy hook')
-  }
-  const workspace = {
-    name: project.workspace.name,
-    id: project.workspace.id
-  }
-
-  const { orgId, X_API_KEY: clientId, eventsClient } = await initEventsSdk(project)
-  if (!eventsClient) {
-    throw new Error('Events SDK could not be initialised correctly. Skipping event registration in pre-app-deploy hook')
-  }
-  const registrations = events.registrations
-
-  const providerMetadataToProviderIdMapping = getProviderMetadataToProviderIdMapping()
-  if (!providerMetadataToProviderIdMapping) {
-    throw new Error('Required env variables missing. Skipping event registration in pre-app-deploy hook')
-  }
-  const existingRegistrations = getRegistrationsFromAioConfig(project.workspace.details.registrations)
-
-  for (const registrationName in registrations) {
-    const deliveryType = getDeliveryType(registrations[registrationName])
-    const body = {
-      name: registrationName,
-      client_id: clientId,
-      description: registrations[registrationName].description,
-      delivery_type: getDeliveryType(registrations[registrationName]),
-      events_of_interest: getEventsOfInterestForRegistration(
-        registrations[registrationName],
-        providerMetadataToProviderIdMapping)
-    }
-    if (deliveryType === JOURNAL) {
-      if (existingRegistrations[registrationName]) {
-        await eventsClient.updateRegistration(orgId, project.id, workspace.id,
-          existingRegistrations[registrationName].registration_id, body)
-        console.log('Updated:' + registrationName + ' with registration id:' + existingRegistrations[registrationName].registration_id)
-      } else {
-        await eventsClient.createRegistration(orgId, project.id, workspace.id, body)
-        console.log('Created:' + registrationName)
-      }
-    }
-  }
+  await deployRegistration({ appConfig }, JOURNAL, 'pre-deploy-hook')
 }
