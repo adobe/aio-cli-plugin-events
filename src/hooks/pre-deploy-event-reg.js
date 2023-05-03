@@ -50,13 +50,10 @@ module.exports = async function ({ appConfig }) {
     }
     if (deliveryType === JOURNAL) {
       if (existingRegistrations[registrationName]) {
-        console.log('Updating registration with name:' + registrationName + ', and registrationId:' +
-                        existingRegistrations[registrationName].registration_id)
         await eventsClient.updateRegistration(orgId, project.id, workspace.id,
           existingRegistrations[registrationName].registration_id, body)
-        console.log('Updated:' + registrationName)
+        console.log('Updated:' + registrationName + ' with registration id:' + existingRegistrations[registrationName].registration_id)
       } else {
-        console.log('Creating registration with name:' + registrationName)
         await eventsClient.createRegistration(orgId, project.id, workspace.id, body)
         console.log('Created:' + registrationName)
       }
