@@ -166,7 +166,12 @@ async function deployRegistration ({ appConfig: { events, project } }, expectedD
         events_of_interest: getEventsOfInterestForRegistration(
           registrations[registrationName], providerMetadataToProviderIdMapping)
       }
-      await createOrUpdateRegistration(body, eventsSDK, existingRegistrations[registrationName], project)
+      try {
+        await createOrUpdateRegistration(body, eventsSDK,
+          existingRegistrations[registrationName], project)
+      } catch (e) {
+        throw new Error('Error:' + e + '\ncode:' + e.code + '\nDetails:' + JSON.stringify(e.sdkDetails))
+      }
     }
   }
 }
