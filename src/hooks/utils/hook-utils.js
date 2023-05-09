@@ -116,13 +116,13 @@ function getRegistrationsFromAioConfig (eventRegistrations) {
  */
 async function createOrUpdateRegistration (body, eventsSDK, existingRegistration, project) {
   if (existingRegistration) {
-    await eventsSDK.eventsClient.updateRegistration(eventsSDK.orgId, project.id, project.workspace.id,
+    const response = await eventsSDK.eventsClient.updateRegistration(eventsSDK.orgId, project.id, project.workspace.id,
       existingRegistration.registration_id, body)
-    console.log('Updated:' + body.name + ' with registration id:' +
-      existingRegistration.registration_id)
+    console.log('Updated registration:' + JSON.stringify(response))
   } else {
-    await eventsSDK.eventsClient.createRegistration(eventsSDK.orgId, project.id, project.workspace.id, body)
-    console.log('Created:' + body.name)
+    const response = await eventsSDK.eventsClient.createRegistration(eventsSDK.orgId, project.id,
+      project.workspace.id, body)
+    console.log('Created registration:' + JSON.stringify(response))
   }
 }
 
@@ -134,26 +134,29 @@ async function createOrUpdateRegistration (body, eventsSDK, existingRegistration
  * @param expectedDeliveryType
  * @param hookType
  */
-async function deployRegistration ({ appConfig: { events, project } }, expectedDeliveryType, hookType) {
+async function deployRegistration (
+  { appConfig: { events, project } }, expectedDeliveryType, hookType) {
   if (!project) {
-    throw new Error(`No project found, skipping event registration in ${hookType} hook`)
+    throw new Error(
+      `No project found, skipping event registration in ${hookType} hook`)
   }
-
   if (!events) {
-    console.log(`No events to register, skipping event registration in ${hookType} hook`)
+    console.log(
+      `No events to register, skipping event registration in ${hookType} hook`)
+    return
   }
-
   const eventsSDK = await initEventsSdk(project)
   if (!eventsSDK.eventsClient) {
-    throw new Error(`Events SDK could not be initialised correctly. Skipping event registration in ${hookType} hook`)
+    throw new Error(
+      `Events SDK could not be initialised correctly. Skipping event registration in ${hookType} hook`)
   }
   const registrations = events.registrations
-
   const providerMetadataToProviderIdMapping = getProviderMetadataToProviderIdMapping()
-  if (!providerMetadataToProviderIdMapping) {
-    throw new Error(`Required env variables missing. Skipping event registration in ${hookType} hook`)
+  let existingRegistrations
+  if (project.workspace.details.events) {
+    existingRegistrations = getRegistrationsFromAioConfig(
+      project.workspace.details.events.registrations)
   }
-  const existingRegistrations = getRegistrationsFromAioConfig(project.workspace.details.registrations)
 
   for (const registrationName in registrations) {
     const deliveryType = getDeliveryType(registrations[registrationName])
@@ -167,10 +170,14 @@ async function deployRegistration ({ appConfig: { events, project } }, expectedD
           registrations[registrationName], providerMetadataToProviderIdMapping)
       }
       try {
+        let existingRegistration
+        if (existingRegistrations && existingRegistrations[registrationName]) { existingRegistration = existingRegistrations[registrationName] }
         await createOrUpdateRegistration(body, eventsSDK,
-          existingRegistrations[registrationName], project)
+          existingRegistration, project)
       } catch (e) {
-        throw new Error('Error:' + e + '\ncode:' + e.code + '\nDetails:' + JSON.stringify(e.sdkDetails))
+        throw new Error(
+          e + '\ncode:' + e.code + '\nDetails:' + JSON.stringify(
+            e.sdkDetails))
       }
     }
   }
