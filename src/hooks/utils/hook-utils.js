@@ -18,6 +18,7 @@ const WEBHOOK = 'webhook'
 const JOURNAL = 'journal'
 
 /**
+ *
  * get the delivery type of the registration
  *
  * @param {object} registration - registration object
@@ -36,8 +37,8 @@ function getDeliveryType (registration) {
 
 /**
  *
- * @param {*} registration - registration object
- * @param {*} providerMetadataToProviderIdMapping - mapping of provider metadata to provider id
+ * @param {object} registration - registration object
+ * @param {object} providerMetadataToProviderIdMapping - mapping of provider metadata to provider id
  * @returns {Array} of events of interest {provider_id, event_code}
  */
 function getEventsOfInterestForRegistration (registration,
@@ -59,8 +60,8 @@ function getEventsOfInterestForRegistration (registration,
 
 /**
  *
- * @param {*} projectConfig - project config object
- * @returns {*} Object containing orgId, X_API_KEY, eventsClient
+ * @param {object} projectConfig - project config object
+ * @returns {object} Object containing orgId, X_API_KEY, eventsClient
  */
 async function initEventsSdk (projectConfig) {
   const orgId = projectConfig.org.id
@@ -75,8 +76,7 @@ async function initEventsSdk (projectConfig) {
 }
 
 /**
- *
- * @returns {*} Object containing mapping of provider metadata to provider id
+ * @returns {object} Object containing mapping of provider metadata to provider id
  */
 function getProviderMetadataToProviderIdMapping () {
   if (!process.env.AIO_events_providermetadata_to_provider_mapping) {
@@ -92,7 +92,8 @@ function getProviderMetadataToProviderIdMapping () {
 }
 
 /**
- * @param eventRegistrations
+ * @param {object} eventRegistrations - registrations from the .aio config file
+ * @returns {object} Object containing mapping of registration name to registration object
  */
 function getRegistrationsFromAioConfig (eventRegistrations) {
   const registrationNameToRegistrations = {}
@@ -105,14 +106,10 @@ function getRegistrationsFromAioConfig (eventRegistrations) {
 }
 
 /**
- * @param registrationName
- * @param body
- * @param eventsSDK
- * @param registration
- * @param deliveryType
- * @param providerMetadataToProviderIdMapping
- * @param existingRegistration
- * @param project
+ * @param {object} body - Registration Create/Update Model
+ * @param {object} eventsSDK - eventsSDK object containing eventsClient and orgId
+ * @param {object} existingRegistration - existing registration obtained from .aio config if exists
+ * @param {object} project - project details from .aio config file
  */
 async function createOrUpdateRegistration (body, eventsSDK, existingRegistration, project) {
   if (existingRegistration) {
@@ -127,28 +124,27 @@ async function createOrUpdateRegistration (body, eventsSDK, existingRegistration
 }
 
 /**
- * @param root0
- * @param root0.appConfig
- * @param root0.appConfig.events
- * @param root0.appConfig.project
- * @param expectedDeliveryType
- * @param hookType
+ * @param {object} appConfigRoot - Root object containing events and project details
+ * @param {object} appConfigRoot.appConfig - Object containing events and project details
+ * @param {object} appConfigRoot.appConfig.project - Project details from the .aio file
+ * @param {object} appConfigRoot.appConfig.events - Events registrations that are part of the app.config.yaml file
+ * @param {string} expectedDeliveryType - Delivery type based on the hook that is calling. Expected delivery type can be webhook or journal
+ * @param {string} hookType - pre-deploy-event-reg or post-deploy-event-reg hook values
  */
-async function deployRegistration (
-  { appConfig: { events, project } }, expectedDeliveryType, hookType) {
+async function deployRegistration ({ appConfig: { events, project } }, expectedDeliveryType, hookType) {
   if (!project) {
     throw new Error(
-      `No project found, skipping event registration in ${hookType} hook`)
+            `No project found, skipping event registration in ${hookType} hook`)
   }
   if (!events) {
     console.log(
-      `No events to register, skipping event registration in ${hookType} hook`)
+            `No events to register, skipping event registration in ${hookType} hook`)
     return
   }
   const eventsSDK = await initEventsSdk(project)
   if (!eventsSDK.eventsClient) {
     throw new Error(
-      `Events SDK could not be initialised correctly. Skipping event registration in ${hookType} hook`)
+            `Events SDK could not be initialised correctly. Skipping event registration in ${hookType} hook`)
   }
   const registrations = events.registrations
   const providerMetadataToProviderIdMapping = getProviderMetadataToProviderIdMapping()
@@ -186,5 +182,6 @@ async function deployRegistration (
 module.exports = {
   WEBHOOK,
   JOURNAL,
-  deployRegistration
+  deployRegistration,
+  getDeliveryType
 }

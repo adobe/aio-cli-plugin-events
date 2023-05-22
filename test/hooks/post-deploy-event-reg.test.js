@@ -30,13 +30,13 @@ describe('post deploy event registration hook interfaces', () => {
   test('command-error', async () => {
     const hook = require('../../src/hooks/post-deploy-event-reg')
     expect(typeof hook).toBe('function')
-    await expect(hook({ appConfig: {} })).rejects.toThrowError(new Error('No project found, skipping event registration in post-deploy-hook hook'))
+    await expect(hook({ appConfig: {} })).rejects.toThrowError(new Error('No project found, skipping event registration in post-deploy-event-reg hook'))
   })
 
   test('no project error', async () => {
     const hook = require('../../src/hooks/post-deploy-event-reg')
     expect(typeof hook).toBe('function')
-    await expect(hook({ appConfig: {} })).rejects.toThrowError(new Error('No project found, skipping event registration in post-deploy-hook hook'))
+    await expect(hook({ appConfig: {} })).rejects.toThrowError(new Error('No project found, skipping event registration in post-deploy-event-reg hook'))
   })
 
   test('no events should return without error', async () => {
@@ -46,7 +46,7 @@ describe('post deploy event registration hook interfaces', () => {
   })
 
   test('no service api key error', async () => {
-    const hook = require('../../src/hooks/pre-deploy-event-reg')
+    const hook = require('../../src/hooks/post-deploy-event-reg')
     expect(typeof hook).toBe('function')
     process.env = mock.data.dotEnvMissingApiKey
     await expect(hook({ appConfig: { project: mock.data.sampleProject, events: mock.data.sampleEvents } })).rejects.toThrowError(new Error('Required SERVICE_API_KEY is missing from .env file'))
@@ -58,7 +58,7 @@ describe('post deploy event registration hook interfaces', () => {
     process.env = mock.data.dotEnvMissingProviderMetadataToProviderIdMapping
     getToken.mockReturnValue('accessToken')
     eventsSdk.init.mockResolvedValue(undefined)
-    await expect(hook({ appConfig: { project: mock.data.sampleProject, events: mock.data.sampleEvents } })).rejects.toThrowError(new Error('Events SDK could not be initialised correctly. Skipping event registration in post-deploy-hook hook'))
+    await expect(hook({ appConfig: { project: mock.data.sampleProject, events: mock.data.sampleEvents } })).rejects.toThrowError(new Error('Events SDK could not be initialised correctly. Skipping event registration in post-deploy-event-reg hook'))
   })
 
   test('no providerMetadata to providerId mapping env variable error', async () => {

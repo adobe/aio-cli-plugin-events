@@ -10,9 +10,20 @@ governing permissions and limitations under the License.
 */
 
 const {
-  JOURNAL, deployRegistration
+  JOURNAL, getDeliveryType
 } = require('./utils/hook-utils')
 
 module.exports = async function ({ appConfig }) {
-  await deployRegistration({ appConfig }, JOURNAL, 'pre-deploy-hook')
+  if (appConfig && appConfig.events) {
+    const registrations = appConfig.events.registrations
+    for (const registrationName in registrations) {
+      const deliveryType = getDeliveryType(registrations[registrationName])
+      if (deliveryType === JOURNAL) {
+        console.log('Journal registrations are not currently supported.')
+        return
+      }
+    }
+  } else {
+    console.log('No events to register. Skipping pre-deploy-event-reg hook')
+  }
 }

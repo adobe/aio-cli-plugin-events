@@ -13,5 +13,5 @@ const {
 } = require('./utils/hook-utils')
 
 module.exports = async function ({ appConfig }) {
-  await deployRegistration({ appConfig }, WEBHOOK, 'post-deploy-hook')
+  await deployRegistration({ appConfig }, WEBHOOK, 'post-deploy-event-reg')
 }
