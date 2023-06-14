@@ -24,13 +24,15 @@ const Console = require('@adobe/aio-lib-console')
 const CONSOLE_CONFIG_KEY = 'console'
 const CONSOLE_API_KEY = 'aio-cli-console-auth'
 const EVENTS_CONFIG_KEY = 'events'
+const JWT_INTEGRATION_TYPE = 'service'
+const OAUTH_SERVER_TO_SERVER_INTEGRATION_TYPE = 'oauth_server_to_server'
 
 class BaseCommand extends Command {
   async initSdk () {
     // login
     await context.setCli({ 'cli.bare-output': true }, false) // set this globally
     aioLogger.debug('run login')
-    this.accessToken = await getToken(CLI) // user access token, would work with jwt too
+    this.accessToken = await getToken(CLI) // user access token, would work with JWT/OAuth Server-to-Server token too
 
     // init console sdk
     this.consoleClient = await Console.init(this.accessToken, CONSOLE_API_KEY)
@@ -42,8 +44,8 @@ class BaseCommand extends Command {
     aioLogger.debug(`${JSON.stringify(this.conf)}`)
 
     // init the event client
-    aioLogger.debug(`initializing aio-lib-events with org=${this.conf.org.code}, apiKey(jwtClientId)=${this.conf.integration.jwtClientId} and accessToken=<hidden>`)
-    this.eventClient = await Events.init(this.conf.org.code, this.conf.integration.jwtClientId, this.accessToken)
+    aioLogger.debug(`initializing aio-lib-events with org=${this.conf.org.code}, apiKey(clientId)=${this.conf.integration.clientId} and accessToken=<hidden>`)
+    this.eventClient = await Events.init(this.conf.org.code, this.conf.integration.clientId, this.accessToken)
   }
 
   // Note: loadConfig should be shared across plugins at the aio-lib-ims level
@@ -69,7 +71,7 @@ class BaseCommand extends Command {
         org: { id: localProject.org.id, name: localProject.org.name, code: localProject.org.ims_org_id },
         project: { id: localProject.id, name: localProject.name, title: localProject.title },
         workspace: { id: localProject.workspace.id, name: localProject.workspace.name },
-        integration: { id: workspaceIntegration.id, name: workspaceIntegration.name, jwtClientId: integrationCredentials.client_id }
+        integration: { id: workspaceIntegration.id, name: workspaceIntegration.name, clientId: integrationCredentials.client_id }
       }
     }
 
@@ -91,7 +93,12 @@ class BaseCommand extends Command {
       // fetch integration details
       const consoleJSON = await consoleClient.downloadWorkspaceJson(org.id, project.id, workspace.id)
       const workspaceIntegration = this.extractServiceIntegrationConfig(consoleJSON.body.project.workspace)
-      integration = { id: workspaceIntegration.id, name: workspaceIntegration.name, jwtClientId: workspaceIntegration.jwt.client_id }
+      const integrationType = workspaceIntegration.integration_type
+      integration = {
+        id: workspaceIntegration.id,
+        name: workspaceIntegration.name,
+        clientId: workspaceIntegration[integrationType].client_id
+      }
 
       // cache the integration details for future use
       aioLogger.debug(`caching integration details with workspaceId=${workspace.id} to ${EVENTS_CONFIG_KEY}`)
@@ -118,9 +125,13 @@ class BaseCommand extends Command {
   /** @private */
   extractServiceIntegrationConfig (workspaceConfig) {
     // note here we take the first that matches
-    const workspaceIntegration = workspaceConfig.details.credentials && workspaceConfig.details.credentials.find(c => c.integration_type === 'service')
+    const workspaceIntegration = workspaceConfig.details.credentials &&
+        workspaceConfig.details.credentials.find(c => {
+          return c.integration_type === OAUTH_SERVER_TO_SERVER_INTEGRATION_TYPE ||
+                 c.integration_type === JWT_INTEGRATION_TYPE
+        })
     if (!workspaceIntegration) {
-      throw new Error(`Workspace ${workspaceConfig.name} has no JWT integration`)
+      throw new Error(this.getErrorMessageForInvalidCredentials(workspaceConfig.name))
     }
     return workspaceIntegration
   }
@@ -143,6 +154,16 @@ class BaseCommand extends Command {
     // clean undefined values
     data = JSON.parse(JSON.stringify(data))
     this.log(yaml.safeDump(data, { noCompatMode: true }))
+  }
+
+  /**
+   * Returns error message for invalid credential configuration in a workspace
+   *
+   * @param {string} workspaceName - name of the workspace
+   * @returns {string} error message in case the workspace has invalid credential configuration
+   */
+  getErrorMessageForInvalidCredentials (workspaceName) {
+    return `Workspace ${workspaceName} has no oAuth Server-to-Server or JWT credential associated.`
   }
 }
 
