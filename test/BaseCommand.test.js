@@ -41,6 +41,7 @@ const CONSOLE_CONFIG_KEY = 'console'
 const EVENT_CONFIG_KEY = 'events'
 const CONSOLE_API_KEY = 'aio-cli-console-auth'
 const IMS_CLI_CONFIG_KEY = 'ims'
+const TEST_WORKSPACE_NAME = 'Rug'
 
 let command
 beforeEach(() => {
@@ -82,7 +83,7 @@ describe('initSDK', () => {
       org: { code: 'A1B23456789DUDE@MoviesOrg', id: '09876', name: 'Coen Brothers' },
       integration: { id: '11111', clientId: '222333444555666', name: 'Project_WhiteRussian' },
       project: { id: '123456789', name: 'TheBigLebowski', title: "the dude's project" },
-      workspace: { id: '543216789', name: 'Rug' }
+      workspace: { id: '543216789', name: TEST_WORKSPACE_NAME }
     }
     consoleConfig = { org: _validConfig.org, project: { ..._validConfig.project, org_id: _validConfig.org.id }, workspace: _validConfig.workspace }
     eventsConfig = { integration: _validConfig.integration, workspaceId: _validConfig.workspace.id }
@@ -95,7 +96,7 @@ describe('initSDK', () => {
         workspace: {
           id: _validConfig.workspace.id,
           name: _validConfig.workspace.name,
-          title: 'Don\'t pee on the Rug',
+          title: `Don't pee on the ${TEST_WORKSPACE_NAME}`,
           details: {
             credentials: [
               { id: 'bad', name: 'not service', integration_type: 'oauth' },
@@ -203,11 +204,12 @@ describe('initSDK', () => {
       if (key === CONSOLE_CONFIG_KEY) return consoleConfig
       if (key === EVENT_CONFIG_KEY) return undefined
     })
+    const BAD_WORKSPACE_NAME = 'badDude'
     mockConsoleInstance.downloadWorkspaceJson.mockResolvedValue({
       body: {
         project: {
           workspace: {
-            name: 'badDude',
+            name: BAD_WORKSPACE_NAME,
             details: {
               credentials: [
                 { id: 'bad', name: 'not service', integration_type: 'oauth' }
@@ -217,7 +219,7 @@ describe('initSDK', () => {
         }
       }
     })
-    await expect(command.initSdk()).rejects.toThrow(command.getErrorMessageForInvalidCredentials('badDude'))
+    await expect(command.initSdk()).rejects.toThrow(command.getErrorMessageForInvalidCredentials(BAD_WORKSPACE_NAME))
   })
 
   test('not local config, console config is not set', async () => {
@@ -286,7 +288,7 @@ describe('initSDK', () => {
       if (type === 'local' && key === 'project') return localConfig.project
       if (type === 'env' && key === `${IMS_CLI_CONFIG_KEY}.contexts.${_validConfig.integration.name}`) return Object.values(localEnvConfig[IMS_CLI_CONFIG_KEY])[0]
     })
-    await expect(command.initSdk()).rejects.toThrow(command.getErrorMessageForInvalidCredentials('Rug'))
+    await expect(command.initSdk()).rejects.toThrow(command.getErrorMessageForInvalidCredentials(TEST_WORKSPACE_NAME))
   })
 
   test('local app config, missing .env credentials jwt client id', async () => {
