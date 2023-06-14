@@ -24,6 +24,8 @@ const Console = require('@adobe/aio-lib-console')
 const CONSOLE_CONFIG_KEY = 'console'
 const CONSOLE_API_KEY = 'aio-cli-console-auth'
 const EVENTS_CONFIG_KEY = 'events'
+const JWT_INTEGRATION_TYPE = 'service'
+const OAUTH_SERVER_TO_SERVER_INTEGRATION_TYPE = 'oauth_server_to_server'
 
 class BaseCommand extends Command {
   async initSdk () {
@@ -91,7 +93,12 @@ class BaseCommand extends Command {
       // fetch integration details
       const consoleJSON = await consoleClient.downloadWorkspaceJson(org.id, project.id, workspace.id)
       const workspaceIntegration = this.extractServiceIntegrationConfig(consoleJSON.body.project.workspace)
-      integration = { id: workspaceIntegration.id, name: workspaceIntegration.name, jwtClientId: workspaceIntegration.jwt.client_id }
+      const integrationType = workspaceIntegration.integration_type
+      integration = {
+        id: workspaceIntegration.id,
+        name: workspaceIntegration.name,
+        jwtClientId: workspaceIntegration[integrationType].client_id
+      }
 
       // cache the integration details for future use
       aioLogger.debug(`caching integration details with workspaceId=${workspace.id} to ${EVENTS_CONFIG_KEY}`)
@@ -118,7 +125,11 @@ class BaseCommand extends Command {
   /** @private */
   extractServiceIntegrationConfig (workspaceConfig) {
     // note here we take the first that matches
-    const workspaceIntegration = workspaceConfig.details.credentials && workspaceConfig.details.credentials.find(c => c.integration_type === 'service')
+    const workspaceIntegration = workspaceConfig.details.credentials &&
+        workspaceConfig.details.credentials.find(c => {
+          return c.integration_type === OAUTH_SERVER_TO_SERVER_INTEGRATION_TYPE ||
+                 c.integration_type === JWT_INTEGRATION_TYPE
+        })
     if (!workspaceIntegration) {
       throw new Error(`Workspace ${workspaceConfig.name} has no JWT integration`)
     }
