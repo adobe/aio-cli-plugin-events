@@ -32,7 +32,7 @@ class BaseCommand extends Command {
     // login
     await context.setCli({ 'cli.bare-output': true }, false) // set this globally
     aioLogger.debug('run login')
-    this.accessToken = await getToken(CLI) // user access token, would work with jwt too
+    this.accessToken = await getToken(CLI) // user access token, would work with JWT/OAuth Server-to-Server token too
 
     // init console sdk
     this.consoleClient = await Console.init(this.accessToken, CONSOLE_API_KEY)
