@@ -217,7 +217,7 @@ describe('initSDK', () => {
         }
       }
     })
-    await expect(command.initSdk()).rejects.toThrow('Workspace badDude has no JWT integration')
+    await expect(command.initSdk()).rejects.toThrow(command.getErrorMessageForInvalidCredentials('badDude'))
   })
 
   test('not local config, console config is not set', async () => {
@@ -286,7 +286,7 @@ describe('initSDK', () => {
       if (type === 'local' && key === 'project') return localConfig.project
       if (type === 'env' && key === `${IMS_CLI_CONFIG_KEY}.contexts.${_validConfig.integration.name}`) return Object.values(localEnvConfig[IMS_CLI_CONFIG_KEY])[0]
     })
-    await expect(command.initSdk()).rejects.toThrow('Workspace Rug has no JWT integration')
+    await expect(command.initSdk()).rejects.toThrow(command.getErrorMessageForInvalidCredentials('Rug'))
   })
 
   test('local app config, missing .env credentials jwt client id', async () => {

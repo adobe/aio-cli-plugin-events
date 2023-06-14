@@ -131,7 +131,7 @@ class BaseCommand extends Command {
                  c.integration_type === JWT_INTEGRATION_TYPE
         })
     if (!workspaceIntegration) {
-      throw new Error(`Workspace ${workspaceConfig.name} has no JWT integration`)
+      throw new Error(this.getErrorMessageForInvalidCredentials(workspaceConfig.name))
     }
     return workspaceIntegration
   }
@@ -154,6 +154,16 @@ class BaseCommand extends Command {
     // clean undefined values
     data = JSON.parse(JSON.stringify(data))
     this.log(yaml.safeDump(data, { noCompatMode: true }))
+  }
+
+  /**
+   * Returns error message for invalid credential configuration in a workspace
+   *
+   * @param {string} workspaceName - name of the workspace
+   * @returns {string} error message in case the workspace has invalid credential configuration
+   */
+  getErrorMessageForInvalidCredentials (workspaceName) {
+    return `Workspace ${workspaceName} has no oAuth Server-to-Server or JWT credential associated.`
   }
 }
 
