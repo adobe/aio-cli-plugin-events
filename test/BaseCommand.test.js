@@ -80,7 +80,7 @@ describe('initSDK', () => {
   beforeEach(() => {
     _validConfig = {
       org: { code: 'A1B23456789DUDE@MoviesOrg', id: '09876', name: 'Coen Brothers' },
-      integration: { id: '11111', jwtClientId: '222333444555666', name: 'Project_WhiteRussian' },
+      integration: { id: '11111', clientId: '222333444555666', name: 'Project_WhiteRussian' },
       project: { id: '123456789', name: 'TheBigLebowski', title: "the dude's project" },
       workspace: { id: '543216789', name: 'Rug' }
     }
@@ -105,7 +105,7 @@ describe('initSDK', () => {
         }
       }
     }
-    localEnvConfig = { [IMS_CLI_CONFIG_KEY]: { contexts: { [_validConfig.integration.name.toLowerCase()]: { client_id: _validConfig.integration.jwtClientId } } } }
+    localEnvConfig = { [IMS_CLI_CONFIG_KEY]: { contexts: { [_validConfig.integration.name.toLowerCase()]: { client_id: _validConfig.integration.clientId } } } }
   })
   test('not local config, console and events config are set', async () => {
     aioConfig.get.mockImplementation((key, type) => {
@@ -117,7 +117,7 @@ describe('initSDK', () => {
     expect(command.consoleClient).toBe(mockConsoleInstance)
     expect(Console.init).toHaveBeenCalledWith('bowling', CONSOLE_API_KEY)
     expect(command.eventClient).toBe(mockEventsInstance)
-    expect(Events.init).toHaveBeenCalledWith(_validConfig.org.code, _validConfig.integration.jwtClientId, 'bowling')
+    expect(Events.init).toHaveBeenCalledWith(_validConfig.org.code, _validConfig.integration.clientId, 'bowling')
     expect(command.accessToken).toBe('bowling')
     expect(command.conf).toEqual({ ..._validConfig, isLocal: false })
     expect(mockConsoleInstance.downloadWorkspaceJson).toHaveBeenCalledTimes(0)
@@ -139,7 +139,7 @@ describe('initSDK', () => {
                   id: _validConfig.integration.id,
                   name: _validConfig.integration.name,
                   integration_type: 'service',
-                  jwt: { client_id: _validConfig.integration.jwtClientId }
+                  service: { client_id: _validConfig.integration.clientId }
                 }
               ]
             }
@@ -151,7 +151,7 @@ describe('initSDK', () => {
     expect(command.consoleClient).toBe(mockConsoleInstance)
     expect(Console.init).toHaveBeenCalledWith('bowling', CONSOLE_API_KEY)
     expect(command.eventClient).toBe(mockEventsInstance)
-    expect(Events.init).toHaveBeenCalledWith(_validConfig.org.code, _validConfig.integration.jwtClientId, 'bowling')
+    expect(Events.init).toHaveBeenCalledWith(_validConfig.org.code, _validConfig.integration.clientId, 'bowling')
     expect(command.accessToken).toBe('bowling')
     expect(command.conf).toEqual({ ..._validConfig, isLocal: false })
     expect(mockConsoleInstance.downloadWorkspaceJson).toHaveBeenCalledWith(_validConfig.org.id, _validConfig.project.id, _validConfig.workspace.id)
@@ -175,7 +175,7 @@ describe('initSDK', () => {
                   id: _validConfig.integration.id,
                   name: _validConfig.integration.name,
                   integration_type: 'service',
-                  jwt: { client_id: _validConfig.integration.jwtClientId }
+                  service: { client_id: _validConfig.integration.clientId }
                 }
               ]
             }
@@ -185,13 +185,13 @@ describe('initSDK', () => {
     })
     await command.initSdk()
     expect(aioConfig.set).toHaveBeenCalledWith(EVENT_CONFIG_KEY, {
-      integration: { id: _validConfig.integration.id, name: _validConfig.integration.name, jwtClientId: _validConfig.integration.jwtClientId },
+      integration: { id: _validConfig.integration.id, name: _validConfig.integration.name, clientId: _validConfig.integration.clientId },
       workspaceId: _validConfig.workspace.id
     }, false)
     expect(command.consoleClient).toBe(mockConsoleInstance)
     expect(Console.init).toHaveBeenCalledWith('bowling', CONSOLE_API_KEY)
     expect(command.eventClient).toBe(mockEventsInstance)
-    expect(Events.init).toHaveBeenCalledWith(_validConfig.org.code, _validConfig.integration.jwtClientId, 'bowling')
+    expect(Events.init).toHaveBeenCalledWith(_validConfig.org.code, _validConfig.integration.clientId, 'bowling')
     expect(command.accessToken).toBe('bowling')
     expect(command.conf).toEqual({ ..._validConfig, isLocal: false })
     expect(mockConsoleInstance.downloadWorkspaceJson).toHaveBeenCalledWith(_validConfig.org.id, _validConfig.project.id, _validConfig.workspace.id)
@@ -274,7 +274,7 @@ describe('initSDK', () => {
     expect(command.consoleClient).toBe(mockConsoleInstance)
     expect(Console.init).toHaveBeenCalledWith('bowling', CONSOLE_API_KEY)
     expect(command.eventClient).toBe(mockEventsInstance)
-    expect(Events.init).toHaveBeenCalledWith(_validConfig.org.code, _validConfig.integration.jwtClientId, 'bowling')
+    expect(Events.init).toHaveBeenCalledWith(_validConfig.org.code, _validConfig.integration.clientId, 'bowling')
     expect(command.accessToken).toBe('bowling')
     expect(command.conf).toEqual({ ..._validConfig, isLocal: true })
     expect(Ims.context.get).toHaveBeenCalledWith(_validConfig.integration.name)

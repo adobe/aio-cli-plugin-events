@@ -44,8 +44,8 @@ class BaseCommand extends Command {
     aioLogger.debug(`${JSON.stringify(this.conf)}`)
 
     // init the event client
-    aioLogger.debug(`initializing aio-lib-events with org=${this.conf.org.code}, apiKey(jwtClientId)=${this.conf.integration.jwtClientId} and accessToken=<hidden>`)
-    this.eventClient = await Events.init(this.conf.org.code, this.conf.integration.jwtClientId, this.accessToken)
+    aioLogger.debug(`initializing aio-lib-events with org=${this.conf.org.code}, apiKey(clientId)=${this.conf.integration.clientId} and accessToken=<hidden>`)
+    this.eventClient = await Events.init(this.conf.org.code, this.conf.integration.clientId, this.accessToken)
   }
 
   // Note: loadConfig should be shared across plugins at the aio-lib-ims level
@@ -71,7 +71,7 @@ class BaseCommand extends Command {
         org: { id: localProject.org.id, name: localProject.org.name, code: localProject.org.ims_org_id },
         project: { id: localProject.id, name: localProject.name, title: localProject.title },
         workspace: { id: localProject.workspace.id, name: localProject.workspace.name },
-        integration: { id: workspaceIntegration.id, name: workspaceIntegration.name, jwtClientId: integrationCredentials.client_id }
+        integration: { id: workspaceIntegration.id, name: workspaceIntegration.name, clientId: integrationCredentials.client_id }
       }
     }
 
@@ -97,7 +97,7 @@ class BaseCommand extends Command {
       integration = {
         id: workspaceIntegration.id,
         name: workspaceIntegration.name,
-        jwtClientId: workspaceIntegration[integrationType].client_id
+        clientId: workspaceIntegration[integrationType].client_id
       }
 
       // cache the integration details for future use

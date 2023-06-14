@@ -47,7 +47,7 @@ describe('console:registration:list', () => {
       org: { id: 'ORGID' },
       project: { id: 'PROJECTID' },
       workspace: { id: 'WORKSPACEID' },
-      integration: { id: 'INTEGRATIONID', jwtClientId: 'CLIENTID' }
+      integration: { id: 'INTEGRATIONID', clientId: 'CLIENTID' }
     }
     command.initSdk = jest.fn()
   })
