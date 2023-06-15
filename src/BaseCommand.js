@@ -25,8 +25,14 @@ const CONSOLE_CONFIG_KEY = 'console'
 const CONSOLE_API_KEY = 'aio-cli-console-auth'
 const EVENTS_CONFIG_KEY = 'events'
 const JWT_INTEGRATION_TYPE = 'service'
+const JWT_JSON_KEY = 'jwt'
 const OAUTH_SERVER_TO_SERVER_INTEGRATION_TYPE = 'oauth_server_to_server'
 const OAUTH_SERVER_TO_SERVER_MIGRATE_INTEGRATION_TYPE = 'oauth_server_to_server_migrate'
+const INTEGRATION_TYPES_TO_JSON_KEYS_MAP = {
+  [OAUTH_SERVER_TO_SERVER_INTEGRATION_TYPE]: OAUTH_SERVER_TO_SERVER_INTEGRATION_TYPE,
+  [OAUTH_SERVER_TO_SERVER_MIGRATE_INTEGRATION_TYPE]: OAUTH_SERVER_TO_SERVER_INTEGRATION_TYPE,
+  [JWT_INTEGRATION_TYPE]: JWT_JSON_KEY
+}
 
 class BaseCommand extends Command {
   async initSdk () {
@@ -95,10 +101,11 @@ class BaseCommand extends Command {
       const consoleJSON = await consoleClient.downloadWorkspaceJson(org.id, project.id, workspace.id)
       const workspaceIntegration = this.extractServiceIntegrationConfig(consoleJSON.body.project.workspace)
       const integrationType = workspaceIntegration.integration_type
+      const credentialJsonKey = INTEGRATION_TYPES_TO_JSON_KEYS_MAP[integrationType]
       integration = {
         id: workspaceIntegration.id,
         name: workspaceIntegration.name,
-        clientId: workspaceIntegration[integrationType].client_id
+        clientId: workspaceIntegration[credentialJsonKey].client_id
       }
 
       // cache the integration details for future use
@@ -128,9 +135,8 @@ class BaseCommand extends Command {
     // note here we take the first that matches
     const workspaceIntegration = workspaceConfig.details.credentials &&
         workspaceConfig.details.credentials.find(c => {
-          return c.integration_type === OAUTH_SERVER_TO_SERVER_INTEGRATION_TYPE ||
-                 c.integration_type === OAUTH_SERVER_TO_SERVER_MIGRATE_INTEGRATION_TYPE ||
-                 c.integration_type === JWT_INTEGRATION_TYPE
+          return Object.keys(INTEGRATION_TYPES_TO_JSON_KEYS_MAP)
+            .includes(c.integration_type)
         })
     if (!workspaceIntegration) {
       throw new Error(this.getErrorMessageForInvalidCredentials(workspaceConfig.name))
