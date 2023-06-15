@@ -26,6 +26,7 @@ const CONSOLE_API_KEY = 'aio-cli-console-auth'
 const EVENTS_CONFIG_KEY = 'events'
 const JWT_INTEGRATION_TYPE = 'service'
 const OAUTH_SERVER_TO_SERVER_INTEGRATION_TYPE = 'oauth_server_to_server'
+const OAUTH_SERVER_TO_SERVER_MIGRATE_INTEGRATION_TYPE = 'oauth_server_to_server_migrate'
 
 class BaseCommand extends Command {
   async initSdk () {
@@ -128,6 +129,7 @@ class BaseCommand extends Command {
     const workspaceIntegration = workspaceConfig.details.credentials &&
         workspaceConfig.details.credentials.find(c => {
           return c.integration_type === OAUTH_SERVER_TO_SERVER_INTEGRATION_TYPE ||
+                 c.integration_type === OAUTH_SERVER_TO_SERVER_MIGRATE_INTEGRATION_TYPE ||
                  c.integration_type === JWT_INTEGRATION_TYPE
         })
     if (!workspaceIntegration) {
