@@ -140,7 +140,7 @@ describe('initSDK', () => {
                   id: _validConfig.integration.id,
                   name: _validConfig.integration.name,
                   integration_type: 'service',
-                  service: { client_id: _validConfig.integration.clientId }
+                  jwt: { client_id: _validConfig.integration.clientId }
                 }
               ]
             }
@@ -176,7 +176,7 @@ describe('initSDK', () => {
                   id: _validConfig.integration.id,
                   name: _validConfig.integration.name,
                   integration_type: 'service',
-                  service: { client_id: _validConfig.integration.clientId }
+                  jwt: { client_id: _validConfig.integration.clientId }
                 }
               ]
             }
