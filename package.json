@@ -15,8 +15,7 @@
     "@adobe/aio-lib-ims": "^6.0.1",
     "@oclif/core": "^1.5.2",
     "inquirer": "^8.2.5",
-    "js-yaml": "^3.13.1",
-    "process": "^0.11.10"
+    "js-yaml": "^3.13.1"
   },
   "repository": "adobe/aio-cli-plugin-events",
   "devDependencies": {
