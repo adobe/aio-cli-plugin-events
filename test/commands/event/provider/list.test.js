@@ -14,6 +14,8 @@ const { stdout } = require('stdout-stderr')
 const mock = require('../../../mocks')
 const ProviderListCommand = require('../../../../src/commands/event/provider/list')
 
+const ORG_ID = 'ORGID'
+
 test('exports', async () => {
   expect(typeof ProviderListCommand).toEqual('function')
   expect(ProviderListCommand.prototype instanceof Command).toBeTruthy()
@@ -45,7 +47,7 @@ describe('console:provider:list', () => {
     command = new ProviderListCommand([])
     command.conf = {
       org: {
-        id: 'ORGID'
+        id: ORG_ID
       }
     }
   })
@@ -84,6 +86,45 @@ describe('console:provider:list', () => {
       await expect(command.run()).resolves.not.toThrowError()
       expect(stdout.output).toMatchFixture('provider/list.yml')
     })
+
+    test('should return list of providers with event metadata', async () => {
+      command.argv = ['--fetchEventMetadata']
+      await expect(command.run()).resolves.not.toThrowError()
+      expect(command.eventClient.getAllProviders).toHaveBeenCalledWith(ORG_ID, {
+        fetchEventMetadata: true,
+        filterBy: {
+          instanceId: undefined,
+          providerMetadataId: undefined,
+          providerMetadataIds: undefined
+        }
+      })
+    })
+
+    test('should return providers for provider metadata id and instance id', async () => {
+      command.argv = ['--providerMetadataId', 'pm-1', '--instanceId', 'instance1']
+      await expect(command.run()).resolves.not.toThrowError()
+      expect(command.eventClient.getAllProviders).toHaveBeenCalledWith(ORG_ID, {
+        fetchEventMetadata: undefined,
+        filterBy: {
+          instanceId: 'instance1',
+          providerMetadataId: 'pm-1',
+          providerMetadataIds: undefined
+        }
+      })
+    })
+
+    test('should return list of providers for provider metadata id list', async () => {
+      command.argv = ['--providerMetadataIds', 'pm-1', 'pm-2']
+      await expect(command.run()).resolves.not.toThrowError()
+      expect(command.eventClient.getAllProviders).toHaveBeenCalledWith(ORG_ID, {
+        fetchEventMetadata: undefined,
+        filterBy: {
+          instanceId: undefined,
+          providerMetadataId: undefined,
+          providerMetadataIds: ['pm-1', 'pm-2']
+        }
+      })
+    })
   })
 
   describe('fail to fetch list of providers', () => {
@@ -99,6 +140,11 @@ describe('console:provider:list', () => {
 
     test('should return error on get list of providers', async () => {
       await expect(command.run()).rejects.toThrowError(new Error('Error retrieving providers'))
+    })
+
+    test('should return error on passing both providerMetadataId and providerMetadataIds flags', async () => {
+      command.argv = ['--providerMetadataId', 'pm-1', '--providerMetadataIds', 'pm-1', 'pm-2']
+      await expect(command.run()).rejects.toThrow('--providerMetadataId=pm-1 cannot also be provided when using --providerMetadataIds')
     })
   })
 })

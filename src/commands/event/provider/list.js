@@ -20,7 +20,15 @@ class ProviderListCommand extends BaseCommand {
     try {
       await this.initSdk()
       cli.action.start('Fetching all Event Providers')
-      const providers = await this.eventClient.getAllProviders(this.conf.org.id)
+      const options = {
+        fetchEventMetadata: flags.fetchEventMetadata,
+        filterBy: {
+          providerMetadataId: flags.providerMetadataId,
+          instanceId: flags.instanceId,
+          providerMetadataIds: flags.providerMetadataIds
+        }
+      }
+      const providers = await this.eventClient.getAllProviders(this.conf.org.id, options)
       cli.action.stop()
       if (flags.json) {
         this.printJson(providers)
@@ -65,6 +73,25 @@ ProviderListCommand.aliases = [
 
 ProviderListCommand.flags = {
   ...BaseCommand.flags,
+  fetchEventMetadata: Flags.boolean({
+    description: 'Fetch event metadata with provider'
+  }),
+  providerMetadataId: Flags.string({
+    multiple: false,
+    description: 'Filter providers for org by provider metadata id (and instance id if applicable)',
+    exclusive: ['providerMetadataIds']
+  }),
+  instanceId: Flags.string({
+    multiple: false,
+    description: 'Filter providers for org by provider metadata id (and instance id if applicable)',
+    exclusive: ['providerMetadataIds']
+  }),
+  providerMetadataIds: Flags.string({
+    multiple: true,
+    char: 'p',
+    description: 'Filter providers for org by list of provider metadata ids',
+    exclusive: ['providerMetadataId', 'instanceId']
+  }),
   json: Flags.boolean({
     description: 'Output json',
     char: 'j',
