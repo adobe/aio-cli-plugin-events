@@ -83,14 +83,13 @@ ProviderListCommand.flags = {
   }),
   instanceId: Flags.string({
     multiple: false,
-    description: 'Filter providers for org by provider metadata id (and instance id if applicable)',
-    exclusive: ['providerMetadataIds']
+    description: 'Filter providers for org by provider metadata id (and instance id if applicable)'
   }),
   providerMetadataIds: Flags.string({
     multiple: true,
     char: 'p',
     description: 'Filter providers for org by list of provider metadata ids',
-    exclusive: ['providerMetadataId', 'instanceId']
+    exclusive: ['providerMetadataId']
   }),
   json: Flags.boolean({
     description: 'Output json',
