@@ -370,6 +370,285 @@ const createWebhookRegistrationInputJSONNoClientId = {
   }]
 }
 
+const sampleProject = {
+  id: 'projectId',
+  name: 'projectName',
+  title: 'ProjectTitle',
+  description: 'Test description',
+  org: {
+    id: '112233',
+    name: 'Organisation Name',
+    ims_org_id: '123@AdobeOrg',
+    details: {
+      services: [
+        {
+          name: 'I/O Management API',
+          code: 'apiCode',
+          type: 'entp'
+        }
+      ]
+    }
+  },
+  workspace: {
+    id: 'workspaceId',
+    name: 'Stage',
+    action_url: 'https://action_name.adobeioruntime.net',
+    app_url: 'https://action_name.adobeio-static.net',
+    details: {
+      credentials: [
+        {
+          id: 'credentialId',
+          name: 'credentialName',
+          integration_type: 'service'
+        }
+      ],
+      services: [
+        {
+          code: 'apiCode',
+          name: 'I/O Management API'
+        }
+      ],
+      events: {
+        registrations: [
+          {
+            id: 0,
+            name: 'Event Registration 1',
+            description: 'description',
+            client_id: 'clientId',
+            registration_id: 'registrationId1',
+            events_of_interest: [
+              {
+                provider: 'providerName',
+                event_code: 'eventCode1',
+                provider_id: 'providerId',
+                event_label: 'Sample event code',
+                event_description: 'Sample event code',
+                provider_label: 'Sample provider',
+                provider_description: 'Test provider',
+                event_delivery_format: 'adobe_io',
+                provider_metadata: 'providerMetadata1'
+              }
+            ],
+            webhook_status: 'verified',
+            created_date: 'string',
+            updated_date: 'string',
+            webhook_url: 'https://test-webhook.io',
+            delivery_type: 'webhook',
+            runtime_action: 'action-name',
+            enabled: true,
+            events_url: 'https://journal.adobe.io/events',
+            trace_url: 'https://trace.adobe.io/traces'
+          },
+          {
+            id: 0,
+            name: 'Event Registration 2',
+            description: 'description2',
+            client_id: 'clientId',
+            registration_id: 'registrationId2',
+            events_of_interest: [
+              {
+                provider: 'providerName',
+                event_code: 'eventCode2',
+                provider_id: 'providerId2',
+                event_label: 'Sample event code',
+                event_description: 'Sample event code',
+                provider_label: 'Sample provider',
+                provider_description: 'Test provider',
+                event_delivery_format: 'adobe_io',
+                provider_metadata: 'providerMetadata2'
+              }
+            ],
+            webhook_status: 'verified',
+            created_date: 'string',
+            updated_date: 'string',
+            delivery_type: 'journal',
+            enabled: true,
+            events_url: 'https://journal.adobe.io/events',
+            trace_url: 'https://trace.adobe.io/traces'
+          }
+        ]
+      }
+    },
+    endpoints: {
+      packageName: {
+        view: [
+          {
+            href: 'https://action-name.adobeio-static.net/index.html',
+            metadata: {
+              services: [
+                {
+                  code: 'apiCode',
+                  name: 'I/O Management API'
+                }
+              ],
+              profile: {
+                client_id: 'clientId',
+                scope: 'scopes'
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+}
+
+const sampleProjectWithoutEvents = {
+  id: 'projectId',
+  name: 'projectName',
+  title: 'ProjectTitle',
+  description: 'Test description',
+  org: {
+    id: '112233',
+    name: 'Organisation Name',
+    ims_org_id: '123@AdobeOrg',
+    details: {
+      services: [
+        {
+          name: 'I/O Management API',
+          code: 'apiCode',
+          type: 'entp'
+        }
+      ]
+    }
+  },
+  workspace: {
+    id: 'workspaceId',
+    name: 'Stage',
+    action_url: 'https://action_name.adobeioruntime.net',
+    app_url: 'https://action_name.adobeio-static.net',
+    details: {
+      credentials: [
+        {
+          id: 'credentialId',
+          name: 'credentialName',
+          integration_type: 'service'
+        }
+      ],
+      services: [
+        {
+          code: 'apiCode',
+          name: 'I/O Management API'
+        }
+      ]
+    },
+    endpoints: {
+      packageName: {
+        view: [
+          {
+            href: 'https://action-name.adobeio-static.net/index.html',
+            metadata: {
+              services: [
+                {
+                  code: 'apiCode',
+                  name: 'I/O Management API'
+                }
+              ],
+              profile: {
+                client_id: 'clientId',
+                scope: 'scopes'
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+}
+
+const sampleEvents = {
+  registrations: {
+    'Event Registration 1': {
+      description: 'Registration for IO Events 1',
+      events_of_interest: [
+        {
+          provider_metadata: 'providerMetadata1',
+          event_codes: [
+            'eventCode1',
+            'eventCode2'
+          ]
+        }
+      ],
+      runtime_action: 'poc-event-1'
+    },
+    'Event Registration 2': {
+      description: 'Registration for IO Events 2',
+      events_of_interest: [
+        {
+          provider_metadata: 'providerMetadata1',
+          event_codes: [
+            'eventCode1',
+            'eventCode2'
+          ]
+        },
+        {
+          provider_metadata: 'providerMetadata2',
+          event_codes: [
+            'eventCode3'
+          ]
+        }
+      ]
+    }
+  }
+}
+
+const hookDecodedEventRegistration1 = {
+  name: 'Event Registration 1',
+  client_id: 'serviceApiKey',
+  description: 'Registration for IO Events 1',
+  delivery_type: 'webhook',
+  events_of_interest: [{
+    provider_id: 'providerId1',
+    event_code: 'eventCode1'
+  },
+  {
+    provider_id: 'providerId1',
+    event_code: 'eventCode2'
+  }]
+}
+
+const hookDecodedEventRegistration2 = {
+  name: 'Event Registration 2',
+  client_id: 'serviceApiKey',
+  description: 'Registration for IO Events 2',
+  delivery_type: 'journal',
+  events_of_interest: [{
+    provider_id: 'providerId1',
+    event_code: 'eventCode1'
+  },
+  {
+    provider_id: 'providerId1',
+    event_code: 'eventCode2'
+  },
+  {
+    provider_id: 'providerId2',
+    event_code: 'eventCode3'
+  }]
+}
+
+const dotEnv = {
+  AIO_runtime_auth: 'runtimeAuth',
+  AIO_runtime_namespace: 'namespace',
+  AIO_runtime_apihost: 'https://adobeioruntime.net',
+  SERVICE_API_KEY: 'serviceApiKey',
+  API_KEY: 'apiKey',
+  AIO_events_providermetadata_to_provider_mapping: 'providerMetadata1:providerId1,providerMetadata2:providerId2'
+}
+
+const dotEnvMissingApiKey = {
+  AIO_runtime_auth: 'runtimeAuth',
+  AIO_runtime_namespace: 'namespace',
+  AIO_runtime_apihost: 'https://adobeioruntime.net',
+  AIO_events_providermetadata_to_provider_mapping: 'providerMetadata1:providerId1,providerMetadata2:providerId2'
+}
+
+const dotEnvMissingProviderMetadataToProviderIdMapping = {
+  AIO_runtime_auth: 'runtimeAuth',
+  AIO_runtime_namespace: 'namespace',
+  AIO_runtime_apihost: 'https://adobeioruntime.net',
+  SERVICE_API_KEY: 'serviceApiKey',
+  API_KEY: 'apiKey'
+}
 const data = {
   getAllProvidersResponse,
   getProviderByIdResponse,
@@ -383,7 +662,15 @@ const data = {
   getAllWebhookRegistrationsResponse,
   getWebhookRegistrationResponse,
   createWebhookRegistrationInputJSON,
-  createWebhookRegistrationInputJSONNoClientId
+  createWebhookRegistrationInputJSONNoClientId,
+  sampleProject,
+  sampleEvents,
+  hookDecodedEventRegistration1,
+  hookDecodedEventRegistration2,
+  sampleProjectWithoutEvents,
+  dotEnv,
+  dotEnvMissingApiKey,
+  dotEnvMissingProviderMetadataToProviderIdMapping
 }
 
 module.exports = {
