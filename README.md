@@ -83,7 +83,7 @@ DESCRIPTION
   Manage your Adobe I/O Events
 ```
 
-_See code: [src/commands/event/index.ts](https://github.com/adobe/aio-cli-plugin-events/blob/v3.1.0/src/commands/event/index.ts)_
+_See code: [src/commands/event/index.ts](https://github.com/adobe/aio-cli-plugin-events/blob/v3.2.0/src/commands/event/index.ts)_
 
 ## `aio event eventmetadata`
 
@@ -326,7 +326,8 @@ Get list of all Providers for the Organization
 
 ```
 USAGE
-  $ aio event provider list [--help] [-v] [--version] [--fetchEventMetadata] [--providerMetadataId <value> | -p <value>] [--instanceId <value>] [-j | -y]
+  $ aio event provider list [--help] [-v] [--version] [--fetchEventMetadata] [--providerMetadataId <value> | -p <value>]
+    [--instanceId <value>] [-j | -y]
 
 FLAGS
   -j, --json                            Output json
@@ -338,7 +339,6 @@ FLAGS
   --instanceId=<value>                  Filter providers for org by provider metadata id (and instance id if applicable)
   --providerMetadataId=<value>          Filter providers for org by provider metadata id (and instance id if applicable)
   --version                             Show version
-
 
 DESCRIPTION
   Get list of all Providers for the Organization
@@ -353,14 +353,19 @@ Get list of all Providers for the Organization
 
 ```
 USAGE
-  $ aio event provider ls [--help] [-v] [--version] [-j | -y]
+  $ aio event provider ls [--help] [-v] [--version] [--fetchEventMetadata] [--providerMetadataId <value> | -p <value>]
+    [--instanceId <value>] [-j | -y]
 
 FLAGS
-  -j, --json     Output json
-  -v, --verbose  Verbose output
-  -y, --yml      Output yml
-  --help         Show help
-  --version      Show version
+  -j, --json                            Output json
+  -p, --providerMetadataIds=<value>...  Filter providers for org by list of provider metadata ids
+  -v, --verbose                         Verbose output
+  -y, --yml                             Output yml
+  --fetchEventMetadata                  Fetch event metadata with provider
+  --help                                Show help
+  --instanceId=<value>                  Filter providers for org by provider metadata id (and instance id if applicable)
+  --providerMetadataId=<value>          Filter providers for org by provider metadata id (and instance id if applicable)
+  --version                             Show version
 
 DESCRIPTION
   Get list of all Providers for the Organization
