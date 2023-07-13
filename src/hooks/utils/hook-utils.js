@@ -140,11 +140,9 @@ async function createOrUpdateRegistration (body, eventsSDK, existingRegistration
  * @param {object} project - project details from .aio config file
  */
 async function deleteRegistration (eventsSDK, existingRegistration, project) {
-  if (existingRegistration) {
-    await eventsSDK.eventsClient.deleteRegistration(eventsSDK.orgId, project.id, project.workspace.id,
-      existingRegistration.registration_id)
-    console.log('Deleted registration with name:' + existingRegistration.name + ' and id:' + existingRegistration.registration_id)
-  }
+  await eventsSDK.eventsClient.deleteRegistration(eventsSDK.orgId, project.id, project.workspace.id,
+    existingRegistration.registration_id)
+  console.log('Deleted registration with name:' + existingRegistration.name + ' and id:' + existingRegistration.registration_id)
 }
 
 /**
@@ -202,8 +200,7 @@ async function deployRegistration ({ appConfig: { events, project } }, expectedD
       try {
         let existingRegistration
         if (registrationsFromWorkspace && registrationsFromWorkspace[registrationName]) { existingRegistration = registrationsFromWorkspace[registrationName] }
-        await createOrUpdateRegistration(body, eventsSDK,
-          existingRegistration, project)
+        await createOrUpdateRegistration(body, eventsSDK, existingRegistration, project)
       } catch (e) {
         throw new Error(
           e + '\ncode:' + e.code + '\nDetails:' + JSON.stringify(
@@ -217,10 +214,7 @@ async function deployRegistration ({ appConfig: { events, project } }, expectedD
     console.log('The following registrations will be deleted: ', registrationsToDeleted)
     for (const registrationName of registrationsToDeleted) {
       try {
-        if (registrationsFromWorkspace && registrationsFromWorkspace[registrationName]) {
-          await deleteRegistration(eventsSDK,
-            registrationsFromWorkspace[registrationName], project)
-        }
+        await deleteRegistration(eventsSDK, registrationsFromWorkspace[registrationName], project)
       } catch (e) {
         throw new Error(
           e + '\ncode:' + e.code + '\nDetails:' + JSON.stringify(

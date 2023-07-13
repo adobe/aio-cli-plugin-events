@@ -15,7 +15,8 @@ const eventsSdk = require('@adobe/aio-lib-events')
 const mockEventsSdkInstance = {
   createRegistration: jest.fn(),
   updateRegistration: jest.fn(),
-  getAllRegistrationsForWorkspace: jest.fn()
+  getAllRegistrationsForWorkspace: jest.fn(),
+  deleteRegistration: jest.fn()
 }
 jest.mock('@adobe/aio-lib-ims')
 const { getToken } = require('@adobe/aio-lib-ims')
@@ -31,6 +32,10 @@ describe('post deploy event registration hook interfaces', () => {
   beforeEach(() => {
     jest.clearAllMocks()
     eventsSdk.init.mockResolvedValue(mockEventsSdkInstance)
+  })
+
+  afterEach(() => {
+    eventsSdk.init.mockRestore()
   })
 
   test('hook interface', async () => {
@@ -169,5 +174,76 @@ describe('post deploy event registration hook interfaces', () => {
     expect(mockEventsSdkInstance.updateRegistration).toHaveBeenCalledWith(CONSUMER_ID, PROJECT_ID, WORKSPACE_ID, 'REGID1',
       mock.data.hookDecodedEventRegistration1
     )
+  })
+
+  test('successfully delete registrations not part of the config', async () => {
+    const hook = require('../../src/hooks/post-deploy-event-reg')
+    expect(typeof hook).toBe('function')
+    process.env = mock.data.dotEnv
+    getToken.mockReturnValue('accessToken')
+    const events = {
+      registrations: {
+        'Event Registration 1': mock.data.sampleEvents.registrations['Event Registration 1']
+      }
+    }
+    mockEventsSdkInstance.getAllRegistrationsForWorkspace.mockResolvedValue(mock.data.getAllWebhookRegistrationsResponse)
+    mockEventsSdkInstance.updateRegistration.mockReturnValue(mock.data.createWebhookRegistrationResponse)
+    const projectWithEmptyEvents = mock.data.sampleProjectWithoutEvents
+    await expect(hook({ appConfig: { project: projectWithEmptyEvents, events }, force: true })).resolves.not.toThrowError()
+    expect(mockEventsSdkInstance.updateRegistration).toBeCalledTimes(1)
+    expect(mockEventsSdkInstance.deleteRegistration).toHaveBeenCalledWith(CONSUMER_ID, PROJECT_ID, WORKSPACE_ID, 'REGID2')
+  })
+
+  test('test delete registrations not part of the config, with no registrations to delete', async () => {
+    const hook = require('../../src/hooks/post-deploy-event-reg')
+    expect(typeof hook).toBe('function')
+    process.env = mock.data.dotEnv
+    getToken.mockReturnValue('accessToken')
+    mockEventsSdkInstance.getAllRegistrationsForWorkspace.mockResolvedValue(mock.data.getAllWebhookRegistrationsResponse)
+    mockEventsSdkInstance.updateRegistration.mockReturnValue(mock.data.createWebhookRegistrationResponse)
+    await expect(hook({ appConfig: { project: mock.data.sampleProject, events: mock.data.sampleEvents }, force: true })).resolves.not.toThrowError()
+    expect(mockEventsSdkInstance.updateRegistration).toBeCalledTimes(1)
+    expect(mockEventsSdkInstance.updateRegistration).toHaveBeenCalledWith(CONSUMER_ID, PROJECT_ID, WORKSPACE_ID, 'REGID1',
+      mock.data.hookDecodedEventRegistration1)
+    expect(mockEventsSdkInstance.deleteRegistration).toHaveBeenCalledTimes(0)
+  })
+
+  test('test delete registrations not part of the config, with no registrations in workspace', async () => {
+    const hook = require('../../src/hooks/post-deploy-event-reg')
+    expect(typeof hook).toBe('function')
+    process.env = mock.data.dotEnv
+    getToken.mockReturnValue('accessToken')
+    mockEventsSdkInstance.getAllRegistrationsForWorkspace.mockResolvedValue(mock.data.getAllWebhookRegistrationsWithEmptyResponse)
+
+    mockEventsSdkInstance.createRegistration.mockReturnValue(mock.data.createWebhookRegistrationResponse)
+    await expect(hook({ appConfig: { project: mock.data.sampleProjectWithoutEvents, events: mock.data.sampleEvents }, force: true })).resolves.not.toThrowError()
+    expect(mockEventsSdkInstance.createRegistration).toBeCalledTimes(1)
+    expect(mockEventsSdkInstance.createRegistration).toHaveBeenCalledWith(CONSUMER_ID, PROJECT_ID, WORKSPACE_ID,
+      mock.data.hookDecodedEventRegistration1)
+    expect(mockEventsSdkInstance.deleteRegistration).toHaveBeenCalledTimes(0)
+  })
+
+  test('test error on delete registrations not part of the config', async () => {
+    const hook = require('../../src/hooks/post-deploy-event-reg')
+    expect(typeof hook).toBe('function')
+    process.env = mock.data.dotEnv
+    getToken.mockReturnValue('accessToken')
+    const events = {
+      registrations: {
+        'Event Registration 1': mock.data.sampleEvents.registrations['Event Registration 1']
+      }
+    }
+    mockEventsSdkInstance.getAllRegistrationsForWorkspace.mockResolvedValue(mock.data.getAllWebhookRegistrationsResponse)
+    mockEventsSdkInstance.updateRegistration.mockReturnValue(mock.data.createWebhookRegistrationResponse)
+    mockEventsSdkInstance.deleteRegistration.mockRejectedValueOnce({
+      code: 500,
+      errorDetails: {
+        message: 'Internal Server Error'
+      }
+    })
+    const projectWithEmptyEvents = mock.data.sampleProjectWithoutEvents
+    await expect(hook({ appConfig: { project: projectWithEmptyEvents, events }, force: true })).rejects.toThrowError()
+    expect(mockEventsSdkInstance.updateRegistration).toBeCalledTimes(1)
+    expect(mockEventsSdkInstance.deleteRegistration).toHaveBeenCalledWith(CONSUMER_ID, PROJECT_ID, WORKSPACE_ID, 'REGID2')
   })
 })
