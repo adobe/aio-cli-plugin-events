@@ -106,6 +106,16 @@ function getRegistrationNameToRegistrationsMap (eventRegistrations) {
 
 /**
  * @private
+ * @param {Array.<string>} workspaceRegistrationNames Registration names from the Console workspace
+ * @param {Array.<string>} appConfigRegistrationNames Registration names defined in the app.config.yaml file
+ * @returns {Array.<string>} Registrations that are part of the workspace, but not part of the app.config.yaml
+ */
+function getWorkspaceRegistrationsToBeDeleted (workspaceRegistrationNames, appConfigRegistrationNames) {
+  return workspaceRegistrationNames.filter(wsRegistration => !appConfigRegistrationNames.includes(wsRegistration))
+}
+
+/**
+ * @private
  * @param {object} body - Registration Create/Update Model
  * @param {object} eventsSDK - eventsSDK object containing eventsClient and orgId
  * @param {object} existingRegistration - existing registration obtained from .aio config if exists
@@ -115,11 +125,25 @@ async function createOrUpdateRegistration (body, eventsSDK, existingRegistration
   if (existingRegistration) {
     const response = await eventsSDK.eventsClient.updateRegistration(eventsSDK.orgId, project.id, project.workspace.id,
       existingRegistration.registration_id, body)
-    console.log('Updated registration:' + JSON.stringify(response))
+    console.log('Updated registration with name:' + response.name + ' and id:' + response.registration_id)
   } else {
     const response = await eventsSDK.eventsClient.createRegistration(eventsSDK.orgId, project.id,
       project.workspace.id, body)
-    console.log('Created registration:' + JSON.stringify(response))
+    console.log('Created registration:' + response.name + ' and id:' + response.registration_id)
+  }
+}
+
+/**
+ * @private
+ * @param {object} eventsSDK - eventsSDK object containing eventsClient and orgId
+ * @param {object} existingRegistration - existing registration obtained from .aio config if exists
+ * @param {object} project - project details from .aio config file
+ */
+async function deleteRegistration (eventsSDK, existingRegistration, project) {
+  if (existingRegistration) {
+    await eventsSDK.eventsClient.deleteRegistration(eventsSDK.orgId, project.id, project.workspace.id,
+      existingRegistration.registration_id)
+    console.log('Deleted registration with name:' + existingRegistration.name + ' and id:' + existingRegistration.registration_id)
   }
 }
 
@@ -160,25 +184,43 @@ async function deployRegistration ({ appConfig: { events, project } }, expectedD
     throw new Error(
             `Events SDK could not be initialised correctly. Skipping event registration in ${hookType} hook`)
   }
-  const registrations = events.registrations
+  const registrationsFromConfig = events.registrations
   const providerMetadataToProviderIdMapping = getProviderMetadataToProviderIdMapping()
-  const existingRegistrations = await getAllRegistrationsForWorkspace(eventsSDK, project)
-  for (const registrationName in registrations) {
-    const deliveryType = getDeliveryType(registrations[registrationName])
+  const registrationsFromWorkspace = await getAllRegistrationsForWorkspace(eventsSDK, project)
+  for (const registrationName in registrationsFromConfig) {
+    const deliveryType = getDeliveryType(registrationsFromConfig[registrationName])
     if (deliveryType === expectedDeliveryType) {
       const body = {
         name: registrationName,
         client_id: eventsSDK.X_API_KEY,
-        description: registrations[registrationName].description,
+        description: registrationsFromConfig[registrationName].description,
         delivery_type: deliveryType,
+        runtime_action: registrationsFromConfig[registrationName].runtime_action,
         events_of_interest: getEventsOfInterestForRegistration(
-          registrations[registrationName], providerMetadataToProviderIdMapping)
+          registrationsFromConfig[registrationName], providerMetadataToProviderIdMapping)
       }
       try {
         let existingRegistration
-        if (existingRegistrations && existingRegistrations[registrationName]) { existingRegistration = existingRegistrations[registrationName] }
+        if (registrationsFromWorkspace && registrationsFromWorkspace[registrationName]) { existingRegistration = registrationsFromWorkspace[registrationName] }
         await createOrUpdateRegistration(body, eventsSDK,
           existingRegistration, project)
+      } catch (e) {
+        throw new Error(
+          e + '\ncode:' + e.code + '\nDetails:' + JSON.stringify(
+            e.sdkDetails))
+      }
+    }
+  }
+
+  if (forceEventsFlag) {
+    const registrationsToDeleted = getWorkspaceRegistrationsToBeDeleted(Object.keys(registrationsFromWorkspace), Object.keys(registrationsFromConfig))
+    console.log('The following registrations will be deleted: ', registrationsToDeleted)
+    for (const registrationName of registrationsToDeleted) {
+      try {
+        if (registrationsFromWorkspace && registrationsFromWorkspace[registrationName]) {
+          await deleteRegistration(eventsSDK,
+            registrationsFromWorkspace[registrationName], project)
+        }
       } catch (e) {
         throw new Error(
           e + '\ncode:' + e.code + '\nDetails:' + JSON.stringify(

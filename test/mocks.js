@@ -603,6 +603,7 @@ const hookDecodedEventRegistration1 = {
   client_id: 'serviceApiKey',
   description: 'Registration for IO Events 1',
   delivery_type: 'webhook',
+  runtime_action: 'poc-event-1',
   events_of_interest: [{
     provider_id: 'providerId1',
     event_code: 'eventCode1'
