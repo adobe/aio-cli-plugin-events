@@ -14,7 +14,8 @@ jest.mock('@adobe/aio-lib-events')
 const eventsSdk = require('@adobe/aio-lib-events')
 const mockEventsSdkInstance = {
   createRegistration: jest.fn(),
-  updateRegistration: jest.fn()
+  updateRegistration: jest.fn(),
+  getAllRegistrationsForWorkspace: jest.fn()
 }
 jest.mock('@adobe/aio-lib-ims')
 const { getToken } = require('@adobe/aio-lib-ims')
@@ -126,6 +127,7 @@ describe('post deploy event registration hook interfaces', () => {
     getToken.mockReturnValue('accessToken')
     const events = mock.data.sampleEvents
     events.registrations['Event Registration 1'].delivery_type = 'webhook'
+    mockEventsSdkInstance.getAllRegistrationsForWorkspace.mockResolvedValue(mock.data.getAllWebhookRegistrationsWithEmptyResponse)
     mockEventsSdkInstance.createRegistration.mockReturnValue(mock.data.createWebhookRegistrationResponse)
     const projectWithEmptyEvents = mock.data.sampleProjectWithoutEvents
     projectWithEmptyEvents.workspace.details.events = {}
@@ -141,6 +143,7 @@ describe('post deploy event registration hook interfaces', () => {
     expect(typeof hook).toBe('function')
     process.env = mock.data.dotEnv
     getToken.mockReturnValue('accessToken')
+    mockEventsSdkInstance.getAllRegistrationsForWorkspace.mockResolvedValue(mock.data.getAllWebhookRegistrationsResponse)
     mockEventsSdkInstance.updateRegistration.mockRejectedValueOnce(JSON.stringify({
       code: 500,
       errorDetails: {
@@ -149,7 +152,7 @@ describe('post deploy event registration hook interfaces', () => {
     }))
     await expect(hook({ appConfig: { project: mock.data.sampleProject, events: mock.data.sampleEvents } })).rejects.toThrowError()
     expect(mockEventsSdkInstance.updateRegistration).toBeCalledTimes(1)
-    expect(mockEventsSdkInstance.updateRegistration).toHaveBeenCalledWith(CONSUMER_ID, PROJECT_ID, WORKSPACE_ID, 'registrationId1',
+    expect(mockEventsSdkInstance.updateRegistration).toHaveBeenCalledWith(CONSUMER_ID, PROJECT_ID, WORKSPACE_ID, 'REGID1',
       mock.data.hookDecodedEventRegistration1
     )
   })
@@ -159,10 +162,11 @@ describe('post deploy event registration hook interfaces', () => {
     expect(typeof hook).toBe('function')
     process.env = mock.data.dotEnv
     getToken.mockReturnValue('accessToken')
+    mockEventsSdkInstance.getAllRegistrationsForWorkspace.mockResolvedValue(mock.data.getAllWebhookRegistrationsResponse)
     mockEventsSdkInstance.updateRegistration.mockReturnValue(mock.data.createWebhookRegistrationResponse)
     await expect(hook({ appConfig: { project: mock.data.sampleProject, events: mock.data.sampleEvents } })).resolves.not.toThrowError()
     expect(mockEventsSdkInstance.updateRegistration).toBeCalledTimes(1)
-    expect(mockEventsSdkInstance.updateRegistration).toHaveBeenCalledWith(CONSUMER_ID, PROJECT_ID, WORKSPACE_ID, 'registrationId1',
+    expect(mockEventsSdkInstance.updateRegistration).toHaveBeenCalledWith(CONSUMER_ID, PROJECT_ID, WORKSPACE_ID, 'REGID1',
       mock.data.hookDecodedEventRegistration1
     )
   })

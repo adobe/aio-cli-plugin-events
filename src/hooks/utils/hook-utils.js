@@ -35,7 +35,7 @@ function getDeliveryType (registration) {
 }
 
 /**
- *
+ * @private
  * @param {object} registration - registration object
  * @param {object} providerMetadataToProviderIdMapping - mapping of provider metadata to provider id
  * @returns {Array} of events of interest {provider_id, event_code}
@@ -58,7 +58,7 @@ function getEventsOfInterestForRegistration (registration,
 }
 
 /**
- *
+ * @private
  * @param {object} projectConfig - project config object
  * @returns {object} Object containing orgId, X_API_KEY, eventsClient
  */
@@ -75,6 +75,7 @@ async function initEventsSdk (projectConfig) {
 }
 
 /**
+ * @private
  * @returns {object} Object containing mapping of provider metadata to provider id
  */
 function getProviderMetadataToProviderIdMapping () {
@@ -91,20 +92,20 @@ function getProviderMetadataToProviderIdMapping () {
 }
 
 /**
+ * @private
  * @param {object} eventRegistrations - registrations from the .aio config file
  * @returns {object} Object containing mapping of registration name to registration object
  */
-function getRegistrationsFromAioConfig (eventRegistrations) {
+function getRegistrationNameToRegistrationsMap (eventRegistrations) {
   const registrationNameToRegistrations = {}
-  if (eventRegistrations) {
-    for (const registration of eventRegistrations) {
-      registrationNameToRegistrations[registration.name] = registration
-    }
+  for (const registration of eventRegistrations) {
+    registrationNameToRegistrations[registration.name] = registration
   }
   return registrationNameToRegistrations
 }
 
 /**
+ * @private
  * @param {object} body - Registration Create/Update Model
  * @param {object} eventsSDK - eventsSDK object containing eventsClient and orgId
  * @param {object} existingRegistration - existing registration obtained from .aio config if exists
@@ -123,14 +124,28 @@ async function createOrUpdateRegistration (body, eventsSDK, existingRegistration
 }
 
 /**
+ * @private
+ * @param {object} eventsSDK - eventsSDK object containing eventsClient and orgId
+ * @param {object} project - project details from .aio config file
+ * @returns {object} Object containing all registrations for the workspace
+ */
+async function getAllRegistrationsForWorkspace (eventsSDK, project) {
+  const registrationsForWorkspace = await eventsSDK.eventsClient.getAllRegistrationsForWorkspace(eventsSDK.orgId, project.id,
+    project.workspace.id)
+  if (!registrationsForWorkspace) { return {} }
+  return getRegistrationNameToRegistrationsMap(registrationsForWorkspace._embedded.registrations)
+}
+
+/**
  * @param {object} appConfigRoot - Root object containing events and project details
  * @param {object} appConfigRoot.appConfig - Object containing events and project details
  * @param {object} appConfigRoot.appConfig.project - Project details from the .aio file
  * @param {object} appConfigRoot.appConfig.events - Events registrations that are part of the app.config.yaml file
  * @param {string} expectedDeliveryType - Delivery type based on the hook that is calling. Expected delivery type can be webhook or journal
  * @param {string} hookType - pre-deploy-event-reg or post-deploy-event-reg hook values
+ * @param {boolean} forceEventsFlag - determines if registrations that are part of the workspace but not part of the app.config.yaml will be deleted or not
  */
-async function deployRegistration ({ appConfig: { events, project } }, expectedDeliveryType, hookType) {
+async function deployRegistration ({ appConfig: { events, project } }, expectedDeliveryType, hookType, forceEventsFlag) {
   if (!project) {
     throw new Error(
             `No project found, skipping event registration in ${hookType} hook`)
@@ -147,12 +162,7 @@ async function deployRegistration ({ appConfig: { events, project } }, expectedD
   }
   const registrations = events.registrations
   const providerMetadataToProviderIdMapping = getProviderMetadataToProviderIdMapping()
-  let existingRegistrations
-  if (project.workspace.details.events) {
-    existingRegistrations = getRegistrationsFromAioConfig(
-      project.workspace.details.events.registrations)
-  }
-
+  const existingRegistrations = await getAllRegistrationsForWorkspace(eventsSDK, project)
   for (const registrationName in registrations) {
     const deliveryType = getDeliveryType(registrations[registrationName])
     if (deliveryType === expectedDeliveryType) {

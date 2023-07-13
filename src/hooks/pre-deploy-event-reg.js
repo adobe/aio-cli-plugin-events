@@ -13,7 +13,7 @@ const {
   JOURNAL, getDeliveryType
 } = require('./utils/hook-utils')
 
-module.exports = async function ({ appConfig }) {
+module.exports = async function ({ appConfig, force }) {
   if (appConfig && appConfig.events) {
     const registrations = appConfig.events.registrations
     for (const registrationName in registrations) {
