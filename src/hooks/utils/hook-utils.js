@@ -183,8 +183,8 @@ async function deployRegistration ({ appConfig: { events, project } }, expectedD
             `Events SDK could not be initialised correctly. Skipping event registration in ${hookType} hook`)
   }
   const registrationsFromConfig = events.registrations
-  const providerMetadataToProviderIdMapping = getProviderMetadataToProviderIdMapping()
   const registrationsFromWorkspace = await getAllRegistrationsForWorkspace(eventsSDK, project)
+  const providerMetadataToProviderIdMapping = getProviderMetadataToProviderIdMapping()
   for (const registrationName in registrationsFromConfig) {
     const deliveryType = getDeliveryType(registrationsFromConfig[registrationName])
     if (deliveryType === expectedDeliveryType) {
@@ -224,9 +224,52 @@ async function deployRegistration ({ appConfig: { events, project } }, expectedD
   }
 }
 
+/**
+ * @param {object} appConfigRoot - Root object containing events and project details
+ * @param {object} appConfigRoot.appConfig - Object containing events and project details
+ * @param {object} appConfigRoot.appConfig.project - Project details from the .aio file
+ * @param {object} appConfigRoot.appConfig.events - Events registrations that are part of the app.config.yaml file
+ * @param {string} hookType - pre-deploy-event-reg or post-deploy-event-reg hook values
+ */
+async function undeployRegistration ({ appConfig: { events, project } }, hookType) {
+  if (!project) {
+    throw new Error(
+            `No project found, skipping event registration in ${hookType} hook`)
+  }
+  if (!events) {
+    console.log(
+            `No events to delete, skipping deletion of event registrations in ${hookType} hook`)
+    return
+  }
+  const eventsSDK = await initEventsSdk(project)
+  if (!eventsSDK.eventsClient) {
+    throw new Error(
+            `Events SDK could not be initialised correctly. Skipping event registration in ${hookType} hook`)
+  }
+  const registrationsFromConfig = events.registrations
+  const registrationsFromWorkspace = await getAllRegistrationsForWorkspace(eventsSDK, project)
+  if (!registrationsFromWorkspace) {
+    console.log(
+      `No events to delete, skipping deletion of event registrations in ${hookType} hook`)
+    return
+  }
+  for (const registrationName in registrationsFromConfig) {
+    try {
+      if (registrationsFromWorkspace[registrationName]) {
+        await deleteRegistration(eventsSDK, registrationsFromWorkspace[registrationName], project)
+      }
+    } catch (e) {
+      throw new Error(
+        e + '\ncode:' + e.code + '\nDetails:' + JSON.stringify(
+          e.sdkDetails))
+    }
+  }
+}
+
 module.exports = {
   WEBHOOK,
   JOURNAL,
   deployRegistration,
+  undeployRegistration,
   getDeliveryType
 }

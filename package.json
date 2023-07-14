@@ -61,8 +61,7 @@
     "hooks": {
       "pre-deploy-event-reg": "./src/hooks/pre-deploy-event-reg.js",
       "post-deploy-event-reg": "./src/hooks/post-deploy-event-reg.js",
-      "pre-undeploy-event-reg": "./src/hooks/pre-deploy-event-reg.js",
-      "post-undeploy-event-reg": "./src/hooks/post-deploy-event-reg.js"
+      "pre-undeploy-event-reg": "./src/hooks/pre-undeploy-event-reg.js"
     }
   },
   "scripts": {
