@@ -237,8 +237,7 @@ async function undeployRegistration ({ appConfig: { events, project } }, hookTyp
             `No project found, skipping event registration in ${hookType} hook`)
   }
   if (!events) {
-    console.log(
-            `No events to delete, skipping deletion of event registrations in ${hookType} hook`)
+    console.log(`No events to delete, skipping deletion of event registrations in ${hookType} hook`)
     return
   }
   const eventsSDK = await initEventsSdk(project)
@@ -248,9 +247,8 @@ async function undeployRegistration ({ appConfig: { events, project } }, hookTyp
   }
   const registrationsFromConfig = events.registrations
   const registrationsFromWorkspace = await getAllRegistrationsForWorkspace(eventsSDK, project)
-  if (!registrationsFromWorkspace) {
-    console.log(
-      `No events to delete, skipping deletion of event registrations in ${hookType} hook`)
+  if (Object.keys(registrationsFromWorkspace).length === 0) {
+    console.log(`No events to delete, skipping deletion of event registrations in ${hookType} hook`)
     return
   }
   for (const registrationName in registrationsFromConfig) {
