@@ -95,7 +95,7 @@ describe('pre undeploy event registration hook interfaces', () => {
     expect(mockEventsSdkInstance.deleteRegistration).toHaveBeenCalledWith(CONSUMER_ID, PROJECT_ID, WORKSPACE_ID, 'REGID1')
   })
 
-  test('successfully create registration', async () => {
+  test('successfully delete all registrations', async () => {
     const hook = require('../../src/hooks/pre-undeploy-event-reg')
     expect(typeof hook).toBe('function')
     process.env = mock.data.dotEnv
@@ -104,5 +104,20 @@ describe('pre undeploy event registration hook interfaces', () => {
 
     await expect(hook({ appConfig: { project: mock.data.sampleProject, events: mock.data.sampleEvents } })).resolves.not.toThrowError()
     expect(mockEventsSdkInstance.deleteRegistration).toBeCalledTimes(2)
+  })
+
+  test('test do not delete registrations that are not part of the latest workspace', async () => {
+    const hook = require('../../src/hooks/pre-undeploy-event-reg')
+    expect(typeof hook).toBe('function')
+    process.env = mock.data.dotEnv
+    getToken.mockReturnValue('accessToken')
+    mockEventsSdkInstance.getAllRegistrationsForWorkspace.mockResolvedValue(mock.data.getAllWebhookRegistrationsResponse)
+    const events = {
+      registrations: {
+        'Event Registration 3': mock.data.sampleEvents.registrations['Event Registration 1']
+      }
+    }
+    await expect(hook({ appConfig: { project: mock.data.sampleProject, events } })).resolves.not.toThrowError()
+    expect(mockEventsSdkInstance.deleteRegistration).toBeCalledTimes(0)
   })
 })
