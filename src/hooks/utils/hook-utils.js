@@ -35,7 +35,7 @@ function getDeliveryType (registration) {
 }
 
 /**
- *
+ * @private
  * @param {object} registration - registration object
  * @param {object} providerMetadataToProviderIdMapping - mapping of provider metadata to provider id
  * @returns {Array} of events of interest {provider_id, event_code}
@@ -58,7 +58,7 @@ function getEventsOfInterestForRegistration (registration,
 }
 
 /**
- *
+ * @private
  * @param {object} projectConfig - project config object
  * @returns {object} Object containing orgId, X_API_KEY, eventsClient
  */
@@ -75,6 +75,7 @@ async function initEventsSdk (projectConfig) {
 }
 
 /**
+ * @private
  * @returns {object} Object containing mapping of provider metadata to provider id
  */
 function getProviderMetadataToProviderIdMapping () {
@@ -91,20 +92,30 @@ function getProviderMetadataToProviderIdMapping () {
 }
 
 /**
+ * @private
  * @param {object} eventRegistrations - registrations from the .aio config file
  * @returns {object} Object containing mapping of registration name to registration object
  */
-function getRegistrationsFromAioConfig (eventRegistrations) {
+function getRegistrationNameToRegistrationsMap (eventRegistrations) {
   const registrationNameToRegistrations = {}
-  if (eventRegistrations) {
-    for (const registration of eventRegistrations) {
-      registrationNameToRegistrations[registration.name] = registration
-    }
+  for (const registration of eventRegistrations) {
+    registrationNameToRegistrations[registration.name] = registration
   }
   return registrationNameToRegistrations
 }
 
 /**
+ * @private
+ * @param {Array.<string>} workspaceRegistrationNames Registration names from the Console workspace
+ * @param {Array.<string>} appConfigRegistrationNames Registration names defined in the app.config.yaml file
+ * @returns {Array.<string>} Registrations that are part of the workspace, but not part of the app.config.yaml
+ */
+function getWorkspaceRegistrationsToBeDeleted (workspaceRegistrationNames, appConfigRegistrationNames) {
+  return workspaceRegistrationNames.filter(wsRegistration => !appConfigRegistrationNames.includes(wsRegistration))
+}
+
+/**
+ * @private
  * @param {object} body - Registration Create/Update Model
  * @param {object} eventsSDK - eventsSDK object containing eventsClient and orgId
  * @param {object} existingRegistration - existing registration obtained from .aio config if exists
@@ -114,12 +125,37 @@ async function createOrUpdateRegistration (body, eventsSDK, existingRegistration
   if (existingRegistration) {
     const response = await eventsSDK.eventsClient.updateRegistration(eventsSDK.orgId, project.id, project.workspace.id,
       existingRegistration.registration_id, body)
-    console.log('Updated registration:' + JSON.stringify(response))
+    console.log('Updated registration with name:' + response.name + ' and id:' + response.registration_id)
   } else {
     const response = await eventsSDK.eventsClient.createRegistration(eventsSDK.orgId, project.id,
       project.workspace.id, body)
-    console.log('Created registration:' + JSON.stringify(response))
+    console.log('Created registration:' + response.name + ' and id:' + response.registration_id)
   }
+}
+
+/**
+ * @private
+ * @param {object} eventsSDK - eventsSDK object containing eventsClient and orgId
+ * @param {object} existingRegistration - existing registration obtained from .aio config if exists
+ * @param {object} project - project details from .aio config file
+ */
+async function deleteRegistration (eventsSDK, existingRegistration, project) {
+  await eventsSDK.eventsClient.deleteRegistration(eventsSDK.orgId, project.id, project.workspace.id,
+    existingRegistration.registration_id)
+  console.log('Deleted registration with name:' + existingRegistration.name + ' and id:' + existingRegistration.registration_id)
+}
+
+/**
+ * @private
+ * @param {object} eventsSDK - eventsSDK object containing eventsClient and orgId
+ * @param {object} project - project details from .aio config file
+ * @returns {object} Object containing all registrations for the workspace
+ */
+async function getAllRegistrationsForWorkspace (eventsSDK, project) {
+  const registrationsForWorkspace = await eventsSDK.eventsClient.getAllRegistrationsForWorkspace(eventsSDK.orgId, project.id,
+    project.workspace.id)
+  if (!registrationsForWorkspace) { return {} }
+  return getRegistrationNameToRegistrationsMap(registrationsForWorkspace._embedded.registrations)
 }
 
 /**
@@ -129,8 +165,9 @@ async function createOrUpdateRegistration (body, eventsSDK, existingRegistration
  * @param {object} appConfigRoot.appConfig.events - Events registrations that are part of the app.config.yaml file
  * @param {string} expectedDeliveryType - Delivery type based on the hook that is calling. Expected delivery type can be webhook or journal
  * @param {string} hookType - pre-deploy-event-reg or post-deploy-event-reg hook values
+ * @param {boolean} forceEventsFlag - determines if registrations that are part of the workspace but not part of the app.config.yaml will be deleted or not
  */
-async function deployRegistration ({ appConfig: { events, project } }, expectedDeliveryType, hookType) {
+async function deployRegistration ({ appConfig: { events, project } }, expectedDeliveryType, hookType, forceEventsFlag) {
   if (!project) {
     throw new Error(
             `No project found, skipping event registration in ${hookType} hook`)
@@ -145,30 +182,39 @@ async function deployRegistration ({ appConfig: { events, project } }, expectedD
     throw new Error(
             `Events SDK could not be initialised correctly. Skipping event registration in ${hookType} hook`)
   }
-  const registrations = events.registrations
+  const registrationsFromConfig = events.registrations
   const providerMetadataToProviderIdMapping = getProviderMetadataToProviderIdMapping()
-  let existingRegistrations
-  if (project.workspace.details.events) {
-    existingRegistrations = getRegistrationsFromAioConfig(
-      project.workspace.details.events.registrations)
-  }
-
-  for (const registrationName in registrations) {
-    const deliveryType = getDeliveryType(registrations[registrationName])
+  const registrationsFromWorkspace = await getAllRegistrationsForWorkspace(eventsSDK, project)
+  for (const registrationName in registrationsFromConfig) {
+    const deliveryType = getDeliveryType(registrationsFromConfig[registrationName])
     if (deliveryType === expectedDeliveryType) {
       const body = {
         name: registrationName,
         client_id: eventsSDK.X_API_KEY,
-        description: registrations[registrationName].description,
+        description: registrationsFromConfig[registrationName].description,
         delivery_type: deliveryType,
+        runtime_action: registrationsFromConfig[registrationName].runtime_action,
         events_of_interest: getEventsOfInterestForRegistration(
-          registrations[registrationName], providerMetadataToProviderIdMapping)
+          registrationsFromConfig[registrationName], providerMetadataToProviderIdMapping)
       }
       try {
         let existingRegistration
-        if (existingRegistrations && existingRegistrations[registrationName]) { existingRegistration = existingRegistrations[registrationName] }
-        await createOrUpdateRegistration(body, eventsSDK,
-          existingRegistration, project)
+        if (registrationsFromWorkspace && registrationsFromWorkspace[registrationName]) { existingRegistration = registrationsFromWorkspace[registrationName] }
+        await createOrUpdateRegistration(body, eventsSDK, existingRegistration, project)
+      } catch (e) {
+        throw new Error(
+          e + '\ncode:' + e.code + '\nDetails:' + JSON.stringify(
+            e.sdkDetails))
+      }
+    }
+  }
+
+  if (forceEventsFlag) {
+    const registrationsToDeleted = getWorkspaceRegistrationsToBeDeleted(Object.keys(registrationsFromWorkspace), Object.keys(registrationsFromConfig))
+    console.log('The following registrations will be deleted: ', registrationsToDeleted)
+    for (const registrationName of registrationsToDeleted) {
+      try {
+        await deleteRegistration(eventsSDK, registrationsFromWorkspace[registrationName], project)
       } catch (e) {
         throw new Error(
           e + '\ncode:' + e.code + '\nDetails:' + JSON.stringify(

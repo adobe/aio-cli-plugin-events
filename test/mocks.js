@@ -272,6 +272,12 @@ const createWebhookRegistrationResponse = {
   ...getWebhookRegistrationResponse
 }
 
+const getAllWebhookRegistrationsWithEmptyResponse = {
+  _embedded: {
+    registrations: []
+  }
+}
+
 const getAllWebhookRegistrationsResponse = {
   _embedded: {
     registrations: [
@@ -288,7 +294,7 @@ const getAllWebhookRegistrationsResponse = {
           }
         },
         id: 11111,
-        name: 'bowling 1',
+        name: 'Event Registration 1',
         description: 'let me know when we can go play bowling!',
         client_id: '1234654902189324798',
         webhook_url: 'https://send-me-a-bowling-event.com/right-now',
@@ -322,7 +328,7 @@ const getAllWebhookRegistrationsResponse = {
           }
         },
         id: 22222,
-        name: 'table tenis 2',
+        name: 'Event Registration 2',
         description: 'registration for table tennis events',
         client_id: '1234654902189324798',
         webhook_url: 'https://send-me-a-table-tennis-event.com/please',
@@ -597,6 +603,7 @@ const hookDecodedEventRegistration1 = {
   client_id: 'serviceApiKey',
   description: 'Registration for IO Events 1',
   delivery_type: 'webhook',
+  runtime_action: 'poc-event-1',
   events_of_interest: [{
     provider_id: 'providerId1',
     event_code: 'eventCode1'
@@ -660,6 +667,7 @@ const data = {
   getAllEventMetadata,
   createWebhookRegistrationResponse,
   getAllWebhookRegistrationsResponse,
+  getAllWebhookRegistrationsWithEmptyResponse,
   getWebhookRegistrationResponse,
   createWebhookRegistrationInputJSON,
   createWebhookRegistrationInputJSONNoClientId,
