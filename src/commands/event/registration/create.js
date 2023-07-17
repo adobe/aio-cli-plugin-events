@@ -26,7 +26,7 @@ class CreateCommand extends BaseCommand {
       const body = this.parseJSONFile(args.bodyJSONFile)
 
       if (!body.client_id) {
-        body.client_id = this.conf.integration.jwtClientId
+        body.client_id = this.conf.integration.clientId
       }
       // other checks are performed by the server
 
