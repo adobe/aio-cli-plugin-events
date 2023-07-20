@@ -21,8 +21,6 @@ const mockEventsSdkInstance = {
 jest.mock('@adobe/aio-lib-ims')
 const { getToken } = require('@adobe/aio-lib-ims')
 
-const process = require('process')
-
 jest.mock('@adobe/aio-lib-ims/src/context')
 const CONSUMER_ID = '112233'
 const PROJECT_ID = 'projectId'

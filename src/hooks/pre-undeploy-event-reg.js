@@ -8,7 +8,10 @@ the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTA
 OF ANY KIND, either express or implied. See the License for the specific language
 governing permissions and limitations under the License.
 */
+const {
+  undeployRegistration
+} = require('./utils/hook-utils')
 
 module.exports = async function ({ appConfig }) {
-  console.log('pre-undeploy-event-reg ', appConfig.events)
+  await undeployRegistration({ appConfig })
 }
