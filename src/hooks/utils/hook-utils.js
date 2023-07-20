@@ -229,26 +229,25 @@ async function deployRegistration ({ appConfig: { events, project } }, expectedD
  * @param {object} appConfigRoot.appConfig - Object containing events and project details
  * @param {object} appConfigRoot.appConfig.project - Project details from the .aio file
  * @param {object} appConfigRoot.appConfig.events - Events registrations that are part of the app.config.yaml file
- * @param {string} hookType - pre-deploy-event-reg or post-deploy-event-reg hook values
  */
-async function undeployRegistration ({ appConfig: { events, project } }, hookType) {
+async function undeployRegistration ({ appConfig: { events, project } }) {
   if (!project) {
     throw new Error(
-            `No project found, skipping event registration in ${hookType} hook`)
+      'No project found, skipping deletion of event registrations')
   }
   if (!events) {
-    console.log(`No events to delete, skipping deletion of event registrations in ${hookType} hook`)
+    console.log('No events to delete, skipping deletion of event registrations')
     return
   }
   const eventsSDK = await initEventsSdk(project)
   if (!eventsSDK.eventsClient) {
     throw new Error(
-            `Events SDK could not be initialised correctly. Skipping event registration in ${hookType} hook`)
+      'Events SDK could not be initialised correctly. Skipping deletion of event registrations')
   }
   const registrationsFromConfig = events.registrations
   const registrationsFromWorkspace = await getAllRegistrationsForWorkspace(eventsSDK, project)
   if (Object.keys(registrationsFromWorkspace).length === 0) {
-    console.log(`No events to delete, skipping deletion of event registrations in ${hookType} hook`)
+    console.log('No events to delete, skipping deletion of event registrations')
     return
   }
   for (const registrationName in registrationsFromConfig) {

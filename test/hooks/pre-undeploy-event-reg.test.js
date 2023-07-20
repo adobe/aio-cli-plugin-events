@@ -42,7 +42,7 @@ describe('pre undeploy event registration hook interfaces', () => {
   test('no project error', async () => {
     const hook = require('../../src/hooks/pre-undeploy-event-reg')
     expect(typeof hook).toBe('function')
-    await expect(hook({ appConfig: {} })).rejects.toThrowError(new Error('No project found, skipping event registration in pre-undeploy-event-reg hook'))
+    await expect(hook({ appConfig: {} })).rejects.toThrowError(new Error('No project found, skipping deletion of event registrations'))
   })
 
   test('no events should return without error', async () => {
@@ -64,7 +64,7 @@ describe('pre undeploy event registration hook interfaces', () => {
     process.env = mock.data.dotEnvMissingProviderMetadataToProviderIdMapping
     getToken.mockReturnValue('accessToken')
     eventsSdk.init.mockResolvedValue(undefined)
-    await expect(hook({ appConfig: { project: mock.data.sampleProject, events: mock.data.sampleEvents } })).rejects.toThrowError(new Error('Events SDK could not be initialised correctly. Skipping event registration in pre-undeploy-event-reg hook'))
+    await expect(hook({ appConfig: { project: mock.data.sampleProject, events: mock.data.sampleEvents } })).rejects.toThrowError(new Error('Events SDK could not be initialised correctly. Skipping deletion of event registrations'))
   })
 
   test('no event registrations in workspace to return without error', async () => {

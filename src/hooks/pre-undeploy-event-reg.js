@@ -13,5 +13,5 @@ const {
 } = require('./utils/hook-utils')
 
 module.exports = async function ({ appConfig }) {
-  await undeployRegistration({ appConfig }, 'pre-undeploy-event-reg')
+  await undeployRegistration({ appConfig })
 }
