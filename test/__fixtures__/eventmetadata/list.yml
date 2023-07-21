@@ -1,13 +1,13 @@
 _links:
   self:
-    href: 'https://api.adobe.io/events/providers/ID01/eventmetadata'
+    href: https://api.adobe.io/events/providers/ID01/eventmetadata
 _embedded:
   eventmetadata:
     - _links:
-        'rel:sample_event':
+        rel:sample_event:
           href: >-
             https://api.adobe.io/events/providers/ID01/eventmetadata/com.adobe.CODE01/sample_event
-        'rel:update':
+        rel:update:
           href: >-
             https://api.adobe.io/events/consumerId/projectId/workspaceId/providers/ID01/eventmetadata/com.adobe.CODE01
         self:
@@ -17,10 +17,10 @@ _embedded:
       label: LABEL01
       event_code: com.adobe.CODE01
     - _links:
-        'rel:sample_event':
+        rel:sample_event:
           href: >-
             https://api.adobe.io/events/providers/ID01/eventmetadata/com.adobe.CODE02/sample_event
-        'rel:update':
+        rel:update:
           href: >-
             https://api.adobe.io/events/consumerId/projectId/workspaceId/providers/ID01/eventmetadata/com.adobe.CODE02
         self:

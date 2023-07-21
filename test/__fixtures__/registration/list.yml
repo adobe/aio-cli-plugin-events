@@ -1,10 +1,10 @@
 _embedded:
   registrations:
     - _links:
-        'rel:events':
+        rel:events:
           href: >-
             https://events-va6.adobe.io/events/organizations/consumerOrgId/integrations/integrationId/REGID1
-        'rel:trace':
+        rel:trace:
           href: >-
             https://eventtraces-va6.adobe.io/traces/consumerOrgId/projectId/workspaceId/registration/REGID1
         self:
@@ -14,7 +14,7 @@ _embedded:
       name: Event Registration 1
       description: let me know when we can go play bowling!
       client_id: '1234654902189324798'
-      webhook_url: 'https://send-me-a-bowling-event.com/right-now'
+      webhook_url: https://send-me-a-bowling-event.com/right-now
       webhook_status: verified
       enabled: 'true'
       events_of_interest:
@@ -29,10 +29,10 @@ _embedded:
       created_date: '2020-06-12T13:53:59.363Z'
       updated_date: '2020-06-12T13:53:59.363Z'
     - _links:
-        'rel:events':
+        rel:events:
           href: >-
             https://events-va6.adobe.io/events/organizations/consumerOrgId/integrations/integrationId/REGID2
-        'rel:trace':
+        rel:trace:
           href: >-
             https://eventtraces-va6.adobe.io/traces/consumerOrgId/projectId/workspaceId/registration/REGID2
         self:
@@ -42,7 +42,7 @@ _embedded:
       name: Event Registration 2
       description: registration for table tennis events
       client_id: '1234654902189324798'
-      webhook_url: 'https://send-me-a-table-tennis-event.com/please'
+      webhook_url: https://send-me-a-table-tennis-event.com/please
       webhook_status: verified
       enabled: true
       events_of_interest:

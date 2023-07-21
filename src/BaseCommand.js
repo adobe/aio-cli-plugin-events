@@ -161,7 +161,7 @@ class BaseCommand extends Command {
   printYaml (data) {
     // clean undefined values
     data = JSON.parse(JSON.stringify(data))
-    this.log(yaml.safeDump(data, { noCompatMode: true }))
+    this.log(yaml.dump(data, { noCompatMode: true }))
   }
 
   /**
