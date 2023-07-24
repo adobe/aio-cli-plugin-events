@@ -20,7 +20,7 @@
   "repository": "adobe/aio-cli-plugin-events",
   "devDependencies": {
     "@adobe/eslint-config-aio-lib-config": "^2.0.0",
-    "@types/jest": "^27.4.1",
+    "@types/jest": "^29.5.3",
     "acorn": "^8.10.0",
     "babel-runtime": "^6.26.0",
     "chalk": "^4.0.0",
