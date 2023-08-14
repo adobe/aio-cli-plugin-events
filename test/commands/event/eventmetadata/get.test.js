@@ -68,19 +68,19 @@ describe('console:eventmetadata:get', () => {
     })
 
     test('should return am event metadata', async () => {
-      await expect(command.run()).resolves.not.toThrowError()
+      await expect(command.run()).resolves.not.toThrow()
       expect(stdout.output).toMatchFixture('eventmetadata/get.txt')
     })
 
     test('should return event metadata as json', async () => {
       command.argv = ['providerId', 'com.adobe.CODE01', '--json']
-      await expect(command.run()).resolves.not.toThrowError()
+      await expect(command.run()).resolves.not.toThrow()
       expect(JSON.parse(stdout.output)).toMatchFixtureJson('eventmetadata/get.json')
     })
 
     test('should return event metadata as yaml', async () => {
       command.argv = ['providerId', 'com.adobe.CODE01', '--yml']
-      await expect(command.run()).resolves.not.toThrowError()
+      await expect(command.run()).resolves.not.toThrow()
       expect(stdout.output).toMatchFixture('eventmetadata/get.yml')
     })
   })
@@ -98,7 +98,7 @@ describe('console:eventmetadata:get', () => {
 
     test('should return error on get event metadata', async () => {
       command.argv = ['providerId', 'com.adobe.CODE01']
-      await expect(command.run()).rejects.toThrowError(new Error('Error retrieving event metadata'))
+      await expect(command.run()).rejects.toThrow(new Error('Error retrieving event metadata'))
     })
   })
 })

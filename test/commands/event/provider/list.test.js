@@ -71,25 +71,25 @@ describe('console:provider:list', () => {
     })
 
     test('should return list of providers', async () => {
-      await expect(command.run()).resolves.not.toThrowError()
+      await expect(command.run()).resolves.not.toThrow()
       expect(stdout.output).toMatchFixture('provider/list.txt')
     })
 
     test('should return list of providers as json', async () => {
       command.argv = ['--json']
-      await expect(command.run()).resolves.not.toThrowError()
+      await expect(command.run()).resolves.not.toThrow()
       expect(JSON.parse(stdout.output)).toMatchFixtureJson('provider/list.json')
     })
 
     test('should return list of providers as yaml', async () => {
       command.argv = ['--yml']
-      await expect(command.run()).resolves.not.toThrowError()
+      await expect(command.run()).resolves.not.toThrow()
       expect(stdout.output).toMatchFixture('provider/list.yml')
     })
 
     test('should return list of providers with event metadata', async () => {
       command.argv = ['--fetchEventMetadata']
-      await expect(command.run()).resolves.not.toThrowError()
+      await expect(command.run()).resolves.not.toThrow()
       expect(command.eventClient.getAllProviders).toHaveBeenCalledWith(ORG_ID, {
         fetchEventMetadata: true,
         filterBy: {
@@ -102,7 +102,7 @@ describe('console:provider:list', () => {
 
     test('should return providers for provider metadata id and instance id', async () => {
       command.argv = ['--providerMetadataId', 'pm-1', '--instanceId', 'instance1']
-      await expect(command.run()).resolves.not.toThrowError()
+      await expect(command.run()).resolves.not.toThrow()
       expect(command.eventClient.getAllProviders).toHaveBeenCalledWith(ORG_ID, {
         fetchEventMetadata: undefined,
         filterBy: {
@@ -115,7 +115,7 @@ describe('console:provider:list', () => {
 
     test('should return list of providers for provider metadata id list', async () => {
       command.argv = ['--providerMetadataIds', 'pm-1', 'pm-2']
-      await expect(command.run()).resolves.not.toThrowError()
+      await expect(command.run()).resolves.not.toThrow()
       expect(command.eventClient.getAllProviders).toHaveBeenCalledWith(ORG_ID, {
         fetchEventMetadata: undefined,
         filterBy: {
@@ -139,7 +139,7 @@ describe('console:provider:list', () => {
     })
 
     test('should return error on get list of providers', async () => {
-      await expect(command.run()).rejects.toThrowError(new Error('Error retrieving providers'))
+      await expect(command.run()).rejects.toThrow(new Error('Error retrieving providers'))
     })
 
     test('should return error on passing both providerMetadataId and providerMetadataIds flags', async () => {

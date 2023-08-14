@@ -76,27 +76,27 @@ describe('console:eventmetadata:delete', () => {
       command.argv = ['providerId']
       command.eventClient = { deleteAllEventMetadata: jest.fn().mockReturnValue('OK') }
       inquirer.prompt.mockResolvedValueOnce({ delete: true })
-      await expect(command.run()).resolves.not.toThrowError()
+      await expect(command.run()).resolves.not.toThrow()
       expect(stdout.output).toBe('All event metadata of provider providerId has been deleted successfully\n')
     })
     test('should delete one event metadata', async () => {
       command.argv = ['providerId', 'com.adobe.CODE01']
       command.eventClient = { deleteEventMetadata: jest.fn().mockReturnValue('OK') }
       inquirer.prompt.mockResolvedValueOnce({ delete: true })
-      await expect(command.run()).resolves.not.toThrowError()
+      await expect(command.run()).resolves.not.toThrow()
       expect(stdout.output).toBe('com.adobe.CODE01 event metadata of provider providerId has been deleted successfully\n')
     })
 
     test('cancel delete all event metadata', async () => {
       command.argv = ['providerId']
       inquirer.prompt.mockResolvedValueOnce({ delete: false })
-      await expect(command.run()).resolves.not.toThrowError()
+      await expect(command.run()).resolves.not.toThrow()
       expect(stdout.output).toBe('Deletion operation has been cancelled. For more information on delete use --help\n')
     })
     test('cancel delete one event metadata', async () => {
       command.argv = ['providerId', 'com.adobe.CODE01']
       inquirer.prompt.mockResolvedValueOnce({ delete: false })
-      await expect(command.run()).resolves.not.toThrowError()
+      await expect(command.run()).resolves.not.toThrow()
       expect(stdout.output).toBe('Deletion operation has been cancelled. For more information on delete use --help\n')
     })
   })
@@ -115,14 +115,14 @@ describe('console:eventmetadata:delete', () => {
       command.argv = ['providerId']
       inquirer.prompt.mockResolvedValueOnce({ delete: true })
       command.eventClient = { deleteAllEventMetadata: jest.fn().mockRejectedValue('Error deleting all event metadata') }
-      await expect(command.run()).rejects.toThrowError(new Error('Error deleting all event metadata'))
+      await expect(command.run()).rejects.toThrow(new Error('Error deleting all event metadata'))
     })
 
     test('should return error on delete one event metadata', async () => {
       command.argv = ['providerId', 'com.adobe.CODE01']
       command.eventClient = { deleteEventMetadata: jest.fn().mockRejectedValue('Error deleting event metadata') }
       inquirer.prompt.mockResolvedValueOnce({ delete: true })
-      await expect(command.run()).rejects.toThrowError(new Error('Error deleting event metadata'))
+      await expect(command.run()).rejects.toThrow(new Error('Error deleting event metadata'))
     })
   })
 })
