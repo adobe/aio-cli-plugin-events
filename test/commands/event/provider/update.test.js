@@ -80,7 +80,7 @@ describe('console:provider:update', () => {
     test('should update a provider and return response', async () => {
       command.argv = ['providerId']
       inquirer.prompt.mockResolvedValueOnce({ label: 'LABEL04', description: 'DESC04', docs_url: 'DOCS01' })
-      await expect(command.run()).resolves.not.toThrowError()
+      await expect(command.run()).resolves.not.toThrow()
       expect(stdout.output).toMatchFixture('provider/update.txt')
     })
 
@@ -88,21 +88,21 @@ describe('console:provider:update', () => {
       command.argv = ['providerId']
       command.eventClient = { updateProvider: jest.fn().mockReturnValue(mock.data.updateProviderWithoutDescAndDocsUrlResponse) }
       inquirer.prompt.mockResolvedValueOnce({ label: 'LABEL04', description: '', docs_url: '' })
-      await expect(command.run()).resolves.not.toThrowError()
+      await expect(command.run()).resolves.not.toThrow()
       expect(stdout.output).toMatchFixture('provider/emptyDescUpdate.txt')
     })
 
     test('should update a provider and return response as json', async () => {
       command.argv = ['providerId', '--json']
       inquirer.prompt.mockResolvedValueOnce({ label: 'LABEL04', description: 'DESC04', docs_url: 'DOCS01' })
-      await expect(command.run()).resolves.not.toThrowError()
+      await expect(command.run()).resolves.not.toThrow()
       expect(JSON.parse(stdout.output)).toMatchFixtureJson('provider/update.json')
     })
 
     test('should update a provider and return response as yaml', async () => {
       command.argv = ['providerId', '--yml']
       inquirer.prompt.mockResolvedValueOnce({ label: 'LABEL04', description: 'DESC04', docs_url: 'DOCS01' })
-      await expect(command.run()).resolves.not.toThrowError()
+      await expect(command.run()).resolves.not.toThrow()
       expect(stdout.output).toMatchFixture('provider/update.yml')
     })
   })
@@ -121,7 +121,7 @@ describe('console:provider:update', () => {
     test('should return error on update provider', async () => {
       command.argv = ['providerId']
       inquirer.prompt.mockResolvedValueOnce({ label: 'LABEL04', description: 'DESC04', docs_url: 'DOCS01' })
-      await expect(command.run()).rejects.toThrowError(new Error('Error updating provider'))
+      await expect(command.run()).rejects.toThrow(new Error('Error updating provider'))
     })
   })
 })

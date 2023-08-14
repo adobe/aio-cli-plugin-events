@@ -82,21 +82,21 @@ describe('console:eventmetadata:update', () => {
     test('should update an event metadata and return response', async () => {
       command.argv = ['providerId', 'com.adobe.CODE01']
       inquirer.prompt.mockResolvedValueOnce({ label: 'LABEL04', description: 'DESC04', docs_url: 'DOCS01' })
-      await expect(command.run()).resolves.not.toThrowError()
+      await expect(command.run()).resolves.not.toThrow()
       expect(stdout.output).toMatchFixture('eventmetadata/update.txt')
     })
 
     test('should update an event metadata and return response as json', async () => {
       command.argv = ['providerId', 'com.adobe.CODE01', '--json']
       inquirer.prompt.mockResolvedValueOnce({ label: 'LABEL04', description: 'DESC04', docs_url: 'DOCS01' })
-      await expect(command.run()).resolves.not.toThrowError()
+      await expect(command.run()).resolves.not.toThrow()
       expect(JSON.parse(stdout.output)).toMatchFixtureJson('eventmetadata/update.json')
     })
 
     test('should update a provider and return response as yaml', async () => {
       command.argv = ['providerId', 'com.adobe.CODE01', '--yml']
       inquirer.prompt.mockResolvedValueOnce({ label: 'LABEL04', description: 'DESC04', docs_url: 'DOCS01' })
-      await expect(command.run()).resolves.not.toThrowError()
+      await expect(command.run()).resolves.not.toThrow()
       expect(stdout.output).toMatchFixture('eventmetadata/update.yml')
     })
   })
@@ -115,7 +115,7 @@ describe('console:eventmetadata:update', () => {
     test('should return error on update provider', async () => {
       command.argv = ['providerId', 'com.adobe.CODE01']
       inquirer.prompt.mockResolvedValueOnce({ label: 'LABEL04', description: 'DESC04', docs_url: 'DOCS01' })
-      await expect(command.run()).rejects.toThrowError(new Error('Error updating event metadata'))
+      await expect(command.run()).rejects.toThrow(new Error('Error updating event metadata'))
     })
   })
 })

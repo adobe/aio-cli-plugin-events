@@ -67,19 +67,19 @@ describe('console:provider:get', () => {
     })
 
     test('should return a provider', async () => {
-      await expect(command.run()).resolves.not.toThrowError()
+      await expect(command.run()).resolves.not.toThrow()
       expect(stdout.output).toMatchFixture('provider/get.txt')
     })
 
     test('should return provider as json', async () => {
       command.argv = ['providerId', '--json']
-      await expect(command.run()).resolves.not.toThrowError()
+      await expect(command.run()).resolves.not.toThrow()
       expect(JSON.parse(stdout.output)).toMatchFixtureJson('provider/get.json')
     })
 
     test('should return provider as yaml', async () => {
       command.argv = ['providerId', '--yml']
-      await expect(command.run()).resolves.not.toThrowError()
+      await expect(command.run()).resolves.not.toThrow()
       expect(stdout.output).toMatchFixture('provider/get.yml')
     })
   })
@@ -97,7 +97,7 @@ describe('console:provider:get', () => {
 
     test('should return error on get provider', async () => {
       command.argv = ['providerId']
-      await expect(command.run()).rejects.toThrowError(new Error('Error retrieving provider'))
+      await expect(command.run()).rejects.toThrow(new Error('Error retrieving provider'))
     })
   })
 })

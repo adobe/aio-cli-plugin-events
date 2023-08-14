@@ -64,21 +64,21 @@ describe('console:registration:get', () => {
 
     test('registrationId', async () => {
       command.argv = ['registrationId']
-      await expect(command.run()).resolves.not.toThrowError()
+      await expect(command.run()).resolves.not.toThrow()
       expect(stdout.output).toMatchFixture('registration/get.txt')
       expect(command.eventClient.getRegistration).toHaveBeenCalledWith('ORGID', 'PROJECTID', 'WORKSPACEID', 'registrationId')
     })
 
     test('registrationId --json', async () => {
       command.argv = ['registrationId', '--json']
-      await expect(command.run()).resolves.not.toThrowError()
+      await expect(command.run()).resolves.not.toThrow()
       expect(JSON.parse(stdout.output)).toMatchFixtureJson('registration/get.json')
       expect(command.eventClient.getRegistration).toHaveBeenCalledWith('ORGID', 'PROJECTID', 'WORKSPACEID', 'registrationId')
     })
 
     test('registrationId --yml', async () => {
       command.argv = ['registrationId', '--yml']
-      await expect(command.run()).resolves.not.toThrowError()
+      await expect(command.run()).resolves.not.toThrow()
       expect(stdout.output).toMatchFixture('registration/get.yml')
       expect(command.eventClient.getRegistration).toHaveBeenCalledWith('ORGID', 'PROJECTID', 'WORKSPACEID', 'registrationId')
     })

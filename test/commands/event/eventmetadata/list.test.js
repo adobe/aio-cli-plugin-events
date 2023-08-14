@@ -65,19 +65,19 @@ describe('console:eventmetadata:list', () => {
 
     test('should return list of event metadata', async () => {
       command.argv = ['providerId']
-      await expect(command.run()).resolves.not.toThrowError()
+      await expect(command.run()).resolves.not.toThrow()
       expect(stdout.output).toMatchFixture('eventmetadata/list.txt')
     })
 
     test('should return list of event metadata as json', async () => {
       command.argv = ['providerId', '--json']
-      await expect(command.run()).resolves.not.toThrowError()
+      await expect(command.run()).resolves.not.toThrow()
       expect(JSON.parse(stdout.output)).toMatchFixtureJson('eventmetadata/list.json')
     })
 
     test('should return list of event metadata as yaml', async () => {
       command.argv = ['providerId', '--yml']
-      await expect(command.run()).resolves.not.toThrowError()
+      await expect(command.run()).resolves.not.toThrow()
       expect(stdout.output).toMatchFixture('eventmetadata/list.yml')
     })
   })
@@ -95,7 +95,7 @@ describe('console:eventmetadata:list', () => {
 
     test('should return error on get list of event metadata', async () => {
       command.argv = ['providerId']
-      await expect(command.run()).rejects.toThrowError(new Error('Error retrieving event metadata'))
+      await expect(command.run()).rejects.toThrow(new Error('Error retrieving event metadata'))
     })
   })
 })

@@ -75,14 +75,14 @@ describe('console:provider:delete', () => {
     test('should delete provider', async () => {
       command.argv = ['providerId']
       inquirer.prompt.mockResolvedValueOnce({ delete: true })
-      await expect(command.run()).resolves.not.toThrowError()
+      await expect(command.run()).resolves.not.toThrow()
       expect(stdout.output).toBe('Provider providerId has been deleted successfully\n')
     })
 
     test('cancel delete provider', async () => {
       command.argv = ['providerId']
       inquirer.prompt.mockResolvedValueOnce({ delete: false })
-      await expect(command.run()).resolves.not.toThrowError()
+      await expect(command.run()).resolves.not.toThrow()
       expect(stdout.output).toBe('Delete operation has been cancelled\n')
     })
   })
@@ -101,7 +101,7 @@ describe('console:provider:delete', () => {
     test('should return error on delete provider', async () => {
       command.argv = ['providerId']
       inquirer.prompt.mockResolvedValueOnce({ delete: true })
-      await expect(command.run()).rejects.toThrowError(new Error('Error deleting provider'))
+      await expect(command.run()).rejects.toThrow(new Error('Error deleting provider'))
     })
   })
 })

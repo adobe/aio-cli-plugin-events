@@ -78,28 +78,28 @@ describe('console:provider:create', () => {
 
     test('should create a provider and return response', async () => {
       inquirer.prompt.mockResolvedValueOnce({ label: 'LABEL01', description: 'DESC01', docs_url: 'DOCS01' })
-      await expect(command.run()).resolves.not.toThrowError()
+      await expect(command.run()).resolves.not.toThrow()
       expect(stdout.output).toMatchFixture('provider/create.txt')
     })
 
     test('should create a provider and return response for empty desc and docs', async () => {
       command.eventClient = { createProvider: jest.fn().mockReturnValue(mock.data.createProviderWithoutDescAndDocsUrlResponse) }
       inquirer.prompt.mockResolvedValueOnce({ label: 'LABEL01', description: '', docs_url: '' })
-      await expect(command.run()).resolves.not.toThrowError()
+      await expect(command.run()).resolves.not.toThrow()
       expect(stdout.output).toMatchFixture('provider/emptyDescCreate.txt')
     })
 
     test('should create a provider and return response as json', async () => {
       command.argv = ['--json']
       inquirer.prompt.mockResolvedValueOnce({ label: 'LABEL01', description: 'DESC01', docs_url: 'DOCS01' })
-      await expect(command.run()).resolves.not.toThrowError()
+      await expect(command.run()).resolves.not.toThrow()
       expect(JSON.parse(stdout.output)).toMatchFixtureJson('provider/create.json')
     })
 
     test('should create a provider and return response as yaml', async () => {
       command.argv = ['--yml']
       inquirer.prompt.mockResolvedValueOnce({ label: 'LABEL01', description: 'DESC01', docs_url: 'DOCS01' })
-      await expect(command.run()).resolves.not.toThrowError()
+      await expect(command.run()).resolves.not.toThrow()
       expect(stdout.output).toMatchFixture('provider/create.yml')
     })
   })
@@ -117,7 +117,7 @@ describe('console:provider:create', () => {
 
     test('should return error on create provider', async () => {
       inquirer.prompt.mockResolvedValueOnce({ label: 'LABEL01', description: 'DESC01', docs_url: 'DOCS01' })
-      await expect(command.run()).rejects.toThrowError(new Error('Error creating provider'))
+      await expect(command.run()).rejects.toThrow(new Error('Error creating provider'))
     })
   })
 })

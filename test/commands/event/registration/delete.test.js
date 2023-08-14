@@ -69,7 +69,7 @@ describe('console:registration:delete', () => {
     test('cancel delete provider', async () => {
       command.argv = ['providerId']
       inquirer.prompt.mockResolvedValueOnce({ delete: false })
-      await expect(command.run()).resolves.not.toThrowError()
+      await expect(command.run()).resolves.not.toThrow()
       expect(stdout.output).toBe('Delete operation has been cancelled\n')
       expect(command.eventClient.deleteRegistration).not.toHaveBeenCalled()
     })

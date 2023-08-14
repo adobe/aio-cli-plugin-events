@@ -80,21 +80,21 @@ describe('console:eventmetadata:create', () => {
     test('should create an event metadata and return response', async () => {
       command.argv = ['providerId']
       inquirer.prompt.mockResolvedValueOnce({ label: 'LABEL01', description: 'DESC01', event_code: 'come.adobe.CODE01' })
-      await expect(command.run()).resolves.not.toThrowError()
+      await expect(command.run()).resolves.not.toThrow()
       expect(stdout.output).toMatchFixture('eventmetadata/create.txt')
     })
 
     test('should create an event metadata and return response as json', async () => {
       command.argv = ['providerId', '--json']
       inquirer.prompt.mockResolvedValueOnce({ label: 'LABEL01', description: 'DESC01', event_code: 'come.adobe.CODE01' })
-      await expect(command.run()).resolves.not.toThrowError()
+      await expect(command.run()).resolves.not.toThrow()
       expect(JSON.parse(stdout.output)).toMatchFixtureJson('eventmetadata/create.json')
     })
 
     test('should create an event metadata and return response as yaml', async () => {
       command.argv = ['providerId', '--yml']
       inquirer.prompt.mockResolvedValueOnce({ label: 'LABEL01', description: 'DESC01', event_code: 'come.adobe.CODE01' })
-      await expect(command.run()).resolves.not.toThrowError()
+      await expect(command.run()).resolves.not.toThrow()
       expect(stdout.output).toMatchFixture('eventmetadata/create.yml')
     })
   })
@@ -113,7 +113,7 @@ describe('console:eventmetadata:create', () => {
     test('should return error on create event metadata', async () => {
       command.argv = ['providerId']
       inquirer.prompt.mockResolvedValueOnce({ label: 'LABEL01', description: 'DESC01', event_code: 'come.adobe.CODE01' })
-      await expect(command.run()).rejects.toThrowError(new Error('Error creating event metadata'))
+      await expect(command.run()).rejects.toThrow(new Error('Error creating event metadata'))
     })
   })
 })

@@ -70,14 +70,14 @@ describe('console:registration:list', () => {
 
     test('--json', async () => {
       command.argv = ['--json']
-      await expect(command.run()).resolves.not.toThrowError()
+      await expect(command.run()).resolves.not.toThrow()
       expect(JSON.parse(stdout.output)).toMatchFixtureJson('registration/list.json')
       expect(command.eventClient.getAllRegistrationsForWorkspace).toHaveBeenCalledWith('ORGID', 'PROJECTID', 'WORKSPACEID')
     })
 
     test('registrationId --yml', async () => {
       command.argv = ['--yml']
-      await expect(command.run()).resolves.not.toThrowError()
+      await expect(command.run()).resolves.not.toThrow()
       expect(stdout.output).toMatchFixture('registration/list.yml')
       expect(command.eventClient.getAllRegistrationsForWorkspace).toHaveBeenCalledWith('ORGID', 'PROJECTID', 'WORKSPACEID')
     })
