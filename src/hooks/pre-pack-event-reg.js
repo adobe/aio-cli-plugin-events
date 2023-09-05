@@ -35,14 +35,12 @@ async function getRequestHeaders () {
  * @returns {Promise<object>} returns response body of the IO Events ISV validate API call
  */
 async function handleResponse (response) {
-  return response.json()
-    .then((responseBody) => {
-      if (!response.ok) {
-        console.log(`Error in validating event registrations: ${JSON.stringify(responseBody)}`)
+  if (!response.ok) {
+    return response.json()
+      .then((responseBody) => {
         throw new Error(JSON.stringify(responseBody))
-      }
-      return responseBody
-    })
+      })
+  }
 }
 
 /**
