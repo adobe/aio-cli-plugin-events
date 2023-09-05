@@ -61,12 +61,9 @@ async function handleRequest (registrations, project) {
       headers,
       body: JSON.stringify(registrations)
     }).then((response) => {
-      if (!response.ok) {
-        return handleResponse(response)
-      } else {
-        console.log('Event registrations successfully validated')
-        resolve(response)
-      }
+      const responseBody = handleResponse(response)
+      console.log('Event registrations successfully validated')
+      resolve(responseBody)
     }).catch((error) => {
       reject(error)
     })
@@ -76,10 +73,10 @@ async function handleRequest (registrations, project) {
 module.exports = async function ({ appConfig: { all: { application: { events, project } } } }) {
   if (!project) {
     throw new Error(
-      'No project found, skipping event registration in pre-pack events validation hook')
+      'No project found, error in pre-pack events validation hook')
   }
   if (!(events?.registrations)) {
-    console.log('No event registrations to verify, skipping event registration in pre-pack events validation hook')
+    console.log('No event registrations to verify, skipping pre-pack events validation hook')
     return
   }
   const registrationsToVerify = []
