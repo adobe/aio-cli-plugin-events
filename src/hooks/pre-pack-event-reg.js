@@ -39,7 +39,7 @@ async function handleResponse (response) {
     .then((responseBody) => {
       if (!response.ok) {
         console.log(`Error in validating event registrations: ${JSON.stringify(responseBody)}`)
-        return Promise.reject(responseBody)
+        throw new Error(JSON.stringify(responseBody))
       }
       return responseBody
     })
@@ -55,19 +55,16 @@ async function handleRequest (registrations, project) {
   const headers = await getRequestHeaders()
   const url = `${validationUrl}/${project.org.id}/${project.id}/${project.workspace.id}/isv/registrations/validate`
   const fetch = createFetch()
-  return new Promise((resolve, reject) => {
-    fetch(url, {
-      method: 'POST',
-      headers,
-      body: JSON.stringify(registrations)
-    }).then((response) => {
-      const responseBody = handleResponse(response)
-      console.log('Event registrations successfully validated')
-      resolve(responseBody)
-    }).catch((error) => {
-      reject(error)
+  return fetch(url, {
+    method: 'POST',
+    headers,
+    body: JSON.stringify(registrations)
+  }).then((response) => handleResponse(response))
+    .then(() => console.log('Event registrations successfully validated'))
+    .catch((error) => {
+      console.log(`Error validating event registrations ${error}`)
+      throw new Error(error)
     })
-  })
 }
 
 module.exports = async function ({ appConfig: { all: { application: { events, project } } } }) {

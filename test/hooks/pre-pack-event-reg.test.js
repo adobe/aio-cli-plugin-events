@@ -60,13 +60,13 @@ describe('post deploy event registration hook interfaces', () => {
     expect(typeof hook).toBe('function')
     process.env = mock.data.dotEnv
     mockFetch.mockResolvedValue({ ok: false, json: jest.fn().mockResolvedValue('Bad Request') })
-    await expect(hook({ appConfig: { all: { application: { events: mock.data.sampleEvents, project: mock.data.sampleProject } } } })).rejects.toBe('Bad Request')
+    await expect(hook({ appConfig: { all: { application: { events: mock.data.sampleEvents, project: mock.data.sampleProject } } } })).rejects.toThrow(new Error('Error: "Bad Request"'))
   })
 
   test('error in fetching from URL should throw error', async () => {
     expect(typeof hook).toBe('function')
     process.env = mock.data.dotEnv
     mockFetch.mockRejectedValue(new Error('Connection Rejected'))
-    await expect(hook({ appConfig: { all: { application: { events: mock.data.sampleEvents, project: mock.data.sampleProject } } } })).rejects.toThrow(new Error('Connection Rejected'))
+    await expect(hook({ appConfig: { all: { application: { events: mock.data.sampleEvents, project: mock.data.sampleProject } } } })).rejects.toThrow(new Error('Error: Connection Rejected'))
   })
 })
