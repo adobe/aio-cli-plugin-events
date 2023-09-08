@@ -43,6 +43,12 @@ describe('post deploy event registration hook interfaces', () => {
     await expect(hook({ appConfig: { all: { application: { project: mock.data.sampleProject } } } })).resolves.not.toThrow()
   })
 
+  test('no event registrations should return without error', async () => {
+    expect(typeof hook).toBe('function')
+    process.env = mock.data.dotEnv
+    await expect(hook({ appConfig: { all: { application: { project: mock.data.sampleProject, events: { registrations: {} }, manifest: mock.data.sampleRuntimeManifest } } } })).resolves.not.toThrow()
+  })
+
   test('no service api key error', async () => {
     expect(typeof hook).toBe('function')
     process.env = mock.data.dotEnvMissingApiKey
@@ -98,5 +104,79 @@ describe('post deploy event registration hook interfaces', () => {
     })).rejects.toThrow(new Error('Runtime manifest does not contain package:\n' +
         '        package-1 associated with package-1/poc-event-1\n' +
         '        defined in event registrations'))
+  })
+
+  test('no package name in runtime_action should throw error', async () => {
+    expect(typeof hook).toBe('function')
+    const eventsWithInvalidRuntimeAction = mock.data.sampleEvents
+    eventsWithInvalidRuntimeAction.registrations['Event Registration 1'].runtime_action = 'test-action'
+    await expect(hook({
+      appConfig: {
+        all: {
+          application: {
+            events: eventsWithInvalidRuntimeAction,
+            project: mock.data.sampleProject,
+            manifest: mock.data.sampleRuntimeManifest
+          }
+        }
+      }
+    })).rejects.toThrow(new Error('Runtime action test-action is not correctly defined as part of a package'))
+    eventsWithInvalidRuntimeAction.registrations['Event Registration 1'].runtime_action = 'package-1/poc-event-1'
+  })
+
+  test('valid package with no actions should not throw an error', async () => {
+    expect(typeof hook).toBe('function')
+    const runtimeManifestWithOnePackageHavingNoActions = mock.data.sampleRuntimeManifest
+    runtimeManifestWithOnePackageHavingNoActions.full.packages['package-3'] = {}
+    process.env = mock.data.dotEnv
+    mockFetch.mockResolvedValue({ ok: true, json: jest.fn().mockResolvedValue('OK') })
+
+    await expect(hook({
+      appConfig: {
+        all: {
+          application: {
+            events: mock.data.sampleEvents,
+            project: mock.data.sampleProject,
+            manifest: runtimeManifestWithOnePackageHavingNoActions
+          }
+        }
+      }
+    })).resolves.not.toThrow()
+  })
+
+  test('invalid runtime_action name should throw error', async () => {
+    expect(typeof hook).toBe('function')
+    const eventsWithInvalidRuntimeAction = mock.data.sampleEvents
+    eventsWithInvalidRuntimeAction.registrations['Event Registration 1'].runtime_action = 'package-1/invalid-test-action'
+    await expect(hook({
+      appConfig: {
+        all: {
+          application: {
+            events: eventsWithInvalidRuntimeAction,
+            project: mock.data.sampleProject,
+            manifest: mock.data.sampleRuntimeManifest
+          }
+        }
+      }
+    })).rejects.toThrow(new Error('Runtime action package-1/invalid-test-action associated with the event registration\n' +
+        '        does not exist in the runtime manifest'))
+  })
+
+  test('web runtime_action should throw error', async () => {
+    expect(typeof hook).toBe('function')
+    const eventsWithInvalidRuntimeAction = mock.data.sampleEvents
+    eventsWithInvalidRuntimeAction.registrations['Event Registration 1'].runtime_action = 'package-2/publish-events'
+    await expect(hook({
+      appConfig: {
+        all: {
+          application: {
+            events: eventsWithInvalidRuntimeAction,
+            project: mock.data.sampleProject,
+            manifest: mock.data.sampleRuntimeManifest
+          }
+        }
+      }
+    })).rejects.toThrow(new Error('Invalid runtime action package-2/publish-events.\n' +
+            '        Only non-web action can be registered for events'))
   })
 })

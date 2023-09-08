@@ -46,6 +46,6 @@ describe('pre deploy event registration hook interfaces', () => {
   test('Registrations of journal type should return without error', async () => {
     const hook = require('../../src/hooks/pre-deploy-event-reg')
     expect(typeof hook).toBe('function')
-    await expect(hook({ appConfig: { project: mock.data.sampleProject, events: mock.data.sampleEvents } })).resolves.not.toThrow()
+    await expect(hook({ appConfig: { project: mock.data.sampleProject, events: mock.data.sampleEventsWithWebhookAndJournalReg } })).resolves.not.toThrow()
   })
 })

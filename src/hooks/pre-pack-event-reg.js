@@ -73,7 +73,7 @@ async function handleRequest (registrations, project) {
 function extractRegistrationDetails (events) {
   const registrationsToVerify = []
   const registrationRuntimeActions = []
-  const registrationsFromConfig = events.registrations || []
+  const registrationsFromConfig = events.registrations
   for (const registrationName in registrationsFromConfig) {
     const registration = {
       name: registrationName,
@@ -127,7 +127,7 @@ function validateRuntimeActionsInEventRegistrations (manifestPackageToRuntimeAct
     const packageActions = manifestPackageToRuntimeActionsMap[packageNameToRuntimeAction[0]]
     if (!packageActions[packageNameToRuntimeAction[1]]) {
       throw new Error(`Runtime action ${registrationRuntimeAction} associated with the event registration
-        does not exist in the config for runtime action `)
+        does not exist in the runtime manifest`)
     }
     const actionDetails = packageActions[packageNameToRuntimeAction[1]]
     if (actionDetails.web !== 'no') {
@@ -144,7 +144,7 @@ module.exports = async function ({ appConfig }) {
     throw new Error('No project found, error in pre-pack events validation hook')
   }
 
-  if (!(events?.registrations)) {
+  if (!(events?.registrations) || Object.keys(events.registrations).length === 0) {
     console.log('No event registrations to verify, skipping pre-pack events validation hook')
     return
   }
