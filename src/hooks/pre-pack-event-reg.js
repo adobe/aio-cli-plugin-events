@@ -65,15 +65,18 @@ async function handleRequest (registrations, project) {
     })
 }
 
-module.exports = async function ({ appConfig: { all: { application: { events, project } } } }) {
+module.exports = async function ({ appConfig }) {
+  const {events, project} = appConfig?.all?.application || Object.values(appConfig?.all || {})[0]
   if (!project) {
     throw new Error(
       'No project found, error in pre-pack events validation hook')
   }
+
   if (!(events?.registrations)) {
     console.log('No event registrations to verify, skipping pre-pack events validation hook')
     return
   }
+
   const registrationsToVerify = []
   const registrationsFromConfig = events.registrations
   for (const registrationName in registrationsFromConfig) {
