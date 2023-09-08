@@ -139,14 +139,13 @@ function validateRuntimeActionsInEventRegistrations (manifestPackageToRuntimeAct
 }
 
 module.exports = async function ({ appConfig }) {
-  const { events, project, manifest } = appConfig?.all?.application || Object.values(appConfig?.all || {})[0]
-  if (!project) {
-    throw new Error('No project found, error in pre-pack events validation hook')
-  }
-
+  const { events, project, manifest } = appConfig?.all?.application || {}
   if (!(events?.registrations) || Object.keys(events.registrations).length === 0) {
     console.log('No event registrations to verify, skipping pre-pack events validation hook')
     return
+  }
+  if (!project) {
+    throw new Error('No project found, error in pre-pack events validation hook')
   }
   console.log('Manifest: ', JSON.stringify(manifest))
   const { registrationsToVerify, registrationRuntimeActions } =

@@ -35,12 +35,32 @@ describe('post deploy event registration hook interfaces', () => {
 
   test('no project error', async () => {
     expect(typeof hook).toBe('function')
-    await expect(hook({ appConfig: { all: { application: { events: {} } } } })).rejects.toThrow(new Error('No project found, error in pre-pack events validation hook'))
+    await expect(hook({ appConfig: { all: { application: { events: mock.data.sampleEvents } } } })).rejects.toThrow(new Error('No project found, error in pre-pack events validation hook'))
   })
 
   test('no events should return without error', async () => {
     expect(typeof hook).toBe('function')
     await expect(hook({ appConfig: { all: { application: { project: mock.data.sampleProject } } } })).resolves.not.toThrow()
+  })
+
+  test('no application should return without error', async () => {
+    expect(typeof hook).toBe('function')
+    await expect(hook({ appConfig: { all: { application: { } } } })).resolves.not.toThrow()
+  })
+
+  test('no appConfig.all should return without error', async () => {
+    expect(typeof hook).toBe('function')
+    await expect(hook({ appConfig: { all: { } } })).resolves.not.toThrow()
+  })
+
+  test('no appConfig should return without error', async () => {
+    expect(typeof hook).toBe('function')
+    await expect(hook({ appConfig: {} })).resolves.not.toThrow()
+  })
+
+  test('no input should return without error', async () => {
+    expect(typeof hook).toBe('function')
+    await expect(hook({})).resolves.not.toThrow()
   })
 
   test('no event registrations should return without error', async () => {
