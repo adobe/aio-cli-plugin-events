@@ -46,27 +46,57 @@ describe('post deploy event registration hook interfaces', () => {
   test('no service api key error', async () => {
     expect(typeof hook).toBe('function')
     process.env = mock.data.dotEnvMissingApiKey
-    await expect(hook({ appConfig: { all: { application: { events: mock.data.sampleEvents, project: mock.data.sampleProject } } } })).rejects.toThrow(new Error('Required SERVICE_API_KEY is missing from .env file'))
+    await expect(hook({ appConfig: { all: { application: { events: mock.data.sampleEvents, project: mock.data.sampleProject, manifest: mock.data.sampleRuntimeManifest } } } })).rejects.toThrow(new Error('Required SERVICE_API_KEY is missing from .env file'))
   })
 
   test('valid events should return without error', async () => {
     expect(typeof hook).toBe('function')
     process.env = mock.data.dotEnv
     mockFetch.mockResolvedValue({ ok: true, json: jest.fn().mockResolvedValue('OK') })
-    await expect(hook({ appConfig: { all: { application: { events: mock.data.sampleEvents, project: mock.data.sampleProject } } } })).resolves.not.toThrow()
+    await expect(hook({ appConfig: { all: { application: { events: mock.data.sampleEvents, project: mock.data.sampleProject, manifest: mock.data.sampleRuntimeManifest } } } })).resolves.not.toThrow()
   })
 
   test('invalid events should return error', async () => {
     expect(typeof hook).toBe('function')
     process.env = mock.data.dotEnv
     mockFetch.mockResolvedValue({ ok: false, json: jest.fn().mockResolvedValue('Bad Request') })
-    await expect(hook({ appConfig: { all: { application: { events: mock.data.sampleEvents, project: mock.data.sampleProject } } } })).rejects.toThrow(new Error('Error: "Bad Request"'))
+    await expect(hook({ appConfig: { all: { application: { events: mock.data.sampleEvents, project: mock.data.sampleProject, manifest: mock.data.sampleRuntimeManifest } } } })).rejects.toThrow(new Error('Error: "Bad Request"'))
   })
 
   test('error in fetching from URL should throw error', async () => {
     expect(typeof hook).toBe('function')
     process.env = mock.data.dotEnv
     mockFetch.mockRejectedValue(new Error('Connection Rejected'))
-    await expect(hook({ appConfig: { all: { application: { events: mock.data.sampleEvents, project: mock.data.sampleProject } } } })).rejects.toThrow(new Error('Error: Connection Rejected'))
+    await expect(hook({ appConfig: { all: { application: { events: mock.data.sampleEvents, project: mock.data.sampleProject, manifest: mock.data.sampleRuntimeManifest } } } })).rejects.toThrow(new Error('Error: Connection Rejected'))
+  })
+
+  test('no runtime action in event registration should throw error', async () => {
+    expect(typeof hook).toBe('function')
+    await expect(hook({
+      appConfig: {
+        all: {
+          application: {
+            events: mock.data.sampleEventsWithoutRuntimeAction,
+            project: mock.data.sampleProject
+          }
+        }
+      }
+    })).rejects.toThrow(new Error('Invalid event registration. All Event registrations need to be associated with a runtime action'))
+  })
+
+  test('no runtime manifest should throw error', async () => {
+    expect(typeof hook).toBe('function')
+    await expect(hook({
+      appConfig: {
+        all: {
+          application: {
+            events: mock.data.sampleEvents,
+            project: mock.data.sampleProject
+          }
+        }
+      }
+    })).rejects.toThrow(new Error('Runtime manifest does not contain package:\n' +
+        '        package-1 associated with package-1/poc-event-1\n' +
+        '        defined in event registrations'))
   })
 })

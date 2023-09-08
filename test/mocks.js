@@ -499,6 +499,74 @@ const sampleProject = {
   }
 }
 
+const sampleRuntimeManifest = {
+  src: 'manifest.yml',
+  full: {
+    packages: {
+      'package-1': {
+        license: 'Apache-2.0',
+        actions: {
+          'poc-event-1': {
+            function: 'path/to/pacakge/package-1/actions/poc-event-1/index.js',
+            web: 'no',
+            runtime: 'nodejs:16',
+            inputs: {
+              LOG_LEVEL: 'debug'
+            },
+            annotations: {
+              'require-adobe-auth': false,
+              final: true
+            }
+          },
+          'poc-event-2-1': {
+            function: 'path/to/pacakge/package-1/actions/poc-event-2-1/index.js',
+            web: 'yes',
+            runtime: 'nodejs:16',
+            inputs: {
+              LOG_LEVEL: 'debug'
+            },
+            annotations: {
+              'require-adobe-auth': true,
+              final: true
+            }
+          }
+        }
+      },
+      'package-2': {
+        license: 'Apache-2.0',
+        actions: {
+          'poc-event-2': {
+            function: 'path/to/pacakge/package-2/actions/poc-event-2/index.js',
+            web: 'no',
+            runtime: 'nodejs:16',
+            inputs: {
+              LOG_LEVEL: 'debug'
+            },
+            annotations: {
+              'require-adobe-auth': false,
+              final: true
+            }
+          },
+          'publish-events': {
+            function: 'path/to/pacakge/package-2/actions/publish-events/index.js',
+            web: 'yes',
+            runtime: 'nodejs:16',
+            inputs: {
+              LOG_LEVEL: 'debug',
+              apiKey: '$SERVICE_API_KEY'
+            },
+            annotations: {
+              'require-adobe-auth': true,
+              final: true
+            }
+          }
+        }
+      }
+    }
+  },
+  packagePlaceholder: '__APP_PACKAGE__'
+}
+
 const sampleProjectWithoutEvents = {
   id: 'projectId',
   name: 'projectName',
@@ -575,7 +643,44 @@ const sampleEvents = {
           ]
         }
       ],
-      runtime_action: 'poc-event-1'
+      runtime_action: 'package-1/poc-event-1'
+    },
+    'Event Registration 2': {
+      description: 'Registration for IO Events 2',
+      events_of_interest: [
+        {
+          provider_metadata: 'providerMetadata1',
+          event_codes: [
+            'eventCode1',
+            'eventCode2'
+          ]
+        },
+        {
+          provider_metadata: 'providerMetadata2',
+          event_codes: [
+            'eventCode3'
+          ]
+        }
+      ],
+      runtime_action: 'package-2/poc-event-2'
+    }
+  }
+}
+
+const sampleEventsWithWebhookAndJournalReg = {
+  registrations: {
+    'Event Registration 1': {
+      description: 'Registration for IO Events 1',
+      events_of_interest: [
+        {
+          provider_metadata: 'providerMetadata1',
+          event_codes: [
+            'eventCode1',
+            'eventCode2'
+          ]
+        }
+      ],
+      runtime_action: 'package-1/poc-event-1'
     },
     'Event Registration 2': {
       description: 'Registration for IO Events 2',
@@ -598,12 +703,29 @@ const sampleEvents = {
   }
 }
 
+const sampleEventsWithoutRuntimeAction = {
+  registrations: {
+    'Event Registration 1': {
+      description: 'Registration for IO Events 1',
+      events_of_interest: [
+        {
+          provider_metadata: 'providerMetadata1',
+          event_codes: [
+            'eventCode1',
+            'eventCode2'
+          ]
+        }
+      ]
+    }
+  }
+}
+
 const hookDecodedEventRegistration1 = {
   name: 'Event Registration 1',
   client_id: 'serviceApiKey',
   description: 'Registration for IO Events 1',
   delivery_type: 'webhook',
-  runtime_action: 'poc-event-1',
+  runtime_action: 'package-1/poc-event-1',
   events_of_interest: [{
     provider_id: 'providerId1',
     event_code: 'eventCode1'
@@ -673,6 +795,9 @@ const data = {
   createWebhookRegistrationInputJSONNoClientId,
   sampleProject,
   sampleEvents,
+  sampleEventsWithoutRuntimeAction,
+  sampleEventsWithWebhookAndJournalReg,
+  sampleRuntimeManifest,
   hookDecodedEventRegistration1,
   hookDecodedEventRegistration2,
   sampleProjectWithoutEvents,

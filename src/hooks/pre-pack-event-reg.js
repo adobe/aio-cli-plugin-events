@@ -65,26 +65,94 @@ async function handleRequest (registrations, project) {
     })
 }
 
-module.exports = async function ({ appConfig }) {
-  const {events, project} = appConfig?.all?.application || Object.values(appConfig?.all || {})[0]
-  if (!project) {
-    throw new Error(
-      'No project found, error in pre-pack events validation hook')
-  }
-
-  if (!(events?.registrations)) {
-    console.log('No event registrations to verify, skipping pre-pack events validation hook')
-    return
-  }
-
+/**
+ * Extracts list of event registrations to validate by IO events and list of runtime actions to validate against runtimeManifest
+ * @param {object} events Event registrations from the app.config.yaml file
+ * @returns {object} list of event registrations, and list of runtime actions associated with the event registrations
+ */
+function extractRegistrationDetails (events) {
   const registrationsToVerify = []
-  const registrationsFromConfig = events.registrations
+  const registrationRuntimeActions = []
+  const registrationsFromConfig = events.registrations || []
   for (const registrationName in registrationsFromConfig) {
     const registration = {
       name: registrationName,
       ...registrationsFromConfig[registrationName]
     }
     registrationsToVerify.push(registration)
+    if (!registrationsFromConfig[registrationName].runtime_action) {
+      throw new Error(
+        'Invalid event registration. All Event registrations need to be associated with a runtime action')
+    }
+    registrationRuntimeActions.push(registrationsFromConfig[registrationName].runtime_action)
   }
+  return { registrationsToVerify, registrationRuntimeActions }
+}
+
+/**
+ * Extract Map of packages and actions associated with each package
+ * @param {object} manifest runtime manifest containing packages and runtime actions
+ * @returns {object} Returns a map containing a mapping between the package name and list of actions in the package
+ */
+function extractRuntimeManifestDetails (manifest) {
+  const runtimePackages = manifest?.full?.packages || {}
+  const manifestPackageToRuntimeActionsMap = {}
+  for (const packageName in runtimePackages) {
+    if (runtimePackages[packageName].actions) {
+      manifestPackageToRuntimeActionsMap[packageName] = runtimePackages[packageName].actions
+    }
+  }
+  return manifestPackageToRuntimeActionsMap
+}
+
+/**
+ * Validates the runtime packages and functions associated with event registrations.
+ * The following validations are performed:
+ * a. runtime manifest contains the package name and action used in events registration
+ * b. the actions associated with event registrations are non-web actions
+ * @param {object} manifestPackageToRuntimeActionsMap a map containing a mapping between the package name and list of actions in the package
+ * @param {object} registrationRuntimeActions list of actions associated with event registrations
+ */
+function validateRuntimeActionsInEventRegistrations (manifestPackageToRuntimeActionsMap, registrationRuntimeActions) {
+  for (const registrationRuntimeAction of registrationRuntimeActions) {
+    const packageNameToRuntimeAction = registrationRuntimeAction.split('/')
+    if (packageNameToRuntimeAction.length !== 2) {
+      throw new Error(`Runtime action ${registrationRuntimeAction} is not correctly defined as part of a package`)
+    }
+    if (!manifestPackageToRuntimeActionsMap[packageNameToRuntimeAction[0]]) {
+      throw new Error(`Runtime manifest does not contain package:
+        ${packageNameToRuntimeAction[0]} associated with ${registrationRuntimeAction}
+        defined in event registrations`)
+    }
+    const packageActions = manifestPackageToRuntimeActionsMap[packageNameToRuntimeAction[0]]
+    if (!packageActions[packageNameToRuntimeAction[1]]) {
+      throw new Error(`Runtime action ${registrationRuntimeAction} associated with the event registration
+        does not exist in the config for runtime action `)
+    }
+    const actionDetails = packageActions[packageNameToRuntimeAction[1]]
+    if (actionDetails.web !== 'no') {
+      throw new Error(`Invalid runtime action ${registrationRuntimeAction}.
+        Only non-web action can be registered for events`)
+    }
+  }
+  console.log('Validated runtime actions associated with event registrations successfully')
+}
+
+module.exports = async function ({ appConfig }) {
+  const { events, project, manifest } = appConfig?.all?.application || Object.values(appConfig?.all || {})[0]
+  if (!project) {
+    throw new Error('No project found, error in pre-pack events validation hook')
+  }
+
+  if (!(events?.registrations)) {
+    console.log('No event registrations to verify, skipping pre-pack events validation hook')
+    return
+  }
+  console.log('Manifest: ', JSON.stringify(manifest))
+  const { registrationsToVerify, registrationRuntimeActions } =
+      extractRegistrationDetails(events)
+  console.log('packageName map:', registrationRuntimeActions)
+  const manifestPackageToRuntimeActionsMap = extractRuntimeManifestDetails(manifest)
+  validateRuntimeActionsInEventRegistrations(manifestPackageToRuntimeActionsMap, registrationRuntimeActions)
   await handleRequest(registrationsToVerify, project)
 }
