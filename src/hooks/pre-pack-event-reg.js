@@ -147,10 +147,8 @@ module.exports = async function ({ appConfig }) {
   if (!applicationDetails?.project) {
     throw new Error('No project found, error in pre-pack events validation hook')
   }
-  console.log('Manifest: ', JSON.stringify(appConfig))
   const { registrationsToVerify, registrationRuntimeActions } =
       extractRegistrationDetails(applicationDetails.events)
-  console.log('packageName map:', registrationRuntimeActions)
   const manifestPackageToRuntimeActionsMap = extractRuntimeManifestDetails(applicationDetails.manifest)
   validateRuntimeActionsInEventRegistrations(manifestPackageToRuntimeActionsMap, registrationRuntimeActions)
   await handleRequest(registrationsToVerify, applicationDetails.project)
