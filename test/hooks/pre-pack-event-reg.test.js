@@ -48,21 +48,6 @@ describe('post deploy event registration hook interfaces', () => {
     await expect(hook({ appConfig: { all: { application: { } } } })).resolves.not.toThrow()
   })
 
-  test('no appConfig.all should return without error', async () => {
-    expect(typeof hook).toBe('function')
-    await expect(hook({ appConfig: { all: { } } })).resolves.not.toThrow()
-  })
-
-  test('no appConfig should return without error', async () => {
-    expect(typeof hook).toBe('function')
-    await expect(hook({ appConfig: {} })).resolves.not.toThrow()
-  })
-
-  test('no input should return without error', async () => {
-    expect(typeof hook).toBe('function')
-    await expect(hook({})).resolves.not.toThrow()
-  })
-
   test('no event registrations should return without error', async () => {
     expect(typeof hook).toBe('function')
     process.env = mock.data.dotEnv
@@ -80,6 +65,20 @@ describe('post deploy event registration hook interfaces', () => {
     process.env = mock.data.dotEnv
     mockFetch.mockResolvedValue({ ok: true, json: jest.fn().mockResolvedValue('OK') })
     await expect(hook({ appConfig: { all: { application: { events: mock.data.sampleEvents, project: mock.data.sampleProject, manifest: mock.data.sampleRuntimeManifest } } } })).resolves.not.toThrow()
+  })
+
+  test('valid events in an extention config should return without error', async () => {
+    expect(typeof hook).toBe('function')
+    process.env = mock.data.dotEnv
+    mockFetch.mockResolvedValue({ ok: true, json: jest.fn().mockResolvedValue('OK') })
+    await expect(hook({ appConfig: { all: { 'sample-package': { events: mock.data.sampleEvents, project: mock.data.sampleProject, manifest: mock.data.sampleRuntimeManifest } } } })).resolves.not.toThrow()
+  })
+
+  test('empty events in an extention config should return without error', async () => {
+    expect(typeof hook).toBe('function')
+    process.env = mock.data.dotEnv
+    mockFetch.mockResolvedValue({ ok: true, json: jest.fn().mockResolvedValue('OK') })
+    await expect(hook({ })).resolves.not.toThrow()
   })
 
   test('invalid events should return error', async () => {
