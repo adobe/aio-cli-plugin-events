@@ -11,8 +11,10 @@ governing permissions and limitations under the License.
 
 jest.mock('@adobe/aio-lib-ims')
 jest.mock('@adobe/aio-lib-ims/src/context')
+jest.mock('@adobe/aio-lib-env')
 
 const { getToken } = require('@adobe/aio-lib-ims')
+const { getCliEnv } = require('@adobe/aio-lib-env')
 
 const mockFetch = jest.fn()
 jest.mock('@adobe/aio-lib-core-networking', () => ({
@@ -63,8 +65,28 @@ describe('post deploy event registration hook interfaces', () => {
   test('valid events should return without error', async () => {
     expect(typeof hook).toBe('function')
     process.env = mock.data.dotEnv
+    getCliEnv.mockReturnValue('prod')
     mockFetch.mockResolvedValue({ ok: true, json: jest.fn().mockResolvedValue('OK') })
     await expect(hook({ appConfig: { all: { application: { events: mock.data.sampleEvents, project: mock.data.sampleProject, manifest: mock.data.sampleRuntimeManifest } } } })).resolves.not.toThrow()
+    expect(mockFetch).toHaveBeenCalledWith('https://api.adobe.io/events/112233/projectId/workspaceId/isv/registrations/validate', expect.any(Object))
+  })
+
+  test('valid events should return without error with undefined cli env', async () => {
+    expect(typeof hook).toBe('function')
+    process.env = mock.data.dotEnv
+    getCliEnv.mockReturnValue(undefined)
+    mockFetch.mockResolvedValue({ ok: true, json: jest.fn().mockResolvedValue('OK') })
+    await expect(hook({ appConfig: { all: { application: { events: mock.data.sampleEvents, project: mock.data.sampleProject, manifest: mock.data.sampleRuntimeManifest } } } })).resolves.not.toThrow()
+    expect(mockFetch).toHaveBeenCalledWith('https://api.adobe.io/events/112233/projectId/workspaceId/isv/registrations/validate', expect.any(Object))
+  })
+
+  test('valid events should return without error on stage', async () => {
+    getCliEnv.mockReturnValue('stage')
+    expect(typeof hook).toBe('function')
+    process.env = mock.data.dotEnv
+    mockFetch.mockResolvedValue({ ok: true, json: jest.fn().mockResolvedValue('OK') })
+    await expect(hook({ appConfig: { all: { application: { events: mock.data.sampleEvents, project: mock.data.sampleProject, manifest: mock.data.sampleRuntimeManifest } } } })).resolves.not.toThrow()
+    expect(mockFetch).toHaveBeenCalledWith('https://api-stage.adobe.io/events/112233/projectId/workspaceId/isv/registrations/validate', expect.any(Object))
   })
 
   test('valid events in an extention config should return without error', async () => {

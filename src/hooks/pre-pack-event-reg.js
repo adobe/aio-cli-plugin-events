@@ -11,8 +11,12 @@ governing permissions and limitations under the License.
 const { CLI } = require('@adobe/aio-lib-ims/src/context')
 const { getToken } = require('@adobe/aio-lib-ims')
 const { createFetch } = require('@adobe/aio-lib-core-networking')
-const validationUrl = 'https://api.adobe.io/events'
+const { DEFAULT_ENV, getCliEnv } = require('@adobe/aio-lib-env')
 
+const EVENTS_BASE_URL = {
+  prod: 'https://api.adobe.io/events',
+  stage: 'https://api-stage.adobe.io/events'
+}
 /**
  * @returns {Promise<object>} returns headers required to make a call to the IO Events ISV validate endpoint
  */
@@ -45,11 +49,12 @@ async function handleResponse (response) {
 
 /**
  * Handle request to IO Events ISV Regitration Validate API
+ * @param {string} validationUrl IO Events base url based on the cli environment
  * @param {object} registrations The registrations from the App Builder ISV config file
  * @param {object} project The project details of the ISV app
  * @returns {Promise<object>} returns response object of the IO Events ISV validate API call
  */
-async function handleRequest (registrations, project) {
+async function handleRequest (validationUrl, registrations, project) {
   const headers = await getRequestHeaders()
   const url = `${validationUrl}/${project.org.id}/${project.id}/${project.workspace.id}/isv/registrations/validate`
   const fetch = createFetch()
@@ -147,9 +152,11 @@ module.exports = async function ({ appConfig }) {
   if (!applicationDetails?.project) {
     throw new Error('No project found, error in pre-pack events validation hook')
   }
+  const env = getCliEnv() || DEFAULT_ENV
+  const validationUrl = EVENTS_BASE_URL[env]
   const { registrationsToVerify, registrationRuntimeActions } =
       extractRegistrationDetails(applicationDetails.events)
   const manifestPackageToRuntimeActionsMap = extractRuntimeManifestDetails(applicationDetails.manifest)
   validateRuntimeActionsInEventRegistrations(manifestPackageToRuntimeActionsMap, registrationRuntimeActions)
-  await handleRequest(registrationsToVerify, applicationDetails.project)
+  await handleRequest(validationUrl, registrationsToVerify, applicationDetails.project)
 }
