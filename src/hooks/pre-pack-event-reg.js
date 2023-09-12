@@ -73,11 +73,10 @@ async function handleRequest (validationUrl, registrations, project) {
 /**
  * Extracts list of event registrations to validate by IO events and list of runtime actions to validate against runtimeManifest
  * @param {object} events Event registrations from the app.config.yaml file
- * @returns {object} list of event registrations, and list of runtime actions associated with the event registrations
+ * @param {object[]} registrationsToVerify list of event registrations or empty list
+ * @param {string[]} registrationRuntimeActions list of runtime actions associated with the event registrations
  */
-function extractRegistrationDetails (events) {
-  const registrationsToVerify = []
-  const registrationRuntimeActions = []
+function extractRegistrationDetails (events, registrationsToVerify, registrationRuntimeActions) {
   const registrationsFromConfig = events.registrations
   for (const registrationName in registrationsFromConfig) {
     const registration = {
@@ -91,23 +90,20 @@ function extractRegistrationDetails (events) {
     }
     registrationRuntimeActions.push(registrationsFromConfig[registrationName].runtime_action)
   }
-  return { registrationsToVerify, registrationRuntimeActions }
 }
 
 /**
  * Extract Map of packages and actions associated with each package
  * @param {object} manifest runtime manifest containing packages and runtime actions
- * @returns {object} Returns a map containing a mapping between the package name and list of actions in the package
+ * @param {object} manifestPackageToRuntimeActionsMap a map containing a mapping between the package name and list of actions in the package
  */
-function extractRuntimeManifestDetails (manifest) {
+function extractRuntimeManifestDetails (manifest, manifestPackageToRuntimeActionsMap) {
   const runtimePackages = manifest?.full?.packages || {}
-  const manifestPackageToRuntimeActionsMap = {}
   for (const packageName in runtimePackages) {
     if (runtimePackages[packageName].actions) {
       manifestPackageToRuntimeActionsMap[packageName] = runtimePackages[packageName].actions
     }
   }
-  return manifestPackageToRuntimeActionsMap
 }
 
 /**
@@ -144,19 +140,27 @@ function validateRuntimeActionsInEventRegistrations (manifestPackageToRuntimeAct
 }
 
 module.exports = async function ({ appConfig }) {
-  const applicationDetails = appConfig?.all?.application || Object.values(appConfig?.all || {})[0]
-  if (!(applicationDetails?.events?.registrations) || Object.keys(applicationDetails.events.registrations).length === 0) {
+  const applicationDetails = appConfig?.all || {}
+  if (!applicationDetails || Object.entries(applicationDetails).length === 0) {
     console.log('No event registrations to verify, skipping pre-pack events validation hook')
     return
   }
-  if (!applicationDetails?.project) {
+  if (!appConfig?.aio?.project) {
     throw new Error('No project found, error in pre-pack events validation hook')
+  }
+  const registrationsToVerify = []
+  const registrationRuntimeActions = []
+  const manifestPackageToRuntimeActionsMap = {}
+  Object.entries(applicationDetails).forEach(([extName, extConfig]) => {
+    extractRegistrationDetails(extConfig.events, registrationsToVerify, registrationRuntimeActions)
+    extractRuntimeManifestDetails(extConfig.manifest, manifestPackageToRuntimeActionsMap)
+  })
+  if (registrationsToVerify?.length === 0) {
+    console.log('No event registrations to verify, skipping pre-pack events validation hook')
+    return
   }
   const env = getCliEnv() || DEFAULT_ENV
   const validationUrl = EVENTS_BASE_URL[env]
-  const { registrationsToVerify, registrationRuntimeActions } =
-      extractRegistrationDetails(applicationDetails.events)
-  const manifestPackageToRuntimeActionsMap = extractRuntimeManifestDetails(applicationDetails.manifest)
   validateRuntimeActionsInEventRegistrations(manifestPackageToRuntimeActionsMap, registrationRuntimeActions)
-  await handleRequest(validationUrl, registrationsToVerify, applicationDetails.project)
+  await handleRequest(validationUrl, registrationsToVerify, appConfig.aio.project)
 }

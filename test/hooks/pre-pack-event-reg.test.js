@@ -42,24 +42,19 @@ describe('post deploy event registration hook interfaces', () => {
 
   test('no events should return without error', async () => {
     expect(typeof hook).toBe('function')
-    await expect(hook({ appConfig: { all: { application: { project: mock.data.sampleProject } } } })).resolves.not.toThrow()
-  })
-
-  test('no application should return without error', async () => {
-    expect(typeof hook).toBe('function')
-    await expect(hook({ appConfig: { all: { application: { } } } })).resolves.not.toThrow()
+    await expect(hook({ appConfig: { all: {}, aio: { project: mock.data.sampleProject } } })).resolves.not.toThrow()
   })
 
   test('no event registrations should return without error', async () => {
     expect(typeof hook).toBe('function')
     process.env = mock.data.dotEnv
-    await expect(hook({ appConfig: { all: { application: { project: mock.data.sampleProject, events: { registrations: {} }, manifest: mock.data.sampleRuntimeManifest } } } })).resolves.not.toThrow()
+    await expect(hook({ appConfig: { all: { application: { events: { registrations: {} }, manifest: mock.data.sampleRuntimeManifest } }, aio: { project: mock.data.sampleProject } } })).resolves.not.toThrow()
   })
 
   test('no service api key error', async () => {
     expect(typeof hook).toBe('function')
     process.env = mock.data.dotEnvMissingApiKey
-    await expect(hook({ appConfig: { all: { application: { events: mock.data.sampleEvents, project: mock.data.sampleProject, manifest: mock.data.sampleRuntimeManifest } } } })).rejects.toThrow(new Error('Required SERVICE_API_KEY is missing from .env file'))
+    await expect(hook({ appConfig: { all: { application: { events: mock.data.sampleEvents, manifest: mock.data.sampleRuntimeManifest } }, aio: { project: mock.data.sampleProject } } })).rejects.toThrow(new Error('Required SERVICE_API_KEY is missing from .env file'))
   })
 
   test('valid events should return without error', async () => {
@@ -67,7 +62,7 @@ describe('post deploy event registration hook interfaces', () => {
     process.env = mock.data.dotEnv
     getCliEnv.mockReturnValue('prod')
     mockFetch.mockResolvedValue({ ok: true, json: jest.fn().mockResolvedValue('OK') })
-    await expect(hook({ appConfig: { all: { application: { events: mock.data.sampleEvents, project: mock.data.sampleProject, manifest: mock.data.sampleRuntimeManifest } } } })).resolves.not.toThrow()
+    await expect(hook({ appConfig: { all: { application: { events: mock.data.sampleEvents, manifest: mock.data.sampleRuntimeManifest } }, aio: { project: mock.data.sampleProject } } })).resolves.not.toThrow()
     expect(mockFetch).toHaveBeenCalledWith('https://api.adobe.io/events/112233/projectId/workspaceId/isv/registrations/validate', expect.any(Object))
   })
 
@@ -76,7 +71,7 @@ describe('post deploy event registration hook interfaces', () => {
     process.env = mock.data.dotEnv
     getCliEnv.mockReturnValue(undefined)
     mockFetch.mockResolvedValue({ ok: true, json: jest.fn().mockResolvedValue('OK') })
-    await expect(hook({ appConfig: { all: { application: { events: mock.data.sampleEvents, project: mock.data.sampleProject, manifest: mock.data.sampleRuntimeManifest } } } })).resolves.not.toThrow()
+    await expect(hook({ appConfig: { all: { application: { events: mock.data.sampleEvents, manifest: mock.data.sampleRuntimeManifest } }, aio: { project: mock.data.sampleProject } } })).resolves.not.toThrow()
     expect(mockFetch).toHaveBeenCalledWith('https://api.adobe.io/events/112233/projectId/workspaceId/isv/registrations/validate', expect.any(Object))
   })
 
@@ -85,7 +80,7 @@ describe('post deploy event registration hook interfaces', () => {
     expect(typeof hook).toBe('function')
     process.env = mock.data.dotEnv
     mockFetch.mockResolvedValue({ ok: true, json: jest.fn().mockResolvedValue('OK') })
-    await expect(hook({ appConfig: { all: { application: { events: mock.data.sampleEvents, project: mock.data.sampleProject, manifest: mock.data.sampleRuntimeManifest } } } })).resolves.not.toThrow()
+    await expect(hook({ appConfig: { all: { application: { events: mock.data.sampleEvents, manifest: mock.data.sampleRuntimeManifest } }, aio: { project: mock.data.sampleProject } } })).resolves.not.toThrow()
     expect(mockFetch).toHaveBeenCalledWith('https://api-stage.adobe.io/events/112233/projectId/workspaceId/isv/registrations/validate', expect.any(Object))
   })
 
@@ -93,7 +88,7 @@ describe('post deploy event registration hook interfaces', () => {
     expect(typeof hook).toBe('function')
     process.env = mock.data.dotEnv
     mockFetch.mockResolvedValue({ ok: true, json: jest.fn().mockResolvedValue('OK') })
-    await expect(hook({ appConfig: { all: { 'sample-package': { events: mock.data.sampleEvents, project: mock.data.sampleProject, manifest: mock.data.sampleRuntimeManifest } } } })).resolves.not.toThrow()
+    await expect(hook({ appConfig: { all: { 'sample-package': { events: mock.data.sampleEvents, manifest: mock.data.sampleRuntimeManifest } }, aio: { project: mock.data.sampleProject } } })).resolves.not.toThrow()
   })
 
   test('empty events in an extention config should return without error', async () => {
@@ -107,14 +102,14 @@ describe('post deploy event registration hook interfaces', () => {
     expect(typeof hook).toBe('function')
     process.env = mock.data.dotEnv
     mockFetch.mockResolvedValue({ ok: false, json: jest.fn().mockResolvedValue('Bad Request') })
-    await expect(hook({ appConfig: { all: { application: { events: mock.data.sampleEvents, project: mock.data.sampleProject, manifest: mock.data.sampleRuntimeManifest } } } })).rejects.toThrow(new Error('Error: "Bad Request"'))
+    await expect(hook({ appConfig: { all: { application: { events: mock.data.sampleEvents, manifest: mock.data.sampleRuntimeManifest } }, aio: { project: mock.data.sampleProject } } })).rejects.toThrow(new Error('Error: "Bad Request"'))
   })
 
   test('error in fetching from URL should throw error', async () => {
     expect(typeof hook).toBe('function')
     process.env = mock.data.dotEnv
     mockFetch.mockRejectedValue(new Error('Connection Rejected'))
-    await expect(hook({ appConfig: { all: { application: { events: mock.data.sampleEvents, project: mock.data.sampleProject, manifest: mock.data.sampleRuntimeManifest } } } })).rejects.toThrow(new Error('Error: Connection Rejected'))
+    await expect(hook({ appConfig: { all: { application: { events: mock.data.sampleEvents, manifest: mock.data.sampleRuntimeManifest } }, aio: { project: mock.data.sampleProject } } })).rejects.toThrow(new Error('Error: Connection Rejected'))
   })
 
   test('no runtime action in event registration should throw error', async () => {
@@ -123,10 +118,10 @@ describe('post deploy event registration hook interfaces', () => {
       appConfig: {
         all: {
           application: {
-            events: mock.data.sampleEventsWithoutRuntimeAction,
-            project: mock.data.sampleProject
+            events: mock.data.sampleEventsWithoutRuntimeAction
           }
-        }
+        },
+        aio: { project: mock.data.sampleProject }
       }
     })).rejects.toThrow(new Error('Invalid event registration. All Event registrations need to be associated with a runtime action'))
   })
@@ -137,10 +132,10 @@ describe('post deploy event registration hook interfaces', () => {
       appConfig: {
         all: {
           application: {
-            events: mock.data.sampleEvents,
-            project: mock.data.sampleProject
+            events: mock.data.sampleEvents
           }
-        }
+        },
+        aio: { project: mock.data.sampleProject }
       }
     })).rejects.toThrow(new Error('Runtime manifest does not contain package:\n' +
         '        package-1 associated with package-1/poc-event-1\n' +
@@ -156,10 +151,10 @@ describe('post deploy event registration hook interfaces', () => {
         all: {
           application: {
             events: eventsWithInvalidRuntimeAction,
-            project: mock.data.sampleProject,
             manifest: mock.data.sampleRuntimeManifest
           }
-        }
+        },
+        aio: { project: mock.data.sampleProject }
       }
     })).rejects.toThrow(new Error('Runtime action test-action is not correctly defined as part of a package'))
     eventsWithInvalidRuntimeAction.registrations['Event Registration 1'].runtime_action = 'package-1/poc-event-1'
@@ -177,10 +172,10 @@ describe('post deploy event registration hook interfaces', () => {
         all: {
           application: {
             events: mock.data.sampleEvents,
-            project: mock.data.sampleProject,
             manifest: runtimeManifestWithOnePackageHavingNoActions
           }
-        }
+        },
+        aio: { project: mock.data.sampleProject }
       }
     })).resolves.not.toThrow()
   })
@@ -194,10 +189,10 @@ describe('post deploy event registration hook interfaces', () => {
         all: {
           application: {
             events: eventsWithInvalidRuntimeAction,
-            project: mock.data.sampleProject,
             manifest: mock.data.sampleRuntimeManifest
           }
-        }
+        },
+        aio: { project: mock.data.sampleProject }
       }
     })).rejects.toThrow(new Error('Runtime action package-1/invalid-test-action associated with the event registration\n' +
         '        does not exist in the runtime manifest'))
@@ -212,10 +207,10 @@ describe('post deploy event registration hook interfaces', () => {
         all: {
           application: {
             events: eventsWithInvalidRuntimeAction,
-            project: mock.data.sampleProject,
             manifest: mock.data.sampleRuntimeManifest
           }
-        }
+        },
+        aio: { project: mock.data.sampleProject }
       }
     })).rejects.toThrow(new Error('Invalid runtime action package-2/publish-events.\n' +
             '        Only non-web action can be registered for events'))
