@@ -65,8 +65,7 @@ async function handleRequest (validationUrl, registrations, project) {
   }).then((response) => handleResponse(response))
     .then(() => console.log('Event registrations successfully validated'))
     .catch((error) => {
-      console.log(`Error validating event registrations ${error}`)
-      throw new Error(error)
+      throw new Error(`Error validating event registrations ${error}`)
     })
 }
 
