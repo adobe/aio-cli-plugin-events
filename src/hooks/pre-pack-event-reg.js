@@ -151,8 +151,13 @@ module.exports = async function ({ appConfig }) {
   const registrationRuntimeActions = []
   const manifestPackageToRuntimeActionsMap = {}
   Object.entries(applicationDetails).forEach(([extName, extConfig]) => {
-    extractRegistrationDetails(extConfig.events, registrationsToVerify, registrationRuntimeActions)
-    extractRuntimeManifestDetails(extConfig.manifest, manifestPackageToRuntimeActionsMap)
+    if (extConfig.events) {
+      extractRegistrationDetails(extConfig.events, registrationsToVerify,
+        registrationRuntimeActions)
+    }
+    if (extConfig.manifest) {
+      extractRuntimeManifestDetails(extConfig.manifest, manifestPackageToRuntimeActionsMap)
+    }
   })
   if (registrationsToVerify?.length === 0) {
     console.log('No event registrations to verify, skipping pre-pack events validation hook')

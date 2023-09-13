@@ -112,6 +112,27 @@ describe('post deploy event registration hook interfaces', () => {
     })).resolves.not.toThrow()
   })
 
+  test('valid config and empty manifest and events in another config should return without error', async () => {
+    expect(typeof hook).toBe('function')
+    process.env = mock.data.dotEnv
+    mockFetch.mockResolvedValue({ ok: true, json: jest.fn().mockResolvedValue('OK') })
+    await expect(hook({
+      appConfig: {
+        all: {
+          'package-1': {
+            events: mock.data.sampleEvents,
+            manifest: mock.data.sampleRuntimeManifest
+          },
+          application: {
+            events: {},
+            manifest: { full: {} }
+          }
+        },
+        aio: { project: mock.data.sampleProject }
+      }
+    })).resolves.not.toThrow()
+  })
+
   test('empty events in an extention config should return without error', async () => {
     expect(typeof hook).toBe('function')
     process.env = mock.data.dotEnv
@@ -164,6 +185,19 @@ describe('post deploy event registration hook interfaces', () => {
     })).rejects.toThrow(new Error('Runtime manifest does not contain package:\n' +
         '        package-1 associated with package-1/poc-event-1\n' +
         '        defined in event registrations'))
+  })
+
+  test('no events in config should not throw error', async () => {
+    await expect(hook({
+      appConfig: {
+        all: {
+          application: {
+            manifest: mock.data.sampleRuntimeManifest
+          }
+        },
+        aio: { project: mock.data.sampleProject }
+      }
+    })).resolves.not.toThrow()
   })
 
   test('no package name in runtime_action should throw error', async () => {
