@@ -12,6 +12,7 @@ const { CLI } = require('@adobe/aio-lib-ims/src/context')
 const { getToken } = require('@adobe/aio-lib-ims')
 const { createFetch } = require('@adobe/aio-lib-core-networking')
 const { DEFAULT_ENV, getCliEnv } = require('@adobe/aio-lib-env')
+const aioLogger = require('@adobe/aio-lib-core-logging')('@adobe/aio-cli-plugin-events:hooks:pre-pack-event-reg', { level: 'info' })
 
 const EVENTS_BASE_URL = {
   prod: 'https://api.adobe.io/events',
@@ -63,7 +64,7 @@ async function handleRequest (validationUrl, registrations, project) {
     headers,
     body: JSON.stringify(registrations)
   }).then((response) => handleResponse(response))
-    .then(() => console.log('Event registrations successfully validated'))
+    .then(() => aioLogger.info('Event registrations successfully validated'))
     .catch((error) => {
       throw new Error(`Error validating event registrations ${error}`)
     })
@@ -135,13 +136,13 @@ function validateRuntimeActionsInEventRegistrations (manifestPackageToRuntimeAct
         Only non-web action can be registered for events`)
     }
   }
-  console.log('Validated runtime actions associated with event registrations successfully')
+  aioLogger.info('Validated runtime actions associated with event registrations successfully')
 }
 
 module.exports = async function ({ appConfig }) {
   const applicationDetails = appConfig?.all || {}
   if (!applicationDetails || Object.entries(applicationDetails).length === 0) {
-    console.log('No event registrations to verify, skipping pre-pack events validation hook')
+    aioLogger.debug('No event registrations to verify, skipping pre-pack events validation hook')
     return
   }
   if (!appConfig?.aio?.project) {
@@ -160,7 +161,7 @@ module.exports = async function ({ appConfig }) {
     }
   })
   if (registrationsToVerify?.length === 0) {
-    console.log('No event registrations to verify, skipping pre-pack events validation hook')
+    aioLogger.debug('No event registrations to verify, skipping pre-pack events validation hook')
     return
   }
   const env = getCliEnv() || DEFAULT_ENV
