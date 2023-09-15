@@ -12,6 +12,7 @@ governing permissions and limitations under the License.
 const {
   JOURNAL, getDeliveryType
 } = require('./utils/hook-utils')
+const aioLogger = require('@adobe/aio-lib-core-logging')('@adobe/aio-cli-plugin-events:hooks:pre-deploy-event-reg', { level: 'info' })
 
 module.exports = async function ({ appConfig }) {
   if (appConfig && appConfig.events) {
@@ -19,11 +20,11 @@ module.exports = async function ({ appConfig }) {
     for (const registrationName in registrations) {
       const deliveryType = getDeliveryType(registrations[registrationName])
       if (deliveryType === JOURNAL) {
-        console.log('Journal registrations are not currently supported.')
+        aioLogger.debug('Journal registrations are not currently supported.')
         return
       }
     }
   } else {
-    console.log('No events to register. Skipping pre-deploy-event-reg hook')
+    aioLogger.debug('No events to register. Skipping pre-deploy-event-reg hook')
   }
 }

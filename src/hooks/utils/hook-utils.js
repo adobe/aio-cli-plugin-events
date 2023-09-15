@@ -12,6 +12,7 @@ governing permissions and limitations under the License.
 const eventsSdk = require('@adobe/aio-lib-events')
 const { CLI } = require('@adobe/aio-lib-ims/src/context')
 const { getToken } = require('@adobe/aio-lib-ims')
+const aioLogger = require('@adobe/aio-lib-core-logging')('@adobe/aio-cli-plugin-events:hooks', { level: 'info' })
 
 const WEBHOOK = 'webhook'
 const JOURNAL = 'journal'
@@ -125,11 +126,11 @@ async function createOrUpdateRegistration (body, eventsSDK, existingRegistration
   if (existingRegistration) {
     const response = await eventsSDK.eventsClient.updateRegistration(eventsSDK.orgId, project.id, project.workspace.id,
       existingRegistration.registration_id, body)
-    console.log('Updated registration with name:' + response.name + ' and id:' + response.registration_id)
+    aioLogger.info('Updated registration with name:' + response.name + ' and id:' + response.registration_id)
   } else {
     const response = await eventsSDK.eventsClient.createRegistration(eventsSDK.orgId, project.id,
       project.workspace.id, body)
-    console.log('Created registration:' + response.name + ' and id:' + response.registration_id)
+    aioLogger.info('Created registration:' + response.name + ' and id:' + response.registration_id)
   }
 }
 
@@ -142,7 +143,7 @@ async function createOrUpdateRegistration (body, eventsSDK, existingRegistration
 async function deleteRegistration (eventsSDK, existingRegistration, project) {
   await eventsSDK.eventsClient.deleteRegistration(eventsSDK.orgId, project.id, project.workspace.id,
     existingRegistration.registration_id)
-  console.log('Deleted registration with name:' + existingRegistration.name + ' and id:' + existingRegistration.registration_id)
+  aioLogger.info('Deleted registration with name:' + existingRegistration.name + ' and id:' + existingRegistration.registration_id)
 }
 
 /**
@@ -173,8 +174,8 @@ async function deployRegistration ({ appConfig: { events, project } }, expectedD
             `No project found, skipping event registration in ${hookType} hook`)
   }
   if (!events) {
-    console.log(
-            `No events to register, skipping event registration in ${hookType} hook`)
+    aioLogger.debug(
+      `No events to register, skipping event registration in ${hookType} hook`)
     return
   }
   const eventsSDK = await initEventsSdk(project)
@@ -211,7 +212,7 @@ async function deployRegistration ({ appConfig: { events, project } }, expectedD
 
   if (forceEventsFlag) {
     const registrationsToDeleted = getWorkspaceRegistrationsToBeDeleted(Object.keys(registrationsFromWorkspace), Object.keys(registrationsFromConfig))
-    console.log('The following registrations will be deleted: ', registrationsToDeleted)
+    aioLogger.info('The following registrations will be deleted: ', registrationsToDeleted)
     for (const registrationName of registrationsToDeleted) {
       try {
         await deleteRegistration(eventsSDK, registrationsFromWorkspace[registrationName], project)
@@ -236,7 +237,7 @@ async function undeployRegistration ({ appConfig: { events, project } }) {
       'No project found, skipping deletion of event registrations')
   }
   if (!events) {
-    console.log('No events to delete, skipping deletion of event registrations')
+    aioLogger.debug('No events to delete, skipping deletion of event registrations')
     return
   }
   const eventsSDK = await initEventsSdk(project)
@@ -247,7 +248,7 @@ async function undeployRegistration ({ appConfig: { events, project } }) {
   const registrationsFromConfig = events.registrations
   const registrationsFromWorkspace = await getAllRegistrationsForWorkspace(eventsSDK, project)
   if (Object.keys(registrationsFromWorkspace).length === 0) {
-    console.log('No events to delete, skipping deletion of event registrations')
+    aioLogger.debug('No events to delete, skipping deletion of event registrations')
     return
   }
   for (const registrationName in registrationsFromConfig) {

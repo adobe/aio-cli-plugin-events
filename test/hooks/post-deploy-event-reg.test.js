@@ -116,7 +116,7 @@ describe('post deploy event registration hook interfaces', () => {
     process.env = mock.data.dotEnv
     getToken.mockReturnValue('accessToken')
     mockEventsSdkInstance.createRegistration.mockReturnValue(mock.data.createWebhookRegistrationResponse)
-    await expect(hook({ appConfig: { project: mock.data.sampleProjectWithoutEvents, events: mock.data.sampleEvents } })).resolves.not.toThrow()
+    await expect(hook({ appConfig: { project: mock.data.sampleProjectWithoutEvents, events: mock.data.sampleEventsWithWebhookAndJournalReg } })).resolves.not.toThrow()
     expect(mockEventsSdkInstance.createRegistration).toHaveBeenCalledTimes(1)
     expect(mockEventsSdkInstance.createRegistration).toHaveBeenCalledWith(CONSUMER_ID, PROJECT_ID, WORKSPACE_ID,
       mock.data.hookDecodedEventRegistration1
@@ -128,7 +128,7 @@ describe('post deploy event registration hook interfaces', () => {
     expect(typeof hook).toBe('function')
     process.env = mock.data.dotEnv
     getToken.mockReturnValue('accessToken')
-    const events = mock.data.sampleEvents
+    const events = mock.data.sampleEventsWithWebhookAndJournalReg
     events.registrations['Event Registration 1'].delivery_type = 'webhook'
     mockEventsSdkInstance.getAllRegistrationsForWorkspace.mockResolvedValue(mock.data.getAllWebhookRegistrationsWithEmptyResponse)
     mockEventsSdkInstance.createRegistration.mockReturnValue(mock.data.createWebhookRegistrationResponse)
@@ -167,7 +167,7 @@ describe('post deploy event registration hook interfaces', () => {
     getToken.mockReturnValue('accessToken')
     mockEventsSdkInstance.getAllRegistrationsForWorkspace.mockResolvedValue(mock.data.getAllWebhookRegistrationsResponse)
     mockEventsSdkInstance.updateRegistration.mockReturnValue(mock.data.createWebhookRegistrationResponse)
-    await expect(hook({ appConfig: { project: mock.data.sampleProject, events: mock.data.sampleEvents } })).resolves.not.toThrow()
+    await expect(hook({ appConfig: { project: mock.data.sampleProject, events: mock.data.sampleEventsWithWebhookAndJournalReg } })).resolves.not.toThrow()
     expect(mockEventsSdkInstance.updateRegistration).toHaveBeenCalledTimes(1)
     expect(mockEventsSdkInstance.updateRegistration).toHaveBeenCalledWith(CONSUMER_ID, PROJECT_ID, WORKSPACE_ID, 'REGID1',
       mock.data.hookDecodedEventRegistration1
@@ -199,7 +199,7 @@ describe('post deploy event registration hook interfaces', () => {
     getToken.mockReturnValue('accessToken')
     mockEventsSdkInstance.getAllRegistrationsForWorkspace.mockResolvedValue(mock.data.getAllWebhookRegistrationsResponse)
     mockEventsSdkInstance.updateRegistration.mockReturnValue(mock.data.createWebhookRegistrationResponse)
-    await expect(hook({ appConfig: { project: mock.data.sampleProject, events: mock.data.sampleEvents }, force: true })).resolves.not.toThrow()
+    await expect(hook({ appConfig: { project: mock.data.sampleProject, events: mock.data.sampleEventsWithWebhookAndJournalReg }, force: true })).resolves.not.toThrow()
     expect(mockEventsSdkInstance.updateRegistration).toHaveBeenCalledTimes(1)
     expect(mockEventsSdkInstance.updateRegistration).toHaveBeenCalledWith(CONSUMER_ID, PROJECT_ID, WORKSPACE_ID, 'REGID1',
       mock.data.hookDecodedEventRegistration1)
@@ -214,7 +214,7 @@ describe('post deploy event registration hook interfaces', () => {
     mockEventsSdkInstance.getAllRegistrationsForWorkspace.mockResolvedValue(mock.data.getAllWebhookRegistrationsWithEmptyResponse)
 
     mockEventsSdkInstance.createRegistration.mockReturnValue(mock.data.createWebhookRegistrationResponse)
-    await expect(hook({ appConfig: { project: mock.data.sampleProjectWithoutEvents, events: mock.data.sampleEvents }, force: true })).resolves.not.toThrow()
+    await expect(hook({ appConfig: { project: mock.data.sampleProjectWithoutEvents, events: mock.data.sampleEventsWithWebhookAndJournalReg }, force: true })).resolves.not.toThrow()
     expect(mockEventsSdkInstance.createRegistration).toHaveBeenCalledTimes(1)
     expect(mockEventsSdkInstance.createRegistration).toHaveBeenCalledWith(CONSUMER_ID, PROJECT_ID, WORKSPACE_ID,
       mock.data.hookDecodedEventRegistration1)
