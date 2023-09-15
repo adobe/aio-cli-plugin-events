@@ -39,7 +39,7 @@ async function getRequestHeaders () {
  * @param {object} response The error response object obtained from making a call to the IO Events ISV validate API
  * @returns {Promise<object>} returns response body of the IO Events ISV validate API call
  */
-async function handleResponse (response) {
+async function handleErrorResponse (response) {
   if (!response.ok) {
     return response.json()
       .then((responseBody) => {
@@ -63,7 +63,7 @@ async function handleRequest (validationUrl, registrations, project) {
     method: 'POST',
     headers,
     body: JSON.stringify(registrations)
-  }).then((response) => handleResponse(response))
+  }).then((response) => handleErrorResponse(response))
     .then(() => aioLogger.info('Event registrations successfully validated'))
     .catch((error) => {
       throw new Error(`Error validating event registrations ${error}`)
@@ -73,23 +73,25 @@ async function handleRequest (validationUrl, registrations, project) {
 /**
  * Extracts list of event registrations to validate by IO events and list of runtime actions to validate against runtimeManifest
  * @param {object} events Event registrations from the app.config.yaml file
- * @param {object[]} registrationsToVerify list of event registrations or empty list
- * @param {string[]} registrationRuntimeActions list of runtime actions associated with the event registrations
+ * @returns {object} Object containing list of event registrations and list of runtime actions associated with the event registrations
  */
-function extractRegistrationDetails (events, registrationsToVerify, registrationRuntimeActions) {
+function extractRegistrationDetails (events) {
+  const registrationsList = []
+  const runtimeActionList = []
   const registrationsFromConfig = events.registrations
   for (const registrationName in registrationsFromConfig) {
     const registration = {
       name: registrationName,
       ...registrationsFromConfig[registrationName]
     }
-    registrationsToVerify.push(registration)
+    registrationsList.push(registration)
     if (!registrationsFromConfig[registrationName].runtime_action) {
       throw new Error(
         'Invalid event registration. All Event registrations need to be associated with a runtime action')
     }
-    registrationRuntimeActions.push(registrationsFromConfig[registrationName].runtime_action)
+    runtimeActionList.push(registrationsFromConfig[registrationName].runtime_action)
   }
+  return { registrationsList, runtimeActionList }
 }
 
 /**
@@ -112,7 +114,7 @@ function extractRuntimeManifestDetails (manifest, manifestPackageToRuntimeAction
  * a. runtime manifest contains the package name and action used in events registration
  * b. the actions associated with event registrations are non-web actions
  * @param {object} manifestPackageToRuntimeActionsMap a map containing a mapping between the package name and list of actions in the package
- * @param {object} registrationRuntimeActions list of actions associated with event registrations
+ * @param {string[]} registrationRuntimeActions list of actions associated with event registrations
  */
 function validateRuntimeActionsInEventRegistrations (manifestPackageToRuntimeActionsMap, registrationRuntimeActions) {
   for (const registrationRuntimeAction of registrationRuntimeActions) {
@@ -148,13 +150,14 @@ module.exports = async function ({ appConfig }) {
   if (!appConfig?.aio?.project) {
     throw new Error('No project found, error in pre-pack events validation hook')
   }
-  const registrationsToVerify = []
-  const registrationRuntimeActions = []
+  let registrationsToVerify = []
+  let registrationRuntimeActions = []
   const manifestPackageToRuntimeActionsMap = {}
   Object.entries(applicationDetails).forEach(([extName, extConfig]) => {
     if (extConfig.events) {
-      extractRegistrationDetails(extConfig.events, registrationsToVerify,
-        registrationRuntimeActions)
+      const { registrationsList, runtimeActionList } = extractRegistrationDetails(extConfig.events)
+      registrationsToVerify = [...registrationsToVerify, ...registrationsList]
+      registrationRuntimeActions = [...registrationRuntimeActions, ...runtimeActionList]
     }
     if (extConfig.manifest) {
       extractRuntimeManifestDetails(extConfig.manifest, manifestPackageToRuntimeActionsMap)
