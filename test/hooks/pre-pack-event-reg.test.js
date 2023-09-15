@@ -24,7 +24,7 @@ jest.mock('@adobe/aio-lib-core-networking', () => ({
 const hook = require('../../src/hooks/pre-pack-event-reg')
 const mock = require('../mocks')
 
-describe('post deploy event registration hook interfaces', () => {
+describe('pre pack hook interfaces', () => {
   beforeEach(() => {
     jest.clearAllMocks()
     getToken.mockReturnValue('accessToken')

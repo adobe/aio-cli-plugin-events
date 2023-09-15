@@ -97,15 +97,17 @@ function extractRegistrationDetails (events) {
 /**
  * Extract Map of packages and actions associated with each package
  * @param {object} manifest runtime manifest containing packages and runtime actions
- * @param {object} manifestPackageToRuntimeActionsMap a map containing a mapping between the package name and list of actions in the package
+ * @returns {object} a map containing a mapping between the package name and list of actions in the package
  */
-function extractRuntimeManifestDetails (manifest, manifestPackageToRuntimeActionsMap) {
+function extractRuntimeManifestDetails (manifest) {
+  const manifestPackageToRuntimeActionsMap = {}
   const runtimePackages = manifest?.full?.packages || {}
   for (const packageName in runtimePackages) {
     if (runtimePackages[packageName].actions) {
       manifestPackageToRuntimeActionsMap[packageName] = runtimePackages[packageName].actions
     }
   }
+  return manifestPackageToRuntimeActionsMap
 }
 
 /**
@@ -160,7 +162,13 @@ module.exports = async function ({ appConfig }) {
       registrationRuntimeActions = [...registrationRuntimeActions, ...runtimeActionList]
     }
     if (extConfig.manifest) {
-      extractRuntimeManifestDetails(extConfig.manifest, manifestPackageToRuntimeActionsMap)
+      const packageToRuntimeActions = extractRuntimeManifestDetails(extConfig.manifest)
+      for (const packageToAction in packageToRuntimeActions) {
+        manifestPackageToRuntimeActionsMap[packageToAction] = {
+          ...manifestPackageToRuntimeActionsMap[packageToAction],
+          ...packageToRuntimeActions[packageToAction]
+        }
+      }
     }
   })
   if (registrationsToVerify?.length === 0) {
