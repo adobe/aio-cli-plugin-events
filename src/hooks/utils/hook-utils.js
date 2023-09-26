@@ -80,10 +80,11 @@ async function initEventsSdk (projectConfig) {
  * @returns {object} Object containing mapping of provider metadata to provider id
  */
 function getProviderMetadataToProviderIdMapping () {
-  if (!process.env.AIO_events_providermetadata_to_provider_mapping) {
+  console.log(process.env)
+  if (!process.env.AIO_EVENTS_PROVIDERMETADATA_TO_PROVIDER_MAPPING) {
     throw new Error('No environment variables for provider metadata to provider id mappings found.')
   }
-  const entries = process.env.AIO_events_providermetadata_to_provider_mapping.split(',')
+  const entries = process.env.AIO_EVENTS_PROVIDERMETADATA_TO_PROVIDER_MAPPING.split(',')
   const providerMetadataToProviderIdMap = {}
   entries.forEach(providerMetadataToProviderId => {
     const tokens = providerMetadataToProviderId.split(':')

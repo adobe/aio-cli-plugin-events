@@ -761,14 +761,14 @@ const dotEnv = {
   AIO_runtime_apihost: 'https://adobeioruntime.net',
   SERVICE_API_KEY: 'serviceApiKey',
   API_KEY: 'apiKey',
-  AIO_events_providermetadata_to_provider_mapping: 'providerMetadata1:providerId1,providerMetadata2:providerId2'
+  AIO_EVENTS_PROVIDERMETADATA_TO_PROVIDER_MAPPING: 'providerMetadata1:providerId1,providerMetadata2:providerId2'
 }
 
 const dotEnvMissingApiKey = {
   AIO_runtime_auth: 'runtimeAuth',
   AIO_runtime_namespace: 'namespace',
   AIO_runtime_apihost: 'https://adobeioruntime.net',
-  AIO_events_providermetadata_to_provider_mapping: 'providerMetadata1:providerId1,providerMetadata2:providerId2'
+  AIO_EVENTS_PROVIDERMETADATA_TO_PROVIDER_MAPPING: 'providerMetadata1:providerId1,providerMetadata2:providerId2'
 }
 
 const dotEnvMissingProviderMetadataToProviderIdMapping = {
