@@ -47,6 +47,10 @@ function getEventsOfInterestForRegistration (registration,
   const eventsOfInterestCompressed = registration.events_of_interest
   eventsOfInterestCompressed.forEach(eventOfInterest => {
     const providerId = providerMetadataToProviderIdMapping[eventOfInterest.provider_metadata]
+    if (!providerId) {
+      throw new Error(
+            `No provider id mapping found for provider metadata ${eventOfInterest.provider_metadata}. Skipping event registration`)
+    }
     const eventCodesList = eventOfInterest.event_codes
     for (const eventCode of eventCodesList) {
       eventsOfInterest.push({
