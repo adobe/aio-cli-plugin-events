@@ -92,6 +92,19 @@ describe('post deploy event registration hook interfaces', () => {
     await expect(hook({ appConfig: { project: mock.data.sampleProject, events: mock.data.sampleEvents } })).rejects.toThrow(new Error('No environment variables for provider metadata to provider id mappings found.'))
   })
 
+  test('providerMetadata to providerId missing for some providers', async () => {
+    const hook = require('../../src/hooks/post-deploy-event-reg')
+    expect(typeof hook).toBe('function')
+    process.env = mock.data.dotEnvMissingProviderMetadataToProviderIdMapping
+    process.env.AIO_events_providermetadata_to_provider_mapping = ''
+    process.env = {
+      ...mock.data.dotEnvMissingProviderMetadataToProviderIdMapping,
+      AIO_EVENTS_PROVIDERMETADATA_TO_PROVIDER_MAPPING: 'providerMetadata2:providerId2'
+    }
+    getToken.mockReturnValue('accessToken')
+    await expect(hook({ appConfig: { project: mock.data.sampleProject, events: mock.data.sampleEvents } })).rejects.toThrow(new Error('No provider id mapping found for provider metadata providerMetadata1. Skipping event registration'))
+  })
+
   test('error in create registration', async () => {
     const hook = require('../../src/hooks/post-deploy-event-reg')
     expect(typeof hook).toBe('function')
