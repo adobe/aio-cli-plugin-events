@@ -41,16 +41,10 @@ describe('post deploy event registration hook interfaces', () => {
     expect(typeof hook).toBe('function')
   })
 
-  test('command-error', async () => {
+  test('no project should return without error', async () => {
     const hook = require('../../src/hooks/post-deploy-event-reg')
     expect(typeof hook).toBe('function')
-    await expect(hook({ appConfig: {} })).rejects.toThrow(new Error('No project found, skipping event registration in post-deploy-event-reg hook'))
-  })
-
-  test('no project error', async () => {
-    const hook = require('../../src/hooks/post-deploy-event-reg')
-    expect(typeof hook).toBe('function')
-    await expect(hook({ appConfig: {} })).rejects.toThrow(new Error('No project found, skipping event registration in post-deploy-event-reg hook'))
+    await expect(hook({ appConfig: {} })).resolves.not.toThrow()
   })
 
   test('no events should return without error', async () => {
