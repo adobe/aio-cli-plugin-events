@@ -39,10 +39,10 @@ describe('pre undeploy event registration hook interfaces', () => {
     expect(typeof hook).toBe('function')
   })
 
-  test('no project error', async () => {
+  test('no project should return without error', async () => {
     const hook = require('../../src/hooks/pre-undeploy-event-reg')
     expect(typeof hook).toBe('function')
-    await expect(hook({ appConfig: {} })).rejects.toThrow(new Error('No project found, skipping deletion of event registrations'))
+    await expect(hook({ appConfig: {} })).resolves.not.toThrow()
   })
 
   test('no events should return without error', async () => {

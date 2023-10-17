@@ -174,12 +174,11 @@ async function getAllRegistrationsForWorkspace (eventsSDK, project) {
  */
 async function deployRegistration ({ appConfig: { events, project } }, expectedDeliveryType, hookType, forceEventsFlag) {
   if (!project) {
-    throw new Error(
-            `No project found, skipping event registration in ${hookType} hook`)
+    aioLogger.debug(`No project found, skipping event registration in ${hookType} hook`)
+    return
   }
   if (!events) {
-    aioLogger.debug(
-      `No events to register, skipping event registration in ${hookType} hook`)
+    aioLogger.debug(`No events to register, skipping event registration in ${hookType} hook`)
     return
   }
   const eventsSDK = await initEventsSdk(project)
@@ -237,8 +236,8 @@ async function deployRegistration ({ appConfig: { events, project } }, expectedD
  */
 async function undeployRegistration ({ appConfig: { events, project } }) {
   if (!project) {
-    throw new Error(
-      'No project found, skipping deletion of event registrations')
+    aioLogger.debug('No project with events to delete, skipping deletion of event registrations')
+    return
   }
   if (!events) {
     aioLogger.debug('No events to delete, skipping deletion of event registrations')
