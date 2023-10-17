@@ -236,8 +236,8 @@ async function deployRegistration ({ appConfig: { events, project } }, expectedD
  */
 async function undeployRegistration ({ appConfig: { events, project } }) {
   if (!project) {
-    throw new Error(
-      'No project found, skipping deletion of event registrations')
+    aioLogger.debug('No project with events to delete, skipping deletion of event registrations')
+    return
   }
   if (!events) {
     aioLogger.debug('No events to delete, skipping deletion of event registrations')
