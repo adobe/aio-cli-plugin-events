@@ -16,7 +16,7 @@
     "@adobe/aio-cli-lib-app-config": "^3.0.0",
     "@adobe/aio-lib-events": "^3.2.0",
     "@adobe/aio-lib-ims": "^6.0.1",
-    "@oclif/core": "^1.5.2",
+    "@oclif/core": "2.8.12",
     "inquirer": "^8.2.5",
     "js-yaml": "^4.1.0"
   },
