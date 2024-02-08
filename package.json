@@ -8,12 +8,12 @@
   ],
   "license": "Apache-2.0",
   "dependencies": {
+    "@adobe/aio-cli-lib-app-config": "^4",
     "@adobe/aio-lib-console": "^5",
     "@adobe/aio-lib-core-config": "^5",
     "@adobe/aio-lib-core-logging": "^3",
     "@adobe/aio-lib-core-networking": "^5",
     "@adobe/aio-lib-env": "^3",
-    "@adobe/aio-cli-lib-app-config": "^4",
     "@adobe/aio-lib-events": "^4",
     "@adobe/aio-lib-ims": "^7",
     "@oclif/core": "^1.5.2",
@@ -22,7 +22,7 @@
   },
   "repository": "adobe/aio-cli-plugin-events",
   "devDependencies": {
-    "@adobe/eslint-config-aio-lib-config": "^2.0.2",
+    "@adobe/eslint-config-aio-lib-config": "^3.0.0",
     "@types/jest": "^29.5.3",
     "acorn": "^8.10.0",
     "babel-runtime": "^6.26.0",
@@ -44,8 +44,7 @@
     "jest-junit": "^16.0.0",
     "jest-resolve": "^29.5.0",
     "oclif": "^3.2.0",
-    "stdout-stderr": "^0.1.13",
-    "typescript": "^5.1.6"
+    "stdout-stderr": "^0.1.13"
   },
   "engines": {
     "node": ">=18"
