@@ -21,7 +21,10 @@ jest.useFakeTimers()
 // don't touch the real fs
 const mockFs = {
   readFileSync: jest.fn(),
-  readFile: jest.fn()
+  readFile: jest.fn(),
+  promises: {
+    stat: jest.fn()
+  }
 }
 jest.mock('fs', () => mockFs)
 
