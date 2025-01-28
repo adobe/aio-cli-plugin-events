@@ -18,7 +18,8 @@ const { getCliEnv } = require('@adobe/aio-lib-env')
 
 const mockFetch = jest.fn()
 jest.mock('@adobe/aio-lib-core-networking', () => ({
-  createFetch: jest.fn(() => mockFetch)
+  createFetch: jest.fn(() => mockFetch),
+  HttpExponentialBackoff: jest.fn()
 }))
 
 const hook = require('../../src/hooks/pre-pack-event-reg')

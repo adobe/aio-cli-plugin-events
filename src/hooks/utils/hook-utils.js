@@ -47,6 +47,10 @@ function getEventsOfInterestForRegistration (registration,
   const eventsOfInterestCompressed = registration.events_of_interest
   eventsOfInterestCompressed.forEach(eventOfInterest => {
     const providerId = providerMetadataToProviderIdMapping[eventOfInterest.provider_metadata]
+    if (!providerId) {
+      throw new Error(
+            `No provider id mapping found for provider metadata ${eventOfInterest.provider_metadata}. Skipping event registration`)
+    }
     const eventCodesList = eventOfInterest.event_codes
     for (const eventCode of eventCodesList) {
       eventsOfInterest.push({
@@ -170,12 +174,11 @@ async function getAllRegistrationsForWorkspace (eventsSDK, project) {
  */
 async function deployRegistration ({ appConfig: { events, project } }, expectedDeliveryType, hookType, forceEventsFlag) {
   if (!project) {
-    throw new Error(
-            `No project found, skipping event registration in ${hookType} hook`)
+    aioLogger.debug(`No project found, skipping event registration in ${hookType} hook`)
+    return
   }
   if (!events) {
-    aioLogger.debug(
-      `No events to register, skipping event registration in ${hookType} hook`)
+    aioLogger.debug(`No events to register, skipping event registration in ${hookType} hook`)
     return
   }
   const eventsSDK = await initEventsSdk(project)
@@ -233,8 +236,8 @@ async function deployRegistration ({ appConfig: { events, project } }, expectedD
  */
 async function undeployRegistration ({ appConfig: { events, project } }) {
   if (!project) {
-    throw new Error(
-      'No project found, skipping deletion of event registrations')
+    aioLogger.debug('No project with events to delete, skipping deletion of event registrations')
+    return
   }
   if (!events) {
     aioLogger.debug('No events to delete, skipping deletion of event registrations')
