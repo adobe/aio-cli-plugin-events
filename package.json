@@ -16,7 +16,7 @@
     "@adobe/aio-lib-env": "^3",
     "@adobe/aio-lib-events": "^4",
     "@adobe/aio-lib-ims": "^7",
-    "@oclif/core": "^1.5.2",
+    "@oclif/core": "^4.2.7",
     "inquirer": "^8.2.5",
     "js-yaml": "^4.1.0"
   },
