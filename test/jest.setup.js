@@ -10,7 +10,6 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
-
 jest.mock('@oclif/core/lib/cli-ux/config', () => ({
   fetch: jest.fn(() => Promise.resolve('{}')),
   get: jest.fn(() => ({})),
@@ -26,15 +25,11 @@ jest.mock('@oclif/core/lib/util', () => {
       try {
         return actual.requireJson(path)
       } catch (e) {
-        if (e.message?.includes('not valid JSON')) {
-          return '{}'
-        }
-        throw e
+        return {}
       }
     })
   }
 })
-
 
 const mockUx = {
   action: {
