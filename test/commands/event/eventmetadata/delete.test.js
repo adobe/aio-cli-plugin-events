@@ -29,16 +29,17 @@ test('flags', async () => {
   expect(EventmetadataDeleteCommand.flags.verbose.type).toBe('boolean')
 })
 test('args', async () => {
-  expect(EventmetadataDeleteCommand.args[0].required).toBe(true)
-  expect(EventmetadataDeleteCommand.args[0].description).toBeDefined()
-  expect(EventmetadataDeleteCommand.args[1].required).toBe(false)
-  expect(EventmetadataDeleteCommand.args[1].description).toBeDefined()
+  expect(EventmetadataDeleteCommand.args.providerId.required).toBe(true)
+  expect(EventmetadataDeleteCommand.args.providerId.description).toBeDefined()
+  expect(EventmetadataDeleteCommand.args.eventCode.required).toBe(false)
+  expect(EventmetadataDeleteCommand.args.eventCode.description).toBeDefined()
 })
 
 describe('console:eventmetadata:delete', () => {
   let command
 
   beforeEach(async () => {
+    jest.useRealTimers()
     command = new EventmetadataDeleteCommand([])
     inquirer.prompt = jest.fn()
     command.conf = {
@@ -56,6 +57,8 @@ describe('console:eventmetadata:delete', () => {
 
   afterEach(() => {
     jest.clearAllMocks()
+
+    jest.useFakeTimers()
   })
 
   test('exists', async () => {

@@ -30,8 +30,8 @@ test('flags', async () => {
 })
 
 test('args', async () => {
-  expect(TheCommand.args[0].required).toBe(true)
-  expect(TheCommand.args[0].description).toBeDefined()
+  expect(TheCommand.args.registrationId.required).toBe(true)
+  expect(TheCommand.args.registrationId.description).toBeDefined()
 })
 
 describe('console:registration:delete', () => {

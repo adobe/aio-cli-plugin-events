@@ -10,7 +10,7 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
-const { Flags, CliUx: { ux: cli } } = require('@oclif/core')
+const { Args, Flags, ux: cli } = require('@oclif/core')
 const fs = require('fs')
 
 const BaseCommand = require('../../../BaseCommand')
@@ -81,9 +81,8 @@ CreateCommand.flags = {
   })
 }
 
-CreateCommand.args = [
-  {
-    name: 'bodyJSONFile',
+CreateCommand.args = {
+  bodyJSONFile: Args.file({
     required: true,
     description: `Path to a file in JSON format with the information to create a new Event Registration.
 The JSON should follow the following format:
@@ -97,7 +96,7 @@ The JSON should follow the following format:
     "event_code": "<event provider event_code metadata>"
   }, { /* ...more events */ }]
 }`
-  }
-]
+  })
+}
 
 module.exports = CreateCommand

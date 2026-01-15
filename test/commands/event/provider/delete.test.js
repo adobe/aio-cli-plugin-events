@@ -30,8 +30,8 @@ test('flags', async () => {
 })
 
 test('args', async () => {
-  expect(ProviderDeleteCommand.args[0].required).toBe(true)
-  expect(ProviderDeleteCommand.args[0].description).toBeDefined()
+  expect(ProviderDeleteCommand.args.providerId.required).toBe(true)
+  expect(ProviderDeleteCommand.args.providerId.description).toBeDefined()
 })
 
 describe('console:provider:delete', () => {

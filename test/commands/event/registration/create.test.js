@@ -38,8 +38,8 @@ test('flags', async () => {
 })
 
 test('args', async () => {
-  expect(TheCommand.args[0].required).toBe(true)
-  expect(TheCommand.args[0].description).toBeDefined()
+  expect(TheCommand.args.bodyJSONFile.required).toBe(true)
+  expect(TheCommand.args.bodyJSONFile.description).toBeDefined()
 })
 
 describe('console:registration:create', () => {

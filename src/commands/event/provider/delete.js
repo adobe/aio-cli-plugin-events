@@ -11,7 +11,7 @@ governing permissions and limitations under the License.
 */
 
 const BaseCommand = require('../../../BaseCommand.js')
-const { CliUx: { ux: cli } } = require('@oclif/core')
+const { Args, ux: cli } = require('@oclif/core')
 const inquirer = require('inquirer')
 const aioLogger = require('@adobe/aio-lib-core-logging')('@adobe/aio-cli-plugin-events:provider:delete', { provider: 'debug' })
 
@@ -46,9 +46,12 @@ class ProviderDeleteCommand extends BaseCommand {
 
 ProviderDeleteCommand.description = 'Delete Provider by id'
 
-ProviderDeleteCommand.args = [
-  { name: 'providerId', required: true, description: 'The requested provider ID' }
-]
+ProviderDeleteCommand.args = {
+  providerId: Args.string({
+    required: true,
+    description: 'The requested provider ID'
+  })
+}
 
 ProviderDeleteCommand.flags = {
   ...BaseCommand.flags

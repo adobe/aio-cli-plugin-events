@@ -11,7 +11,7 @@ governing permissions and limitations under the License.
 */
 
 const BaseCommand = require('../../../BaseCommand.js')
-const { CliUx: { ux: cli } } = require('@oclif/core')
+const { Args, ux: cli } = require('@oclif/core')
 const inquirer = require('inquirer')
 const aioLogger = require('@adobe/aio-lib-core-logging')('@adobe/aio-cli-plugin-events:eventmetadata:delete', { provider: 'debug' })
 
@@ -64,10 +64,16 @@ class EventmetadataDeleteCommand extends BaseCommand {
 
 EventmetadataDeleteCommand.description = 'Delete Event Metadata for a Provider'
 
-EventmetadataDeleteCommand.args = [
-  { name: 'providerId', required: true, description: 'The requested provider ID' },
-  { name: 'eventCode', required: false, description: 'The requested eventmetadata event code' }
-]
+EventmetadataDeleteCommand.args = {
+  providerId: Args.string({
+    required: true,
+    description: 'The requested provider ID'
+  }),
+  eventCode: Args.string({
+    required: false,
+    description: 'The requested eventmetadata event code'
+  })
+}
 
 EventmetadataDeleteCommand.flags = {
   ...BaseCommand.flags

@@ -36,10 +36,10 @@ test('flags', async () => {
 })
 
 test('args', async () => {
-  expect(EventmetadataUpdateCommand.args[0].required).toBe(true)
-  expect(EventmetadataUpdateCommand.args[0].description).toBeDefined()
-  expect(EventmetadataUpdateCommand.args[1].required).toBe(true)
-  expect(EventmetadataUpdateCommand.args[1].description).toBeDefined()
+  expect(EventmetadataUpdateCommand.args.providerId.required).toBe(true)
+  expect(EventmetadataUpdateCommand.args.providerId.description).toBeDefined()
+  expect(EventmetadataUpdateCommand.args.eventCode.required).toBe(true)
+  expect(EventmetadataUpdateCommand.args.eventCode.description).toBeDefined()
 })
 
 describe('console:eventmetadata:update', () => {
