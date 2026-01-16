@@ -71,7 +71,7 @@ EventmetadataDeleteCommand.args = {
   }),
   eventCode: Args.string({
     required: false,
-    description: 'The requested eventmetadata event code'
+    description: 'The requested event code'
   })
 }
 

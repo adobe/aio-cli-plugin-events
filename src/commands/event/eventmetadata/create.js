@@ -64,7 +64,7 @@ EventmetadataCreateCommand.description = 'Create an Event Metadata for a Provide
 EventmetadataCreateCommand.args = {
   providerId: Args.string({
     required: true,
-    description: 'The requested eventmetadata event code'
+    description: 'The requested provider ID'
   })
 }
 
