@@ -10,7 +10,7 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
-const { Flags, CliUx: { ux: cli } } = require('@oclif/core')
+const { Args, Flags, ux: cli } = require('@oclif/core')
 
 const BaseCommand = require('../../../BaseCommand')
 const aioLogger = require('@adobe/aio-lib-core-logging')('@adobe/aio-cli-plugin-events:registration:get', { provider: 'debug' })
@@ -63,8 +63,11 @@ GetCommand.flags = {
   })
 }
 
-GetCommand.args = [
-  { name: 'registrationId', required: true, description: 'The requested registration ID' }
-]
+GetCommand.args = {
+  registrationId: Args.string({
+    required: true,
+    description: 'The requested registration ID'
+  })
+}
 
 module.exports = GetCommand

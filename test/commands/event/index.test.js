@@ -23,7 +23,7 @@ test('description', async () => {
 })
 
 test('args', async () => {
-  expect(IndexCommand.args).toEqual([])
+  expect(IndexCommand.args).toEqual({})
 })
 
 test('flags', async () => {

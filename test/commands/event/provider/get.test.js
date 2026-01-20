@@ -36,8 +36,8 @@ test('flags', async () => {
 })
 
 test('args', async () => {
-  expect(ProviderGetCommand.args[0].required).toBe(true)
-  expect(ProviderGetCommand.args[0].description).toBeDefined()
+  expect(ProviderGetCommand.args.providerId.required).toBe(true)
+  expect(ProviderGetCommand.args.providerId.description).toBeDefined()
 })
 
 describe('console:provider:get', () => {

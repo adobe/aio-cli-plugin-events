@@ -11,7 +11,7 @@ governing permissions and limitations under the License.
 */
 
 const BaseCommand = require('../../../BaseCommand.js')
-const { CliUx: { ux: cli } } = require('@oclif/core')
+const { Args, ux: cli } = require('@oclif/core')
 const inquirer = require('inquirer')
 const aioLogger = require('@adobe/aio-lib-core-logging')('@adobe/aio-cli-plugin-events:registration:delete', { provider: 'debug' })
 
@@ -50,9 +50,12 @@ DeleteCommand.aliases = [
   'event:reg:delete'
 ]
 
-DeleteCommand.args = [
-  { name: 'registrationId', required: true, description: 'The requested registration ID' }
-]
+DeleteCommand.args = {
+  registrationId: Args.string({
+    required: true,
+    description: 'The requested registration ID'
+  })
+}
 
 DeleteCommand.flags = {
   ...BaseCommand.flags

@@ -37,7 +37,7 @@ test('flags', async () => {
 })
 
 test('args', async () => {
-  expect(ProviderListCommand.args).toBeUndefined()
+  expect(ProviderListCommand.args).toBeDefined()
 })
 
 describe('console:provider:list', () => {

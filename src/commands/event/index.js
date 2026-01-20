@@ -22,6 +22,6 @@ class IndexCommand extends BaseCommand {
 
 IndexCommand.description = 'Manage your Adobe I/O Events'
 
-IndexCommand.args = []
+IndexCommand.args = {}
 
 module.exports = IndexCommand

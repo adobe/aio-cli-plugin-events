@@ -11,7 +11,7 @@ governing permissions and limitations under the License.
 */
 
 const BaseCommand = require('../../../BaseCommand.js')
-const { Flags, CliUx: { ux: cli } } = require('@oclif/core')
+const { Flags, ux: cli } = require('@oclif/core')
 const aioLogger = require('@adobe/aio-lib-core-logging')('@adobe/aio-cli-plugin-events:provider:list', { provider: 'debug' })
 
 class ProviderListCommand extends BaseCommand {

@@ -11,7 +11,7 @@ governing permissions and limitations under the License.
 */
 
 const BaseCommand = require('../../../BaseCommand.js')
-const { Flags, CliUx: { ux: cli } } = require('@oclif/core')
+const { Args, Flags, ux: cli } = require('@oclif/core')
 const aioLogger = require('@adobe/aio-lib-core-logging')('@adobe/aio-cli-plugin-events:eventmetadata:get', { provider: 'debug' })
 
 class EventmetadataGetCommand extends BaseCommand {
@@ -41,10 +41,16 @@ class EventmetadataGetCommand extends BaseCommand {
 
 EventmetadataGetCommand.description = 'Get details of an Event Code of a Provider'
 
-EventmetadataGetCommand.args = [
-  { name: 'providerId', required: true, description: 'The requested provider ID' },
-  { name: 'eventCode', required: true, description: 'The requested eventmetadata event code' }
-]
+EventmetadataGetCommand.args = {
+  providerId: Args.string({
+    required: true,
+    description: 'The requested provider ID'
+  }),
+  eventCode: Args.string({
+    required: true,
+    description: 'The requested event code'
+  })
+}
 
 EventmetadataGetCommand.flags = {
   ...BaseCommand.flags,

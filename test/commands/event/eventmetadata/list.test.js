@@ -34,8 +34,8 @@ test('flags', async () => {
   expect(EventmetadataListCommand.flags.yml.exclusive).toEqual(['json'])
 })
 test('args', async () => {
-  expect(EventmetadataListCommand.args[0].required).toBe(true)
-  expect(EventmetadataListCommand.args[0].description).toBeDefined()
+  expect(EventmetadataListCommand.args.providerId.required).toBe(true)
+  expect(EventmetadataListCommand.args.providerId.description).toBeDefined()
 })
 
 describe('console:eventmetadata:list', () => {

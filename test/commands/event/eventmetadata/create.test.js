@@ -36,8 +36,8 @@ test('flags', async () => {
 })
 
 test('args', async () => {
-  expect(EventmetadataCreateCommand.args[0].required).toBe(true)
-  expect(EventmetadataCreateCommand.args[0].description).toBeDefined()
+  expect(EventmetadataCreateCommand.args.providerId.required).toBe(true)
+  expect(EventmetadataCreateCommand.args.providerId.description).toBeDefined()
 })
 
 describe('console:eventmetadata:create', () => {

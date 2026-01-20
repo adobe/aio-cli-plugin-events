@@ -35,7 +35,7 @@ test('flags', async () => {
 })
 
 test('args', async () => {
-  expect(TheCommand.args).toBeUndefined()
+  expect(TheCommand.args).toBeDefined()
 })
 
 describe('console:registration:list', () => {

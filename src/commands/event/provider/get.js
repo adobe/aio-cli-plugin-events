@@ -11,7 +11,7 @@ governing permissions and limitations under the License.
 */
 
 const BaseCommand = require('../../../BaseCommand.js')
-const { Flags, CliUx: { ux: cli } } = require('@oclif/core')
+const { Args, Flags, ux: cli } = require('@oclif/core')
 const aioLogger = require('@adobe/aio-lib-core-logging')('@adobe/aio-cli-plugin-events:provider:get', { provider: 'debug' })
 
 class ProviderGetCommand extends BaseCommand {
@@ -41,9 +41,12 @@ class ProviderGetCommand extends BaseCommand {
 
 ProviderGetCommand.description = 'Get details of Provider by id'
 
-ProviderGetCommand.args = [
-  { name: 'providerId', required: true, description: 'The requested provider ID' }
-]
+ProviderGetCommand.args = {
+  providerId: Args.string({
+    required: true,
+    description: 'The requested provider ID'
+  })
+}
 
 ProviderGetCommand.flags = {
   ...BaseCommand.flags,

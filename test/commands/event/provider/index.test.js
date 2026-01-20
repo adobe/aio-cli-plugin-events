@@ -23,7 +23,7 @@ test('description', async () => {
 })
 
 test('args', async () => {
-  expect(IndexCommand.args).toBeUndefined()
+  expect(IndexCommand.args).toBeDefined()
 })
 
 test('flags', async () => {
