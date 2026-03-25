@@ -11,7 +11,7 @@ governing permissions and limitations under the License.
 */
 
 const BaseCommand = require('../../../BaseCommand.js')
-const { Args, ux: cli } = require('@oclif/core')
+const { Args, ux } = require('@oclif/core')
 const inquirer = require('inquirer')
 const aioLogger = require('@adobe/aio-lib-core-logging')('@adobe/aio-cli-plugin-events:eventmetadata:delete', { provider: 'debug' })
 
@@ -29,10 +29,10 @@ class EventmetadataDeleteCommand extends BaseCommand {
 
         }])
         if (response.delete) {
-          cli.action.start('Deleting ALL Event Metadata for provider')
+          ux.action.start('Deleting ALL Event Metadata for provider')
           await this.eventClient.deleteAllEventMetadata(this.conf.org.id,
             this.conf.project.id, this.conf.workspace.id, args.providerId)
-          cli.action.stop()
+          ux.action.stop()
           this.log('All event metadata of provider ' + args.providerId + ' has been deleted successfully')
         } else {
           this.log('Deletion operation has been cancelled. For more information on delete use --help')
@@ -45,11 +45,11 @@ class EventmetadataDeleteCommand extends BaseCommand {
 
         }])
         if (response.delete) {
-          cli.action.start('Deleting Event Metadata for provider')
+          ux.action.start('Deleting Event Metadata for provider')
           await this.eventClient.deleteEventMetadata(this.conf.org.id,
             this.conf.project.id, this.conf.workspace.id, args.providerId,
             args.eventCode)
-          cli.action.stop()
+          ux.action.stop()
           this.log(args.eventCode + ' event metadata of provider ' + args.providerId + ' has been deleted successfully')
         } else {
           this.log('Deletion operation has been cancelled. For more information on delete use --help')

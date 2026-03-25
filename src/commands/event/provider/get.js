@@ -11,7 +11,7 @@ governing permissions and limitations under the License.
 */
 
 const BaseCommand = require('../../../BaseCommand.js')
-const { Args, Flags, ux: cli } = require('@oclif/core')
+const { Args, Flags, ux } = require('@oclif/core')
 const aioLogger = require('@adobe/aio-lib-core-logging')('@adobe/aio-cli-plugin-events:provider:get', { provider: 'debug' })
 
 class ProviderGetCommand extends BaseCommand {
@@ -20,10 +20,10 @@ class ProviderGetCommand extends BaseCommand {
 
     try {
       await this.initSdk()
-      cli.action.start('Fetching the Event Provider')
+      ux.action.start('Fetching the Event Provider')
       const provider = await this.eventClient.getProvider(args.providerId,
         flags.fetchEventMetadata)
-      cli.action.stop()
+      ux.action.stop()
 
       if (flags.json) {
         this.printJson(provider)

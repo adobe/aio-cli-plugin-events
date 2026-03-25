@@ -11,7 +11,7 @@ governing permissions and limitations under the License.
 */
 
 const BaseCommand = require('../../../BaseCommand.js')
-const { Flags, ux: cli } = require('@oclif/core')
+const { Flags, ux } = require('@oclif/core')
 const { sentenceValidatorWithMinOneChar, sentenceValidatorWithMinZeroChar } = require('../../../utils/validator')
 const inquirer = require('inquirer')
 const aioLogger = require('@adobe/aio-lib-core-logging')('@adobe/aio-cli-plugin-events:provider:create', { provider: 'debug' })
@@ -40,9 +40,9 @@ class ProviderCreateCommand extends BaseCommand {
         docs_url: response.docs_url || undefined
       }
 
-      cli.action.start('Creating Event Provider')
+      ux.action.start('Creating Event Provider')
       const provider = await this.eventClient.createProvider(this.conf.org.id, this.conf.project.id, this.conf.workspace.id, providerPayload)
-      cli.action.stop()
+      ux.action.stop()
       if (flags.json) {
         this.printJson(provider)
       } else if (flags.yml) {

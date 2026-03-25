@@ -11,7 +11,7 @@ governing permissions and limitations under the License.
 */
 
 const BaseCommand = require('../../../BaseCommand.js')
-const { Args, ux: cli } = require('@oclif/core')
+const { Args, ux } = require('@oclif/core')
 const inquirer = require('inquirer')
 const aioLogger = require('@adobe/aio-lib-core-logging')('@adobe/aio-cli-plugin-events:provider:delete', { provider: 'debug' })
 
@@ -28,10 +28,10 @@ class ProviderDeleteCommand extends BaseCommand {
 
       }])
       if (response.delete) {
-        cli.action.start('Deleting Event Provider')
+        ux.action.start('Deleting Event Provider')
         await this.eventClient.deleteProvider(this.conf.org.id,
           this.conf.project.id, this.conf.workspace.id, args.providerId)
-        cli.action.stop()
+        ux.action.stop()
         this.log('Provider ' + args.providerId +
                 ' has been deleted successfully')
       } else {

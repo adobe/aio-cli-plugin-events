@@ -10,27 +10,6 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
-jest.mock('@oclif/core/lib/cli-ux/config', () => ({
-  fetch: jest.fn(() => Promise.resolve('{}')),
-  get: jest.fn(() => ({})),
-  set: jest.fn(),
-  clear: jest.fn()
-}))
-
-jest.mock('@oclif/core/lib/util', () => {
-  const actual = jest.requireActual('@oclif/core/lib/util')
-  return {
-    ...actual,
-    requireJson: jest.fn((path) => {
-      try {
-        return actual.requireJson(path)
-      } catch (e) {
-        return {}
-      }
-    })
-  }
-})
-
 const mockUx = {
   action: {
     start: jest.fn(),
@@ -75,19 +54,30 @@ const mockUx = {
   })
 }
 
+const mockConfig = {
+  runHook: jest.fn().mockResolvedValue({ successes: [], failures: [] }),
+  bin: 'aio',
+  userAgent: 'aio',
+  scopedEnvVar: jest.fn().mockReturnValue(undefined),
+  scopedEnvVarKey: jest.fn().mockReturnValue(''),
+  scopedEnvVarKeys: jest.fn().mockReturnValue([]),
+  theme: null
+}
+
 jest.mock('@oclif/core', () => {
   const actual = jest.requireActual('@oclif/core')
+  const originalParse = actual.Command.prototype.parse
+  actual.Command.prototype.parse = function (options, argv) {
+    if (!this.config) {
+      this.config = mockConfig
+    }
+    return originalParse.call(this, options, argv)
+  }
   return {
     ...actual,
     ux: mockUx
   }
 })
-
-jest.mock('@oclif/core/lib/cli-ux', () => ({
-  ux: mockUx,
-  cli: mockUx,
-  default: mockUx
-}))
 
 const { stdout, stderr } = require('stdout-stderr')
 const fs = jest.requireActual('fs')

@@ -10,7 +10,7 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
-const { Args, Flags, ux: cli } = require('@oclif/core')
+const { Args, Flags, ux } = require('@oclif/core')
 
 const BaseCommand = require('../../../BaseCommand')
 const aioLogger = require('@adobe/aio-lib-core-logging')('@adobe/aio-cli-plugin-events:registration:get', { provider: 'debug' })
@@ -23,9 +23,9 @@ class GetCommand extends BaseCommand {
       await this.initSdk()
 
       aioLogger.debug(`get registration: ${args.registrationId}`)
-      cli.action.start(`Retrieving Registration with id ${args.registrationId}`)
+      ux.action.start(`Retrieving Registration with id ${args.registrationId}`)
       const registration = await this.eventClient.getRegistration(this.conf.org.id, this.conf.project.id, this.conf.workspace.id, args.registrationId)
-      cli.action.stop()
+      ux.action.stop()
       aioLogger.debug(`get successful, name: ${registration.name}`)
 
       if (flags.json) {
