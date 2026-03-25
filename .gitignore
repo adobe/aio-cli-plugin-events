@@ -17,3 +17,4 @@ package-lock.json
 playground/
 oclif.manifest.json
 .idea
+.claude
