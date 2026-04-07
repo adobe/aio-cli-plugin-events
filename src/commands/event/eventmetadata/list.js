@@ -49,7 +49,7 @@ class EventmetadataListCommand extends BaseCommand {
         header: 'DESC'
       }
     }
-    table(projects, columns)
+    table(projects, columns, { printLine: this.log.bind(this) })
   }
 }
 

@@ -62,7 +62,7 @@ class ProviderListCommand extends BaseCommand {
         header: 'DOCS'
       }
     }
-    table(projects, columns)
+    table(projects, columns, { printLine: this.log.bind(this) })
   }
 }
 

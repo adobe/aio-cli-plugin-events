@@ -32,16 +32,15 @@ module.exports = [
   },
   {
     files: ['test/**/*.js'],
-    ...pluginJest.configs['flat/recommended'],
-    rules: {
-      ...pluginJest.configs['flat/recommended'].rules
-    }
+    ...pluginJest.configs['flat/recommended']
   },
   {
     files: ['e2e/**/*.js'],
-    ...pluginJest.configs['flat/recommended'],
+    ...pluginJest.configs['flat/recommended']
+  },
+  {
+    files: ['e2e/**/*.js'],
     rules: {
-      ...pluginJest.configs['flat/recommended'].rules,
       'n/no-unpublished-require': 'off'
     }
   }

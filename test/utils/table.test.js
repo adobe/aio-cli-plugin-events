@@ -72,5 +72,22 @@ describe('table utility', () => {
     const lines = []
     table(data, columns, { printLine: (l) => lines.push(l) })
     expect(lines).toHaveLength(3)
+
+    // Verify that the non-last column's effective width is smaller than the last column's,
+    // reflecting the maxWidth decrement behavior.
+    const headerLine = lines[0]
+    const indexA = headerLine.indexOf('A')
+    const indexB = headerLine.indexOf('B')
+
+    // Sanity checks: both headers should be present in the header line.
+    expect(indexA).toBeGreaterThanOrEqual(0)
+    expect(indexB).toBeGreaterThan(indexA)
+
+    const firstColumnSpan = indexB - indexA
+    const secondColumnSpan = headerLine.length - indexB
+
+    // Because maxWidth is decremented for non-last columns when minWidth === maxWidth,
+    // the first column's span should be strictly less than the second column's span.
+    expect(firstColumnSpan).toBeLessThan(secondColumnSpan)
   })
 })
