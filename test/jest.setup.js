@@ -14,44 +14,7 @@ const mockUx = {
   action: {
     start: jest.fn(),
     stop: jest.fn()
-  },
-  table: jest.fn((data, columns, options) => {
-    const printLine = options?.printLine || console.log.bind(console)
-    const headerKeys = Object.keys(columns)
-
-    const colWidths = headerKeys.map(key => {
-      const col = columns[key]
-      const header = col.header || key.toUpperCase()
-      let maxWidth = col.minWidth || header.length
-
-      if (header.length > maxWidth) maxWidth = header.length
-      data.forEach(row => {
-        const strValue = String(row[key] ?? '')
-        if (strValue.length > maxWidth) maxWidth = strValue.length
-      })
-
-      const isLastColumn = headerKeys.indexOf(key) === headerKeys.length - 1
-      if (col.minWidth && maxWidth === col.minWidth && !isLastColumn) {
-        maxWidth--
-      }
-      return maxWidth
-    })
-
-    const headers = headerKeys.map((key, idx) =>
-      (columns[key].header || key.toUpperCase()).padEnd(colWidths[idx], ' ')
-    )
-    printLine(' ' + headers.join(' ') + ' ')
-
-    const separator = colWidths.map(w => '─'.repeat(w)).join(' ')
-    printLine(' ' + separator + ' ')
-
-    data.forEach(row => {
-      const values = headerKeys.map((key, idx) =>
-        String(row[key] ?? '').padEnd(colWidths[idx], ' ')
-      )
-      printLine(' ' + values.join(' ') + ' ')
-    })
-  })
+  }
 }
 
 const mockConfig = {

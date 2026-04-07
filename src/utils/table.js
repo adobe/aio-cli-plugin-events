@@ -20,7 +20,7 @@ function table (data, columns, options = {}) {
   const printLine = options.printLine || console.log.bind(console)
   const headerKeys = Object.keys(columns)
 
-  const colWidths = headerKeys.map(key => {
+  const colWidths = headerKeys.map((key, idx) => {
     const col = columns[key]
     const header = col.header || key.toUpperCase()
     let maxWidth = col.minWidth || header.length
@@ -31,7 +31,7 @@ function table (data, columns, options = {}) {
       if (strValue.length > maxWidth) maxWidth = strValue.length
     })
 
-    const isLastColumn = headerKeys.indexOf(key) === headerKeys.length - 1
+    const isLastColumn = idx === headerKeys.length - 1
     if (col.minWidth && maxWidth === col.minWidth && !isLastColumn) {
       maxWidth--
     }
