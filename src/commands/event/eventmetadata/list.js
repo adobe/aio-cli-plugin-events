@@ -11,7 +11,8 @@ governing permissions and limitations under the License.
 */
 
 const BaseCommand = require('../../../BaseCommand.js')
-const { Args, Flags, ux: cli } = require('@oclif/core')
+const { Args, Flags, ux } = require('@oclif/core')
+const { table } = require('../../../utils/table')
 const aioLogger = require('@adobe/aio-lib-core-logging')('@adobe/aio-cli-plugin-events:eventmetadata:list', { provider: 'debug' })
 
 class EventmetadataListCommand extends BaseCommand {
@@ -19,9 +20,9 @@ class EventmetadataListCommand extends BaseCommand {
     const { args, flags } = await this.parse(EventmetadataListCommand)
     try {
       await this.initSdk()
-      cli.action.start('Fetching all Event Metadata for provider')
+      ux.action.start('Fetching all Event Metadata for provider')
       const eventmetadatas = await this.eventClient.getAllEventMetadataForProvider(args.providerId)
-      cli.action.stop()
+      ux.action.stop()
       if (flags.json) {
         this.printJson(eventmetadatas)
       } else if (flags.yml) {
@@ -48,7 +49,7 @@ class EventmetadataListCommand extends BaseCommand {
         header: 'DESC'
       }
     }
-    cli.table(projects, columns)
+    table(projects, columns, { printLine: this.log.bind(this) })
   }
 }
 

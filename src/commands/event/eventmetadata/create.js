@@ -11,7 +11,7 @@ governing permissions and limitations under the License.
 */
 
 const BaseCommand = require('../../../BaseCommand.js')
-const { Args, Flags, ux: cli } = require('@oclif/core')
+const { Args, Flags, ux } = require('@oclif/core')
 const { sentenceValidatorWithMinOneChar, eventCodeValidator } = require('../../../utils/validator')
 const inquirer = require('inquirer')
 const aioLogger = require('@adobe/aio-lib-core-logging')('@adobe/aio-cli-plugin-events:eventmetadata:create', { provider: 'debug' })
@@ -41,9 +41,9 @@ class EventmetadataCreateCommand extends BaseCommand {
         description: response.description
       }
 
-      cli.action.start('Creating Event Metadata')
+      ux.action.start('Creating Event Metadata')
       const eventmetadata = await this.eventClient.createEventMetadataForProvider(this.conf.org.id, this.conf.project.id, this.conf.workspace.id, args.providerId, eventMetadataPayload)
-      cli.action.stop()
+      ux.action.stop()
 
       if (flags.json) {
         this.printJson(eventmetadata)

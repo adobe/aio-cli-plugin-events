@@ -19,7 +19,6 @@ governing permissions and limitations under the License.
  * @returns {string|boolean} message or error message
  */
 function validator (input, regex, message) {
-  // eslint-disable-next-line no-useless-escape
   const valid = regex
   if (valid.test(input)) {
     return true

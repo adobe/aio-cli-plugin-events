@@ -10,84 +10,37 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
-jest.mock('@oclif/core/lib/cli-ux/config', () => ({
-  fetch: jest.fn(() => Promise.resolve('{}')),
-  get: jest.fn(() => ({})),
-  set: jest.fn(),
-  clear: jest.fn()
-}))
-
-jest.mock('@oclif/core/lib/util', () => {
-  const actual = jest.requireActual('@oclif/core/lib/util')
-  return {
-    ...actual,
-    requireJson: jest.fn((path) => {
-      try {
-        return actual.requireJson(path)
-      } catch (e) {
-        return {}
-      }
-    })
-  }
-})
-
 const mockUx = {
   action: {
     start: jest.fn(),
     stop: jest.fn()
-  },
-  table: jest.fn((data, columns, options) => {
-    const printLine = options?.printLine || console.log.bind(console)
-    const headerKeys = Object.keys(columns)
+  }
+}
 
-    const colWidths = headerKeys.map(key => {
-      const col = columns[key]
-      const header = col.header || key.toUpperCase()
-      let maxWidth = col.minWidth || header.length
-
-      if (header.length > maxWidth) maxWidth = header.length
-      data.forEach(row => {
-        const strValue = String(row[key] ?? '')
-        if (strValue.length > maxWidth) maxWidth = strValue.length
-      })
-
-      const isLastColumn = headerKeys.indexOf(key) === headerKeys.length - 1
-      if (col.minWidth && maxWidth === col.minWidth && !isLastColumn) {
-        maxWidth--
-      }
-      return maxWidth
-    })
-
-    const headers = headerKeys.map((key, idx) =>
-      (columns[key].header || key.toUpperCase()).padEnd(colWidths[idx], ' ')
-    )
-    printLine(' ' + headers.join(' ') + ' ')
-
-    const separator = colWidths.map(w => '─'.repeat(w)).join(' ')
-    printLine(' ' + separator + ' ')
-
-    data.forEach(row => {
-      const values = headerKeys.map((key, idx) =>
-        String(row[key] ?? '').padEnd(colWidths[idx], ' ')
-      )
-      printLine(' ' + values.join(' ') + ' ')
-    })
-  })
+const mockConfig = {
+  runHook: jest.fn().mockResolvedValue({ successes: [], failures: [] }),
+  bin: 'aio',
+  userAgent: 'aio',
+  scopedEnvVar: jest.fn().mockReturnValue(undefined),
+  scopedEnvVarKey: jest.fn().mockReturnValue(''),
+  scopedEnvVarKeys: jest.fn().mockReturnValue([]),
+  theme: null
 }
 
 jest.mock('@oclif/core', () => {
   const actual = jest.requireActual('@oclif/core')
+  const originalParse = actual.Command.prototype.parse
+  actual.Command.prototype.parse = function (options, argv) {
+    if (!this.config) {
+      this.config = mockConfig
+    }
+    return originalParse.call(this, options, argv)
+  }
   return {
     ...actual,
     ux: mockUx
   }
 })
-
-jest.mock('@oclif/core/lib/cli-ux', () => ({
-  ux: mockUx,
-  cli: mockUx,
-  default: mockUx
-}))
 
 const { stdout, stderr } = require('stdout-stderr')
 const fs = jest.requireActual('fs')

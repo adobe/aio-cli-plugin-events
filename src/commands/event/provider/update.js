@@ -11,7 +11,7 @@ governing permissions and limitations under the License.
 */
 
 const BaseCommand = require('../../../BaseCommand.js')
-const { Args, Flags, ux: cli } = require('@oclif/core')
+const { Args, Flags, ux } = require('@oclif/core')
 const { sentenceValidatorWithMinOneChar, sentenceValidatorWithMinZeroChar } = require('../../../utils/validator')
 const inquirer = require('inquirer')
 const aioLogger = require('@adobe/aio-lib-core-logging')('@adobe/aio-cli-plugin-events:provider:update', { provider: 'debug' })
@@ -40,9 +40,9 @@ class ProviderUpdateCommand extends BaseCommand {
         docs_url: response.docs_url || undefined
       }
 
-      cli.action.start('Updating the Event Provider')
+      ux.action.start('Updating the Event Provider')
       const provider = await this.eventClient.updateProvider(this.conf.org.id, this.conf.project.id, this.conf.workspace.id, args.providerId, providerPayload)
-      cli.action.stop()
+      ux.action.stop()
       if (flags.json) {
         this.printJson(provider)
       } else if (flags.yml) {

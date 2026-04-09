@@ -9,7 +9,8 @@ the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTA
 OF ANY KIND, either express or implied. See the License for the specific language
 governing permissions and limitations under the License.
 */
-const { Flags, ux: cli } = require('@oclif/core')
+const { Flags, ux } = require('@oclif/core')
+const { table } = require('../../../utils/table')
 
 const BaseCommand = require('../../../BaseCommand')
 const aioLogger = require('@adobe/aio-lib-core-logging')('@adobe/aio-cli-plugin-events:registration:list', { provider: 'debug' })
@@ -22,9 +23,9 @@ class ListCommand extends BaseCommand {
       await this.initSdk()
 
       aioLogger.debug(`list registrations in the workspace ${this.conf.workspace.id}`)
-      cli.action.start(`Retrieving Registrations for the Workspace ${this.conf.workspace.id}`)
+      ux.action.start(`Retrieving Registrations for the Workspace ${this.conf.workspace.id}`)
       const registrationHalModel = await this.eventClient.getAllRegistrationsForWorkspace(this.conf.org.id, this.conf.project.id, this.conf.workspace.id)
-      cli.action.stop()
+      ux.action.stop()
       aioLogger.debug(`list successful, got ${registrationHalModel._embedded.registrations.length} elements with ids: ${registrationHalModel._embedded.registrations.map(r => r.id)}`)
       if (flags.json) {
         this.printJson(registrationHalModel)
@@ -32,7 +33,7 @@ class ListCommand extends BaseCommand {
         this.printYaml(registrationHalModel)
       } else {
         // print formatted result
-        cli.table(registrationHalModel._embedded.registrations, {
+        table(registrationHalModel._embedded.registrations, {
           registration_id: { minWidth: 38, header: 'ID' },
           name: { minWidth: 25, header: 'NAME' },
           enabled: { minWidth: 10, header: 'ENABLED' },

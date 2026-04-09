@@ -11,7 +11,8 @@ governing permissions and limitations under the License.
 */
 
 const BaseCommand = require('../../../BaseCommand.js')
-const { Flags, ux: cli } = require('@oclif/core')
+const { Flags, ux } = require('@oclif/core')
+const { table } = require('../../../utils/table')
 const aioLogger = require('@adobe/aio-lib-core-logging')('@adobe/aio-cli-plugin-events:provider:list', { provider: 'debug' })
 
 class ProviderListCommand extends BaseCommand {
@@ -19,7 +20,7 @@ class ProviderListCommand extends BaseCommand {
     const { flags } = await this.parse(ProviderListCommand)
     try {
       await this.initSdk()
-      cli.action.start('Fetching all Event Providers')
+      ux.action.start('Fetching all Event Providers')
       const options = {
         fetchEventMetadata: flags.fetchEventMetadata,
         filterBy: {
@@ -29,7 +30,7 @@ class ProviderListCommand extends BaseCommand {
         }
       }
       const providers = await this.eventClient.getAllProviders(this.conf.org.id, options)
-      cli.action.stop()
+      ux.action.stop()
       if (flags.json) {
         this.printJson(providers)
       } else if (flags.yml) {
@@ -61,7 +62,7 @@ class ProviderListCommand extends BaseCommand {
         header: 'DOCS'
       }
     }
-    cli.table(projects, columns)
+    table(projects, columns, { printLine: this.log.bind(this) })
   }
 }
 

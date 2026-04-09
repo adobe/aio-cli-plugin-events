@@ -10,7 +10,7 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
-const { Args, Flags, ux: cli } = require('@oclif/core')
+const { Args, Flags, ux } = require('@oclif/core')
 const fs = require('fs')
 
 const BaseCommand = require('../../../BaseCommand')
@@ -31,9 +31,9 @@ class CreateCommand extends BaseCommand {
       // other checks are performed by the server
 
       aioLogger.debug(`create event registration with body ${body}`)
-      cli.action.start('Creating new Event Registration')
+      ux.action.start('Creating new Event Registration')
       const registration = await this.eventClient.createRegistration(this.conf.org.id, this.conf.project.id, this.conf.workspace.id, body)
-      cli.action.stop()
+      ux.action.stop()
       aioLogger.debug(`create successful, id: ${registration.registration_id}, name: ${registration.name}`)
 
       if (flags.json) {
