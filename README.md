@@ -83,7 +83,7 @@ DESCRIPTION
   Manage your Adobe I/O Events
 ```
 
-_See code: [src/commands/event/index.js](https://github.com/adobe/aio-cli-plugin-events/blob/v4.1.0/src/commands/event/index.js)_
+_See code: [src/commands/event/index.js](https://github.com/adobe/aio-cli-plugin-events/blob/v4.2.0/src/commands/event/index.js)_
 
 ## `aio event eventmetadata`
 
@@ -102,7 +102,7 @@ DESCRIPTION
   Manage your Adobe I/O Events Providers' Event Metadata
 ```
 
-_See code: [src/commands/event/eventmetadata/index.js](https://github.com/adobe/aio-cli-plugin-events/blob/v4.1.0/src/commands/event/eventmetadata/index.js)_
+_See code: [src/commands/event/eventmetadata/index.js](https://github.com/adobe/aio-cli-plugin-events/blob/v4.2.0/src/commands/event/eventmetadata/index.js)_
 
 ## `aio event eventmetadata create PROVIDERID`
 
@@ -126,7 +126,7 @@ DESCRIPTION
   Create an Event Metadata for a Provider
 ```
 
-_See code: [src/commands/event/eventmetadata/create.js](https://github.com/adobe/aio-cli-plugin-events/blob/v4.1.0/src/commands/event/eventmetadata/create.js)_
+_See code: [src/commands/event/eventmetadata/create.js](https://github.com/adobe/aio-cli-plugin-events/blob/v4.2.0/src/commands/event/eventmetadata/create.js)_
 
 ## `aio event eventmetadata delete PROVIDERID [EVENTCODE]`
 
@@ -149,7 +149,7 @@ DESCRIPTION
   Delete Event Metadata for a Provider
 ```
 
-_See code: [src/commands/event/eventmetadata/delete.js](https://github.com/adobe/aio-cli-plugin-events/blob/v4.1.0/src/commands/event/eventmetadata/delete.js)_
+_See code: [src/commands/event/eventmetadata/delete.js](https://github.com/adobe/aio-cli-plugin-events/blob/v4.2.0/src/commands/event/eventmetadata/delete.js)_
 
 ## `aio event eventmetadata get PROVIDERID EVENTCODE`
 
@@ -174,7 +174,7 @@ DESCRIPTION
   Get details of an Event Code of a Provider
 ```
 
-_See code: [src/commands/event/eventmetadata/get.js](https://github.com/adobe/aio-cli-plugin-events/blob/v4.1.0/src/commands/event/eventmetadata/get.js)_
+_See code: [src/commands/event/eventmetadata/get.js](https://github.com/adobe/aio-cli-plugin-events/blob/v4.2.0/src/commands/event/eventmetadata/get.js)_
 
 ## `aio event eventmetadata list PROVIDERID`
 
@@ -201,7 +201,7 @@ ALIASES
   $ aio event eventmetadata ls
 ```
 
-_See code: [src/commands/event/eventmetadata/list.js](https://github.com/adobe/aio-cli-plugin-events/blob/v4.1.0/src/commands/event/eventmetadata/list.js)_
+_See code: [src/commands/event/eventmetadata/list.js](https://github.com/adobe/aio-cli-plugin-events/blob/v4.2.0/src/commands/event/eventmetadata/list.js)_
 
 ## `aio event eventmetadata ls PROVIDERID`
 
@@ -251,7 +251,7 @@ DESCRIPTION
   Update an Event Metadata for a Provider
 ```
 
-_See code: [src/commands/event/eventmetadata/update.js](https://github.com/adobe/aio-cli-plugin-events/blob/v4.1.0/src/commands/event/eventmetadata/update.js)_
+_See code: [src/commands/event/eventmetadata/update.js](https://github.com/adobe/aio-cli-plugin-events/blob/v4.2.0/src/commands/event/eventmetadata/update.js)_
 
 ## `aio event provider`
 
@@ -270,7 +270,7 @@ DESCRIPTION
   Manage your Adobe I/O Events Providers
 ```
 
-_See code: [src/commands/event/provider/index.js](https://github.com/adobe/aio-cli-plugin-events/blob/v4.1.0/src/commands/event/provider/index.js)_
+_See code: [src/commands/event/provider/index.js](https://github.com/adobe/aio-cli-plugin-events/blob/v4.2.0/src/commands/event/provider/index.js)_
 
 ## `aio event provider create`
 
@@ -291,7 +291,7 @@ DESCRIPTION
   Create a new Provider
 ```
 
-_See code: [src/commands/event/provider/create.js](https://github.com/adobe/aio-cli-plugin-events/blob/v4.1.0/src/commands/event/provider/create.js)_
+_See code: [src/commands/event/provider/create.js](https://github.com/adobe/aio-cli-plugin-events/blob/v4.2.0/src/commands/event/provider/create.js)_
 
 ## `aio event provider delete PROVIDERID`
 
@@ -313,7 +313,7 @@ DESCRIPTION
   Delete Provider by id
 ```
 
-_See code: [src/commands/event/provider/delete.js](https://github.com/adobe/aio-cli-plugin-events/blob/v4.1.0/src/commands/event/provider/delete.js)_
+_See code: [src/commands/event/provider/delete.js](https://github.com/adobe/aio-cli-plugin-events/blob/v4.2.0/src/commands/event/provider/delete.js)_
 
 ## `aio event provider get PROVIDERID`
 
@@ -338,7 +338,7 @@ DESCRIPTION
   Get details of Provider by id
 ```
 
-_See code: [src/commands/event/provider/get.js](https://github.com/adobe/aio-cli-plugin-events/blob/v4.1.0/src/commands/event/provider/get.js)_
+_See code: [src/commands/event/provider/get.js](https://github.com/adobe/aio-cli-plugin-events/blob/v4.2.0/src/commands/event/provider/get.js)_
 
 ## `aio event provider list`
 
@@ -367,7 +367,7 @@ ALIASES
   $ aio event provider ls
 ```
 
-_See code: [src/commands/event/provider/list.js](https://github.com/adobe/aio-cli-plugin-events/blob/v4.1.0/src/commands/event/provider/list.js)_
+_See code: [src/commands/event/provider/list.js](https://github.com/adobe/aio-cli-plugin-events/blob/v4.2.0/src/commands/event/provider/list.js)_
 
 ## `aio event provider ls`
 
@@ -418,7 +418,7 @@ DESCRIPTION
   Update an existing Provider
 ```
 
-_See code: [src/commands/event/provider/update.js](https://github.com/adobe/aio-cli-plugin-events/blob/v4.1.0/src/commands/event/provider/update.js)_
+_See code: [src/commands/event/provider/update.js](https://github.com/adobe/aio-cli-plugin-events/blob/v4.2.0/src/commands/event/provider/update.js)_
 
 ## `aio event reg`
 
@@ -593,7 +593,7 @@ ALIASES
   $ aio event reg
 ```
 
-_See code: [src/commands/event/registration/index.js](https://github.com/adobe/aio-cli-plugin-events/blob/v4.1.0/src/commands/event/registration/index.js)_
+_See code: [src/commands/event/registration/index.js](https://github.com/adobe/aio-cli-plugin-events/blob/v4.2.0/src/commands/event/registration/index.js)_
 
 ## `aio event registration create BODYJSONFILE`
 
@@ -632,7 +632,7 @@ ALIASES
   $ aio event reg create
 ```
 
-_See code: [src/commands/event/registration/create.js](https://github.com/adobe/aio-cli-plugin-events/blob/v4.1.0/src/commands/event/registration/create.js)_
+_See code: [src/commands/event/registration/create.js](https://github.com/adobe/aio-cli-plugin-events/blob/v4.2.0/src/commands/event/registration/create.js)_
 
 ## `aio event registration delete REGISTRATIONID`
 
@@ -657,7 +657,7 @@ ALIASES
   $ aio event reg delete
 ```
 
-_See code: [src/commands/event/registration/delete.js](https://github.com/adobe/aio-cli-plugin-events/blob/v4.1.0/src/commands/event/registration/delete.js)_
+_See code: [src/commands/event/registration/delete.js](https://github.com/adobe/aio-cli-plugin-events/blob/v4.2.0/src/commands/event/registration/delete.js)_
 
 ## `aio event registration get REGISTRATIONID`
 
@@ -684,7 +684,7 @@ ALIASES
   $ aio event reg get
 ```
 
-_See code: [src/commands/event/registration/get.js](https://github.com/adobe/aio-cli-plugin-events/blob/v4.1.0/src/commands/event/registration/get.js)_
+_See code: [src/commands/event/registration/get.js](https://github.com/adobe/aio-cli-plugin-events/blob/v4.2.0/src/commands/event/registration/get.js)_
 
 ## `aio event registration list`
 
@@ -710,7 +710,7 @@ ALIASES
   $ aio event reg ls
 ```
 
-_See code: [src/commands/event/registration/list.js](https://github.com/adobe/aio-cli-plugin-events/blob/v4.1.0/src/commands/event/registration/list.js)_
+_See code: [src/commands/event/registration/list.js](https://github.com/adobe/aio-cli-plugin-events/blob/v4.2.0/src/commands/event/registration/list.js)_
 
 ## `aio event registration ls`
 
